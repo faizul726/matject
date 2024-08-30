@@ -4,8 +4,8 @@ A batch script made for Windows to inject `.material.bin` files in Minecraft. (a
 
 <br>
 
-> [!NOTE]
-> This script is very simple and incomplete. So you may expect some inconsitency or problem.
+> [!CAUTION]
+> This script is very experimental. May not work in all scenarios.
 
 <br>
 
