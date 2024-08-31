@@ -36,7 +36,7 @@ echo.
     echo Will not work for large amount of materials.[0m
 
     echo.
-    echo Source: [4;96mgithub.com/faizul726/material-injector[0m
+    echo Source: [4;96mgithub.com/faizul726/materialinjector[0m
     echo.
     pause
 cls
