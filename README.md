@@ -1,5 +1,7 @@
 # MCBE Material Injector
 
+# README IS INCOMPLETE!
+
 A batch script made for Windows to inject `.material.bin` files in Minecraft. (aka file replacement method)  
 
 <br>
@@ -30,7 +32,7 @@ A batch script made for Windows to inject `.material.bin` files in Minecraft. (a
 ![image](https://github.com/user-attachments/assets/4422464e-26a3-4068-993e-adc76817ca9c)
 
 2. Extract it.
-3. Put desired **.material.bin** files in the material folder. *(delete `blank` if you want)*
+3. Put desired **.material.bin** files in the material folder.
 4. Run the script by double clicking *or by running `materialinjector`*.
 5. Backup vanilla materials by pressing Y or N. *(optional)*
 6. After everything is found it will ask if you want to proceed with injecting. Press Y or N to confirm.
