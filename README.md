@@ -1,7 +1,7 @@
 # MCBE Material Injector
 
 
-A batch script made for Windows to inject `.material.bin` files in Minecraft. (aka file replacement method)  
+A batch script made for Windows to inject `.material.bin` files in Minecraft Bedrock Edition. (aka file replacement method)  
 
 <br>
 
