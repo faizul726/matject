@@ -32,7 +32,7 @@ A batch script made for Windows to inject `.material.bin` files in Minecraft Bed
 2. Extract it.
 
 > [!TIP]
-> Extract it in shortest %cd% path possible so it doesn't have any problem working with large amount of shader files.  
+> Extract it in shortest %cd% path possible so it doesn't have any problem working with large number of shader files.  
 >
 > Like, extracting in `C:\script` or `C:\Users\YOURNAME\script`  
 >
