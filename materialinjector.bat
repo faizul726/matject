@@ -29,11 +29,12 @@ cls
 type biloi.txt
 echo.
 echo.
-    echo [97mMinecraft Material Injector[0m
+    echo [97mMCBE Material Injector[0m
+    echo A batch script to inject `.material.bin` files in Minecraft.
     echo Made by ChatGPT and faizul726.
-    echo.
+    echo. 
     echo [91mTHIS SCRIPT IS EXPERIMENTAL.
-    echo Will not work for large amount of materials.[0m
+    echo Will not work for large number of materials.[0m
 
     echo.
     echo Source: [4;96mgithub.com/faizul726/materialinjector[0m
