@@ -61,9 +61,7 @@ if "%found%"=="false" (
     goto:exit
 )
 
-:: LIST SOURCE MATERIALS
-:: USER CONFIRMATION
-:: LIST DESTINATION MATERIALS TO DELETE AND REPLACE
+:: IObit Unlocker exists?
 
 cls
 echo [93mDo you have[0m [97mIObit Unlocker[0m [93minstalled?[0m [[92mY=Yes[0m, [91mN=No[0m]
@@ -85,6 +83,9 @@ if errorlevel 2 (
     echo [97mNice^^![0m
     echo.
 )
+
+:: WindowsApps unlocked?
+
 echo [93mHave you unlocked the WindowsApps folder?[0m [[92mY=Yes[0m, [91mN=No/not sure[0m]
 echo.
     choice /c yn /n
@@ -97,8 +98,9 @@ if errorlevel 2 (
     echo [97mGreat^^![0m
     echo.
     goto:unlocked
-    
 )
+
+:: WindowsApps unlock steps 
 
 :locked
 
@@ -123,11 +125,12 @@ if errorlevel 2 (
     takeown /f "%ProgramFiles%\WindowsApps" /r /d y
     icacls "%ProgramFiles%\WindowsApps" /grant *S-1-3-4:F /t /c /l /q
     cls
-    echo [92mUNLOCKED SUCCESSFULLY[0m
+    echo [92mUNLOCKED SUCCESSFULLY^^![0m
+    echo.
 
 
 
-
+:: Backup vanilla materials?
 
 :unlocked
 
@@ -145,9 +148,15 @@ if errorlevel 2 (
 
 :backup
 xcopy "%mcshaderlocation2%" "%cd%\materials.bak" /E /I /H /Y
+goto:backupDone
 
 
 
+:backupDone
+    echo [92mBACKUP DONE^^![0m
+
+
+:: Find .bin files
 
 :nobackup
 cls
@@ -200,26 +209,13 @@ if errorlevel 2 (
 :confirmed
     echo. 
     echo [93mDeleting vanilla materials...[0m
-    echo just a random file to check if iobit is working. > status.txt
     "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %destList%
-    if exist status.txt (
-    echo [OK]
-
-) else (
-    goto:confirmed2
-)
 
 :confirmed2
 
 echo.
     echo [93mMoving source materials...[0m
-    echo just a random file to check if iobit is working 2. > status2.txt
     "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!mcShaderLocation2!"
-        if exist status2.txt (
-    echo [OK]
-) else (
-    goto:success
-)
 
 :success
     echo [92mDONE SUCCESSFULLY^^![0m
