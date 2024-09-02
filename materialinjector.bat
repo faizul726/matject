@@ -1,30 +1,43 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: MCBE Material Injector
+:: A batch script to inject `.material.bin` files in Minecraft.
+
+:: Made by ChatGPT and faizul726.
+:: https://github.com/faizul726/materialinjector
+
+
 :: GARBAGE
- ::   echo.
-::    echo [4mSource materials[0m:
-  ::  echo [94m!srcList![0m
-    ::echo.
-
-   :: echo.
-    ::echo [4mMaterials to delete and replace[0m:
-    ::echo [91m!destList![0m
-    ::echo.
-
-    ::echo.
+:: echo.
+:: echo [4mSource materials[0m:
+:: echo [94m!srcList![0m
+:: echo.
+:: echo.
+:: echo [4mMaterials to delete and replace[0m:
+:: echo [91m!destList![0m
+:: echo.
+:: echo.
 
 set "mcLocation="
 set "found=false"
 set "firstFile=true"
 set "firstFile2=true"
-
 set "foundSrc=false"
-
 set "srcList="
 set "destList="
 
 cls
+
+:: CD TO SCRIPT DIRECTORY
+
+cd "%~dp0"
+
+:: DELETE BLANK FILE
+
+if exist "%cd%\materials\putMaterialsHere" del "%cd%\materials\putMaterialsHere"
+
+:: INTRO
 
 type biloi.txt
 echo.
@@ -43,26 +56,7 @@ echo.
 cls
 
 
-
-:: GET MINECRAFT LOCATION
-for /d %%D in ("%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*") do (
-    set "found=true"
-    set "mcLocation="%%D""
-    set "mcShaderLocation=%%D\data\renderer\materials\"
-        set "mcShaderLocation2=%%D\data\renderer\materials"
-
-)
-
-if "%found%"=="false" (
-    echo.
-    echo [41;97mCouldn't find Minecraft in "C:\Program Files\WindowsApps" :([0m
-    echo.
-    echo [41;97mPlease install Minecraft :([0m
-    echo.
-    goto:exit
-)
-
-:: IObit Unlocker exists?
+:: IObit Unlocker installed?
 
 cls
 echo [93mDo you have[0m [97mIObit Unlocker[0m [93minstalled?[0m [[92mY=Yes[0m, [91mN=No[0m]
@@ -122,18 +116,46 @@ if errorlevel 2 (
     echo [97mOkay[0m
     echo.
     echo [93mUnlocking...[0m
+     if exist claimedOwnership.txt goto:okay
+    :unlock2
     echo.
-    takeown /f "%ProgramFiles%\WindowsApps" /r /d y
-    icacls "%ProgramFiles%\WindowsApps" /grant *S-1-3-4:F /t /c /l /q
+    powershell -command start-process -file takeOwnership.bat -verb runas -Wait
+    timeout 1 > NUL
+    if exist claimedOwnership.txt (
+    goto:okay
+) else (
+    echo [41;97mPlease accept UAC^^![0m
+    echo.
+        echo [93mTrying again...[0m
+
+    goto:unlock2
+)
+    :okay
     cls
     echo [92mUNLOCKED SUCCESSFULLY^^![0m
     echo.
 
+:unlocked
 
+:: GET MINECRAFT LOCATION
+for /d %%D in ("%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*") do (
+    set "found=true"
+    set "mcLocation="%%D""
+    set "mcShaderLocation=%%D\data\renderer\materials\"
+        set "mcShaderLocation2=%%D\data\renderer\materials"
+
+)
+
+if "%found%"=="false" (
+    echo.
+    echo [41;97mCouldn't find Minecraft in "C:\Program Files\WindowsApps" :([0m
+    echo.
+    echo [41;97mPlease install Minecraft :([0m
+    echo.
+    goto:exit
+)
 
 :: Backup vanilla materials?
-
-:unlocked
 
 if "!found!"=="true" (
     echo [93mDo you want to backup vanilla materials?[0m [[92mY=Yes[0m, [91mN=No[0m]
@@ -193,7 +215,7 @@ echo [92mFound .bin files in materials folder^^![0m
     echo [97mMinecraft location:[0m !mcLocation!
     echo.
 
-
+:: INJECT MATERIALS CONSENT
 
     echo Do you want to proceed with injecting? [[92mY=Yes[0m, [91mN=No/not now[0m]
     choice /c yn /n

@@ -16,9 +16,9 @@ Thanks to [ChatGPT](https://chatgpt.com) for assistance.
 
 ### Known issues
 * Can't find Minecraft location if it's installed in any where other than `C:\Program Files\WindowsApps`.
-* Can replace vanilla backup with modified files if the user accidentally confirms backup, despite already having a vanilla backup.
+* Can replace vanilla backup with modified files if the user accidentally confirms backup, despite already having a vanilla backup. (fix coming soon)
 * Doesn't work with large number of shader files and long %cd% path.
-* Can't detect if the user has accepted UAC for IObit Unlocker, but it will still show success message.
+* Can't detect if the user has accepted UAC for IObit Unlocker, but it will still show success message. (fix coming soon)
 * May not work properly if MC Preview is also installed. (not confirmed)
 
 <br>
@@ -59,10 +59,10 @@ Thanks to [ChatGPT](https://chatgpt.com) for assistance.
 
 ### What this does?
 1. Find **Microsoft.MinecraftUWP** location.
-2. Backup vanilla materials to `%cd%\materials.bak`. *(optional)*
+2. Backup vanilla materials to `%cd%\materials.bak`. (optional)
 3. Check if `%cd%\materials` contains any file. If yes, list them.
 4. After listing, list vanilla materials to delete.^
 5. Delete vanilla materials then move user materials to game directory.^
 
-*`^ IObit Unlocker required`*
+`^ IObit Unlocker required`
 
