@@ -1,5 +1,9 @@
 # MCBE Material Injector
 
+![image](https://github.com/user-attachments/assets/8e0d0846-3ee0-47d2-a490-4acf925c8518)
+
+<h6 align="center">Pic by MrLucifer6529</h6>
+<br>
 
 A batch script made for Windows to inject `.material.bin` files in Minecraft Bedrock Edition. (aka file replacement method)  
 
