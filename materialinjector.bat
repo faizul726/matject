@@ -8,24 +8,9 @@ setlocal enabledelayedexpansion
 :: https://github.com/faizul726/materialinjector
 
 
-:: GARBAGE
-:: echo.
-:: echo [4mSource materials[0m:
-:: echo [94m!srcList![0m
-:: echo.
-:: echo.
-:: echo [4mMaterials to delete and replace[0m:
-:: echo [91m!destList![0m
-:: echo.
-:: echo.
 
 set "mcLocation="
 set "found=false"
-set "firstFile=true"
-set "firstFile2=true"
-set "foundSrc=false"
-set "srcList="
-set "destList="
 
 cls
 
@@ -140,10 +125,7 @@ if errorlevel 2 (
 :: GET MINECRAFT LOCATION
 for /d %%D in ("%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*") do (
     set "found=true"
-    set "mcLocation="%%D""
-    set "mcShaderLocation=%%D\data\renderer\materials\"
-        set "mcShaderLocation2=%%D\data\renderer\materials"
-
+    set "mcLocation=%%D"
 )
 
 if "%found%"=="false" (
@@ -186,15 +168,17 @@ cls
 echo [93mLooking for .bin files in "materials" folder...[0m
 echo.
 
-for /f "delims=" %%f in ('dir /b /a-d "%cd%\materials" 2^>nul') do (
-    if not "!firstFile!"=="true" (
-        set "srcList=!srcList!,"
-    )
-    set "srcList=!srcList!"%cd%\materials\%%f""
-    set "firstFile=false"
-    set "foundSrc=true"
+for %%F in (materials\*) do (
+    set srcList=!srcList!,"%cd%\%%F"
+    set destList=!destList!,"%mcLocation%\data\renderer\%%F"
+    
 )
-if not !foundSrc! == true (
+if defined srcList (
+    set "srcList=%srcList:~1%"
+    set "destList=%destList:~1%"
+)
+
+if not defined srcList (
     echo.
     echo [41;97mNo source materials found.[0m
     echo.
@@ -203,17 +187,14 @@ if not !foundSrc! == true (
     goto:exit
 ) else (
 
-for /f "delims=" %%f in ('dir /b /a-d "%cd%\materials"') do (
-    if not "!firstFile2!"=="true" (
-        set "destList=!destList!,"
-    )
-    set "destList=!destList!"!mcShaderLocation!%%f""
-    set "firstFile2=false"
-)
 echo [92mFound .bin files in materials folder^^![0m
     echo.
-    echo [97mMinecraft location:[0m !mcLocation!
+    echo [93mMinecraft location:[0m !mcLocation!
     echo.
+    echo [93mUser provided materials:[0m
+    for %%f in (materials\*) do (
+    echo [97m%%f[0m
+)
 
 :: INJECT MATERIALS CONSENT
 
@@ -232,13 +213,13 @@ if errorlevel 2 (
 :confirmed
     echo. 
     echo [93mDeleting vanilla materials...[0m
-    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %destList%
+    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete !destList!
 
 :confirmed2
 
 echo.
     echo [93mMoving source materials...[0m
-    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!mcShaderLocation2!"
+    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!mcLocation!\data\renderer\materials"
 
 :success
     echo [92mDONE SUCCESSFULLY^^![0m
