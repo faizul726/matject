@@ -7,10 +7,11 @@ setlocal enabledelayedexpansion
 :: Made by ChatGPT and faizul726.
 :: https://github.com/faizul726/materialinjector
 
-
+title MCBE Material Injector v0.0.1
 
 set "mcLocation="
 set "found=false"
+set srcCount=0
 
 cls
 
@@ -152,7 +153,8 @@ if errorlevel 2 (
 )
 
 :backup
-xcopy "%mcshaderlocation2%" "%cd%\materials.bak" /E /I /H /Y
+xcopy "!mcLocation!\data\renderer\materials" "%cd%\materials.bak" /E /I /H /Y
+pause
 goto:backupDone
 
 
@@ -171,7 +173,7 @@ echo.
 for %%F in (materials\*) do (
     set srcList=!srcList!,"%cd%\%%F"
     set destList=!destList!,"%mcLocation%\data\renderer\%%F"
-    
+    set /a srcCount+=1
 )
 if defined srcList (
     set "srcList=%srcList:~1%"
@@ -187,18 +189,21 @@ if not defined srcList (
     goto:exit
 ) else (
 
-echo [92mFound .bin files in materials folder^^![0m
+echo [92mFound !srcCount! .bin file^(s^) in materials folder^^![0m
     echo.
-    echo [93mMinecraft location:[0m !mcLocation!
+    echo [97mMinecraft location:[0m !mcLocation!
     echo.
-    echo [93mUser provided materials:[0m
+    echo [97m-------- Material list --------[0m
     for %%f in (materials\*) do (
-    echo [97m%%f[0m
+    echo %%~nxf
+)
+echo [97m-------------------------------[0m
 )
 
-:: INJECT MATERIALS CONSENT
 
-    echo Do you want to proceed with injecting? [[92mY=Yes[0m, [91mN=No/not now[0m]
+:: INJECT MATERIALS CONSENT
+echo.
+    echo [93mDo you want to proceed with injecting?[0m [[92mY=Yes[0m, [91mN=No/not now[0m]
     choice /c yn /n
 
 if errorlevel 2 (
