@@ -2,7 +2,8 @@
 
 ![image](https://github.com/user-attachments/assets/8e0d0846-3ee0-47d2-a490-4acf925c8518)
 
-<h6 align="center"><i>Pic by MrLucifer6529</i></h6>
+<p align="center"><i>Pic by MrLucifer6529</i></p>
+
 <br>
 
 A batch script made for Windows to inject `.material.bin` files in Minecraft Bedrock Edition. (aka file replacement method)  
@@ -11,18 +12,23 @@ Thanks to [ChatGPT](https://chatgpt.com) for assistance.
 
 <br>
 
-> [!CAUTION]
-> THIS SCRIPT IS EXPERIMENTAL.
+[**How to use?**](https://github.com/faizul726/materialinjector/tree/main?tab=readme-ov-file#usage)
 
-#### ⭐️ Star if you like it. PRs are welcome.
+<br>
+
+> [!TIP]
+> The script is pretty much usable now.
+> I will add small changes later. For now, you can use it as-is.
+
+**⭐️ Star if you like it. PRs are welcome.**
 
 <br>
 
 ### Known issues
-* Can't find Minecraft location if it's installed in any where other than `C:\Program Files\WindowsApps`.
+* Can't find Minecraft location if it's installed in any where other than `C:\Program Files\WindowsApps`. (fix coming soon)
 * Can replace vanilla backup with modified files if the user accidentally confirms backup, despite already having a vanilla backup. (fix coming soon)
 * Doesn't work with large number of shader files and long %cd% path.
-* Can't detect if the user has accepted UAC for IObit Unlocker, but it will still show success message. (fix coming soon)
+* Can't detect if the user has accepted UAC for IObit Unlocker, but it will still show success message. (fix `maybe` coming soon)
 * May not work properly if MC Preview is also installed. (not confirmed)
 
 <br>
