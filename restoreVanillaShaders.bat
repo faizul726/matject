@@ -165,12 +165,11 @@ if !errorlevel! equ 0 (
 )
 
 :partialRestore
-echo WIP && pause && goto:EOF
+echo [WIP]
 if exist ".settings\.replaceList.log" (
-    move ".settings\*.log" "tmp\"
-    set /p bins=< "tmp\.bins.log"
-    set /p srcList=< "tmp\.srcList.log"
-    set /p replaceList=< "tmp\.replaceList.log"
+    set /p bins=< ".settings\.bins.log"
+    set /p srcList=< ".settings\.srcList.log"
+    set /p replaceList=< ".settings\.replaceList.log"
     goto restore1
 ) else (
     echo [41;97mNo logs found for previous injection.[0m
@@ -179,8 +178,8 @@ if exist ".settings\.replaceList.log" (
 
 :restore1
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %replaceList%
-if not !errorlevel! equ 0 (
-    echo [41;97mPlease accept UAC next time^^![0m
+if !errorlevel! neq 0 (
+    echo [41;97mPlease accept UAC.[0m
     echo.
     pause
     cls
@@ -194,8 +193,8 @@ echo.
 
 :restore2
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!mcLocation!\data\renderer\materials"
-if not !errorlevel! equ 0 (
-    echo [41;97mPlease accept UAC next time^^![0m
+if !errorlevel! neq 0 (
+    echo [41;97mPlease accept UAC.[0m
     echo.
     pause
     cls

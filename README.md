@@ -25,11 +25,13 @@ Thanks to [ChatGPT](https://chatgpt.com) for assistance.
 <br>
 
 ### Known issues
-* Can't find Minecraft location if it's installed in any where other than `C:\Program Files\WindowsApps`. (fix coming soon)
-* Can replace vanilla backup with modified files if the user accidentally confirms backup, despite already having a vanilla backup. (fix coming soon)
-* Doesn't work with large number of shader files and long %cd% path.
-* Can't detect if the user has accepted UAC for IObit Unlocker, but it will still show success message. (fix `maybe` coming soon)
 * May not work properly if MC Preview is also installed. (not confirmed)
+* Doesn't work with large number of shader files and long %cd% path.
+
+* ~~Can't find Minecraft location if it's installed in any where other than `C:\Program Files\WindowsApps`. (fix coming soon)~~
+* ~~Can replace vanilla backup with modified files if the user accidentally confirms backup, despite already having a vanilla backup. (fix coming soon)~~
+* ~~Can't detect if the user has accepted UAC for IObit Unlocker, but it will still show success message.~~
+
 
 <br>
 
@@ -39,6 +41,8 @@ Thanks to [ChatGPT](https://chatgpt.com) for assistance.
 <br>
 
 ### Usage
+(This guide is obsolete)
+
 1. Download source code.  
 ![image](https://github.com/user-attachments/assets/4422464e-26a3-4068-993e-adc76817ca9c)
 
@@ -51,7 +55,7 @@ Thanks to [ChatGPT](https://chatgpt.com) for assistance.
 >
 > If you have few files to inject then it shouldn't have problem running from anywhere. 
 
-3. Put desired **.material.bin** files in the `materials` folder.
+3. Put desired **.material.bin** files in the `MATERIALS` folder.
 
 4. Run the script by double clicking.
 
