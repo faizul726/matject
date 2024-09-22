@@ -5,6 +5,10 @@ rem IDEAS
 rem Migrate colors to variable
 rem Migrate Y/N to variable
 
+echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
+pause
+goto:EOF
+
 title Matject - A material replacer for Minecraft (v1.0)
 cls
 cd "%~dp0"
@@ -53,7 +57,7 @@ set mcVerOld=%mcVerOld: =%
 
 :USERMEETSREQ
 if exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
-    if exist unlockedWindowsApps.txt (
+    if exist ".settings\unlockedWindowsApps.txt" (
         cls
         echo [97m[*] IObit Unlocked installed and WindowsApps unlocked.
         echo [92m[*] Skipping to injection...[0m
@@ -79,35 +83,15 @@ echo [93m[?] Have you unlocked the "WindowsApps" folder? [0m[[92mY=Yes[0m, 
 echo [97m(Pressing N will ask to unlock)[0m && echo.
 choice /c yn /n
 if !errorlevel! equ 1 (
-    if not exist unlockedWindowsApps.txt (echo [%date% %time%] - This file was created to indicate that WindowsApps is already unlocked and to skip the questions in Matject. > unlockedWindowsApps.txt) && goto DLTOLDBAK
+    if not exist ".settings\unlockedWindowsApps.txt" (
+        echo [%date% %time%] - This file was created to indicate that WindowsApps is already unlocked and to skip the questions in Matject. > ".settings\unlockedWindowsApps.txt"
+        ) 
+        goto DLTOLDBAK
 ) else (
     goto UNLOCKCONSENT
 )
 
-:UNLOCKCONSENT
-cls
-echo This will unlock the WindowsApps folder, which may take some time. && echo.
-echo [93m[?] Do you want to unlock? [0m[[92mY=Yes[0m, [91mN=Not now[0m] && echo.
-choice /c yn /n
-if !errorlevel! 1 (
-    echo [93m[*] Unlocking WindowsApps...[0m
-    if exist unlockedWindowsApps.txt (
-        echo [97m[^^!] You have already unlocked WindowsApps.[0m && goto DLTOLDBAK
-    )
-    :UACUNLOCK
-    powershell -command start-process -file unlockWindowsApps.bat -verb runas -Wait
-    timeout %cooldown% > NUL
-    if exist unlockedWindowsApps.txt (
-        echo [92m[^^!] Unlocked WindowsApps.[0m && goto DLTOLDBAK
-    ) else (
-        echo [41;97m[^^!] Please accept UAC.[0m && echo.
-        echo [93m[*] Trying again...[0m && goto UACUNLOCK
-    )
-) else (
-    echo [41;97m[^^!] You can't inject shaders without unlocking the WindowsApps folder.[0m && echo.
-    pause
-    goto:EOF
-)
+
 
 :DLTOLDBAK
 if exist "materials.bak\" if "!mcVer!" neq "%mcVerOld%" (
@@ -116,11 +100,10 @@ if exist "materials.bak\" if "!mcVer!" neq "%mcVerOld%" (
     echo [93m[?] Do you want to remove old backup to avoid inconsistencies? [0m[[92mY=Yes[0m, [91mN=No[0m] && echo.
     choice /c yn /n
     if !errorlevel! equ 1 ( goto DLTOLDBAKCONFIRMED ) else ( goto DLTOLDBAKSKIPPED )
-) else (
-    goto UNLOCKED
 )
 
 :DLTOLDBAKCONFIRMED
+echo pause && pause
 del %oldver% && echo !mcVer! > %oldVer%
 rmdir /q /s "materials.bak\" && cls && echo [92m[*] Deleted old backup.[0m && echo.
 goto BACKUPCONSENT
@@ -131,7 +114,6 @@ pause
 cls
 echo [91m[^^!] Backup skipped. Because an older backup already exists. && echo.
 goto INJECTION
-
 
 :UNLOCKED
 if exist "materials.bak\" (
@@ -184,6 +166,8 @@ set /a mcpackCount=0
 set mcpackzip="tmp\mcpack.zip"
 echo [92m[*] Auto approach selected[0m && echo.
 echo [97mPlease add a [93mmcpack/zip[97m file in the [93m"MCPACK" [97mfolder.[0m && echo. && echo.
+timeout 5 > NUL
+explorer %cd%\MCPACK
 echo After adding,
 pause
 cls

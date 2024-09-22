@@ -1,6 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 
+echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
+pause
+goto:EOF
+
 cd %~dp0
 cls
 if not defined mcLocation ( for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "mcLocation=%%i" )

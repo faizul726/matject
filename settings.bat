@@ -1,5 +1,9 @@
 @echo off
 
+echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
+pause
+goto:EOF
+
 cd "%~dp0"
 set "off=[ ]"
 set "on=[x]"
