@@ -13,6 +13,10 @@ if not exist "MCPACK\" (
     mkdir MCPACK
 )
 
+if exist "MCPACK\putMcpackHere" (
+    del /q /s "MCPACK\putMcpackHere"
+)
+
 if not exist "MATERIALS\" (
     mkdir MATERIALS
 ) else (
