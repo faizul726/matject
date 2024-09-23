@@ -63,6 +63,7 @@ if !errorlevel! equ 3 goto:EOF
 
 
 :fullRestore
+title [FULL RESTORE RUNNING] DO NOT CLOSE THE WINDOW/DISCONNECT POWER. 
 set rstrCount=
 for %%f in ("materials.bak\*") do (
     set /a rstrCount+=1
