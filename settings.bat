@@ -1,8 +1,8 @@
 @echo off
 
-echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
-pause
-goto:EOF
+::echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
+::pause
+::goto:EO
 
 cd "%~dp0"
 set "off=[ ]"
@@ -26,6 +26,7 @@ if exist "%useManualAlways%" (set toggle4=%on%) else (set toggle4=%off%)
 if exist "%disableCooldown%" (set toggle5=%on%) else (set toggle5=%off%)
 
 echo You can change options of Matject here.
+echo WIP. You can toggle for now but it will not work in Matject.
 echo.
 
 echo %toggle1% 1. Skip introduction

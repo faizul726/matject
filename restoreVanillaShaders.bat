@@ -1,14 +1,17 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
-pause
-goto:EOF
+::echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
+::pause
+::goto:EOF
 
 cd %~dp0
 cls
-if not defined mcLocation ( for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "mcLocation=%%i" )
-if not defined mcLocation (
+if not defined MCLOCATION (
+    echo [*] Getting Minecraft installation location...
+    for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "MCLOCATION=%%i"
+)
+if not defined MCLOCATION (
     echo [41;97m[^^!] Couldn't find Minecraft installation location.[0m
     echo.
     pause
@@ -22,10 +25,12 @@ if exist "tmp\" (
     mkdir "tmp"
 )
 
-if "%restoreType%" equ "full" (
+if "!RESTORETYPE!" equ "full" (
     echo [93m[*] Restore type: Full[0m && echo.
     goto fullRestore
-) else if "%restoreType%"=="partial" (
+)
+if "!RESTORETYPE!" equ "partial" (
+    echo [93m[*] Restore type: Partial[0m && echo.
     goto partialRestore
 )
 
@@ -35,18 +40,10 @@ if not exist "materials.bak\" (
     goto:EOF
 )
 
-set rstrCount=
-for %%f in ("materials.bak\*") do set /a rstrCount+=1
-if not defined rstrCount (
-    echo [41;97mmaterials.bak folder is empty.[0m && echo.
-    pause
-    goto:EOF
-)
-
 echo [93m[?] How would you like to restore?[0m
 echo.
 echo [1] Full restore (restore all materials)
-echo [2] Partial restore (only restore the ones modified in previous injection)
+echo [2] Partial restore (only restore the ones modified in previous injection) [WIP]
 echo [3] Exit
 echo.
 choice /c 123 /n 
@@ -64,7 +61,21 @@ if !errorlevel! equ 2 (
 )
 if !errorlevel! equ 3 goto:EOF
 
+
 :fullRestore
+set rstrCount=
+for %%f in ("materials.bak\*") do (
+    set /a rstrCount+=1
+    echo !rstrCount!
+)
+
+if not defined rstrCount (
+    echo [41;97mmaterials.bak folder is empty.[0m && echo.
+    pause
+    goto:EOF
+)
+
+:fullRestore2
 set splitCount=
 for %%f in ("materials.bak\*") do (
     set /a splitCount+=1
@@ -74,7 +85,7 @@ for %%f in ("materials.bak\*") do (
 )
 if defined splitCount (
     set /a stepCount+=1
-    goto fullRestore
+    goto fullRestore2
 ) else (
     move "tmp\*" "materials.bak" > NUL
     set /a stepCount=stepCount+2
@@ -89,14 +100,15 @@ timeout 5 > NUL && cls
 echo [93m[*] Running step 1/%stepCount%: Deleting game materials...[0m && echo.
 
 :fr-delete
-if exist "!mcLocation!\data\renderer\materials\" (
-    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete "!mcLocation!\data\renderer\materials"
-) else (
-    echo [92m[*] Done[0m && echo. && echo.
-    echo [93m[*] Running step 2/%stepCount%: Creating materials folder...[0m && echo.
-    if not exist "tmp\materials" mkdir "tmp\materials"
-    goto fr-mkdir
+if exist "!MCLOCATION!\data\renderer\materials\" (
+    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete "!MCLOCATION!\data\renderer\materials"
+    goto fr-delete
 )
+echo [92m[*] Done[0m && echo. && echo.
+echo [93m[*] Running step 2/%stepCount%: Creating materials folder...[0m && echo.
+if not exist "tmp\materials" mkdir "tmp\materials"
+goto fr-mkdir
+
 cls
 if !errorlevel! neq 0 (
     echo [93m[*] Running step 1/%stepCount%: Deleting game materials...[0m && echo.
@@ -109,7 +121,7 @@ if !errorlevel! neq 0 (
 
 
 :fr-mkdir
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move "%cd%\tmp\materials\" "!mcLocation!\data\renderer\"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move "%cd%\tmp\materials\" "!MCLOCATION!\data\renderer\"
 
 if !errorlevel! neq 0 (
     cls
@@ -147,13 +159,14 @@ if not defined splitCount (
 
 :fr-move
 set srcList=
+set 
 for %%f in (tmp\*) do (
     set srcList=!srcList!,"%cd%\%%f"
     echo [93m[Moving] [0m%%~nxf
 )
 if defined srcList set "srcList=%srcList:~1%" 
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!mcLocation!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! equ 0 (
     cls
     set /a currentStep+=1
@@ -196,7 +209,7 @@ echo.
 echo.
 
 :restore2
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!mcLocation!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! neq 0 (
     echo [41;97mPlease accept UAC.[0m
     echo.
