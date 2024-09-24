@@ -5,11 +5,9 @@ rem IDEAS
 rem Migrate colors to variable
 rem Migrate Y/N to variable
 
-echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
-pause
-goto:EOF
 
-title Matject - A material replacer for Minecraft (v1.0)
+
+title Matject v2.0 - A shader injector for Minecraft
 cls
 cd "%~dp0"
 if exist "tmp" rmdir /s /q "tmp"
@@ -149,9 +147,11 @@ cls
 :INJECTION
 echo [93m[?] Which approach would you like to try?[0m && echo. && echo.
 echo [92m[1] Auto approach[0m
-echo Put shader.mcpack/zip in the [93mMCPACK[0m folder. Matject will extract the its materials to the [93mMaterials [0mfolder, and ask to inject.[97m && echo.
+
+echo Put mcpack/zip in the [93mMCPACK[0m folder. 
+echo Matject will extract the its materials to the [93mMATERIALS [0mfolder, and ask to inject.[97m && echo.
 echo [94m[2] Manual approach[0m
-echo Put [93m.material.bin[0m files in [93mmaterials[0m folder. Matject will ask to inject provided materials. && echo. && echo.
+echo Put [93m.material.bin[0m files in the [93mMATERIALS[0m folder. Matject will ask to inject provided materials. && echo. && echo.
 echo ^(Press 1 or 2 to confirm your choice^) && echo.
 choice /c 12 /n
 if !errorlevel! equ 1 (

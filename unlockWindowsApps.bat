@@ -5,6 +5,7 @@ cd "%~dp0"
 ::pause
 ::goto:EOF
 
+cls
 echo [*] This script is separate from Matject. It's used to take ownership of WindowsApps folder to list content inside.
 echo.
 

@@ -1,12 +1,18 @@
 @echo off
 
-::echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
-::pause
-::goto:EO
-
 cd "%~dp0"
-set "off=[ ]"
-set "on=[x]"
+
+::COLORS
+
+set "GRY=[90m"
+set "RED=[91m"
+set "GRN=[92m"
+set "YLW=[93m"
+set "WHT=[97m"
+set "RST=[0m"
+
+set "off=%GRY%[ ]%RST%"
+set "on=%GRN%[x]%RST%"
 set "skipIntro=.settings\.skipIntroduction.txt"
 set "skipConfirmation=.settings\.skipConfirmation.txt"
 set "useAutoAlways=.settings\.useAutoAlways.txt"
@@ -25,8 +31,13 @@ if exist "%useAutoAlways%" (set toggle3=%on%) else (set toggle3=%off%)
 if exist "%useManualAlways%" (set toggle4=%on%) else (set toggle4=%off%)
 if exist "%disableCooldown%" (set toggle5=%on%) else (set toggle5=%off%)
 
-echo You can change options of Matject here.
-echo WIP. You can toggle for now but it will not work in Matject.
+echo %WHT%You can change options of Matject here. %RED%[WIP]%RST%
+echo.
+
+echo %YLW%[!] You can play with the toggles for now but it will not work in Matject :P%RST%
+echo.
+
+echo Settings folder: "%cd%\.settings"
 echo.
 
 echo %toggle1% 1. Skip introduction
@@ -35,10 +46,10 @@ echo %toggle3% 3. Always use auto method
 echo %toggle4% 4. Always use manual method
 echo %toggle5% 5. Disable cooldown
 echo.
-echo B. Exit
+echo %RED%B. Exit%WHT%
 echo.
 
-echo Press number to toggle desired settings. [Press O to turn on all, F to turn off all]
+echo %WHT%Press number to toggle desired settings. [Press O to turn on all, F to turn off all]%RST%
 choice /c 12345ofb /n
 
 if %errorlevel% equ 1 (

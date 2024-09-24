@@ -7,6 +7,9 @@ setlocal enabledelayedexpansion
 
 cd %~dp0
 cls
+echo This script is used to restore original shader files.
+echo.
+
 if not defined MCLOCATION (
     echo [*] Getting Minecraft installation location...
     for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "MCLOCATION=%%i"
@@ -30,16 +33,17 @@ if "!RESTORETYPE!" equ "full" (
     goto fullRestore
 )
 if "!RESTORETYPE!" equ "partial" (
-    echo [93m[*] Restore type: Partial[0m && echo.
     goto partialRestore
 )
 
 if not exist "materials.bak\" (
     echo [41;97mNo previous backup found.[0m && echo.
+    if exist "tmp\" rmdir /s /q tmp
     pause
     goto:EOF
 )
 
+cls
 echo [93m[?] How would you like to restore?[0m
 echo.
 echo [1] Full restore (restore all materials)
@@ -55,8 +59,6 @@ if !errorlevel! equ 1 (
 if !errorlevel! equ 2 (
     cls
     echo [93m[*] Restore type: Partial[0m && echo.
-    echo WORK IN PROGRESS
-    pause && goto:EOF
     goto partialRestore
 )
 if !errorlevel! equ 3 goto:EOF
@@ -159,15 +161,14 @@ if not defined splitCount (
 )
 
 :fr-move
-set srcList=
-set 
+set SRCLIST2=
 for %%f in (tmp\*) do (
-    set srcList=!srcList!,"%cd%\%%f"
+    set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
     echo [93m[Moving] [0m%%~nxf
 )
-if defined srcList set "srcList=%srcList:~1%" 
+if defined SRCLIST2 set "SRCLIST2=%SRCLIST2:~1%" 
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!MCLOCATION!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! equ 0 (
     cls
     set /a currentStep+=1
@@ -185,16 +186,22 @@ if !errorlevel! equ 0 (
 :partialRestore
 echo [WIP]
 if exist ".settings\.replaceList.log" (
-    set /p bins=< ".settings\.bins.log"
-    set /p srcList=< ".settings\.srcList.log"
+    set /p BINS=< ".settings\.bins.log"
     set /p replaceList=< ".settings\.replaceList.log"
+    robocopy "materials.bak" "tmp" !BINS! /NFL /NDL /NJH /NJS /nc /ns /np
     goto restore1
 ) else (
     echo [41;97mNo logs found for previous injection.[0m
+    pause
+    goto:EOF
 )
 
 
 :restore1
+for %%f in (tmp\*) do (
+    set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
+)
+
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %replaceList%
 if !errorlevel! neq 0 (
     echo [41;97mPlease accept UAC.[0m
@@ -210,7 +217,7 @@ echo.
 echo.
 
 :restore2
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !srcList! "!MCLOCATION!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! neq 0 (
     echo [41;97mPlease accept UAC.[0m
     echo.
@@ -219,12 +226,14 @@ if !errorlevel! neq 0 (
     goto restore2
 ) else (
     echo [92mStep 2/2 succeed^^![0m
+    del /q /s ".settings\.replaceList.log" > NUL
+    del /q /s ".settings\.bins.log" > NUL
     timeout 2 > NUL
-    goto: EOF
+    goto:EOF
 )
 
 :completed
 cls
-echo [92m[*] Done[0m
+echo [92m[*] BACKUP RESTORED[0m
 pause
 goto:EOF

@@ -3,8 +3,12 @@ setlocal enabledelayedexpansion
 cls
 cd "%~dp0"
 
+:: Matject v2.0
+:: A shader injector for Minecraft.
+:: Made by faizul726
+:: https://github.com/faizul726/matject
 
-:: FOLDER CREATION
+:: WORK DIRECTORY SETUP
 if not exist ".settings\" (
     mkdir .settings
 )
@@ -14,7 +18,7 @@ if not exist "MCPACK\" (
 )
 
 if exist "MCPACK\putMcpackHere" (
-    del /q /s "MCPACK\putMcpackHere"
+    del /q /s "MCPACK\putMcpackHere" > NUL
 )
 
 if not exist "MATERIALS\" (
@@ -28,7 +32,7 @@ if exist "tmp" (
 )
 
 
-title Matject - A material replacer for Minecraft (v2.0)
+title Matject v2.0 - A shader injector for Minecraft
 
 
 
@@ -112,6 +116,9 @@ if exist "materials.bak\" (
 
 :SKIPTOINJECTION
 if exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" if exist ".settings\unlockedWindowsApps.txt" (
+    cls
+    echo [*] Questions skipped because user meets requirements.
+    echo.
     goto RESTORECONSENT
 )
 
@@ -187,7 +194,6 @@ if !errorlevel! neq 1 (
 
         goto UAC
     )
-    cls
     echo [*] Unlock succeed.
     echo.
 
@@ -195,9 +201,9 @@ if !errorlevel! neq 1 (
 )
 
 
-
-:RESTORECONSENT
 cls
+:RESTORECONSENT
+
 
 REM IDEA - ADD DATETIME IN RESTORE CONSENT
 REM IDEA - DELETE MATERIALS.BAK IF EMPTY
@@ -213,10 +219,10 @@ echo.
 choice /c yn /n
 
 if !errorlevel! equ 1 (
-    echo THIS IS INCOMPLETE. SKIPPING TO INJECTION
-    goto INJECTION
     set RESTORETYPE=full
     call restoreVanillaShaders
+    title Matject v2.0 - A material replacer for Minecraft
+    goto BACKUPCONSENT
 )
 
 cls
@@ -229,6 +235,13 @@ goto INJECTION
 
 
 :BACKUPCONSENT
+if exist "materials.bak\" (
+    cls echo [^^!] BACKUP SKIPPED BECAUSE AN OLDER BACKUP EXISTS
+    echo.
+    echo.
+
+    goto INJECTION
+)
 echo [?] Do you want to backup vanilla materials? [Y/N]
 echo.
 
@@ -435,7 +448,7 @@ if not defined SRCLIST (
 set "SRCLIST=%SRCLIST:~1%"
 set "REPLACELIST=%REPLACELIST:~1%"
 
-echo [*] Found !SRCCOUNT! material(s) in the MATERIALS folder.
+echo [*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.
 echo.
 
 echo Minecraft location: "!MCLOCATION!"
@@ -468,13 +481,17 @@ if !errorlevel! equ 3 cls && pause && goto:EOF
 
 :INJECTIONCONFIRMED
 cls
+if exist "tmp\" (
+    rmdir /q /s tmp
+)
 echo [INJECTION CONFIRMED]
 echo.
 echo.
-::if exist ".settings\.replaceList.log" (
-    ::set "RESTORETYPE=partial"
-    ::call restoreVanillaShaders
-::)
+if exist ".settings\.bins.log" (
+    set /p BINS=< ".settings\.bins.log"
+    set "RESTORETYPE=partial"
+    call restoreVanillaShaders
+)
 
 
 
@@ -517,12 +534,10 @@ if !errorlevel! neq 0 (
 )
 
 echo [*] Step 2/2 succeed.
-if exist "materials.bak\" echo !BINS! > ".settings\.bins.log" && echo !SRCLIST! > ".settings\.srcList.log" && echo !REPLACELIST! > ".settings\.replaceList.log"
+if exist "materials.bak\" echo !REPLACELIST! > ".settings\.replaceList.log" && echo !BINS! > ".settings\.bins.log"
 
 timeout 3 > NUL
-if exist "tmp\" (
-    rmdir /q /s tmp
-)
+
 
 
 

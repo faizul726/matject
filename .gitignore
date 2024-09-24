@@ -1,0 +1,9 @@
+MCPACK/*
+!MCPACK/putMcpackHere
+
+MATERIALS/*
+!MATERIALS/putMaterialsHere
+
+materials.bak/
+settings/
+tmp/
