@@ -37,7 +37,8 @@ title Matject v2.0 - A shader injector for Minecraft
 
 
 :INTRODUCTION
-echo Matject v2.0 B^&W
+echo Matject v2.0
+echo Made by faizul726
 echo.
 
 echo A batch script made to replace shader files of Minecraft.
