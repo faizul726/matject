@@ -54,11 +54,11 @@ A. Well, depends on you. (2)
 >
 > *Thank you <3*
 
-#### Will add later?
+#### Will do later?
 - [ ] Add GitHub pages
-- [ ] Remove remnants
+- [x] Remove remnants
 - [ ] Optimize script and improve readability
-- [ ] Other todos in matject.bat
+- [ ] Other todos in `matject.bat`
 
 <br>
 
