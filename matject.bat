@@ -163,9 +163,10 @@ choice /c yn /n
 
 if !errorlevel! equ 1 (
     echo [%date% %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject. > ".settings\unlockedWindowsApps.txt"
+    cls
     goto RESTORECONSENT
 )
-cls
+
 
 
 
