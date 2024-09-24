@@ -5,5 +5,5 @@ MATERIALS/*
 !MATERIALS/putMaterialsHere
 
 materials.bak/
-settings/
+.settings/
 tmp/
