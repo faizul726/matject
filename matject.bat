@@ -21,6 +21,10 @@ if exist "MCPACK\putMcpackHere" (
     del /q /s "MCPACK\putMcpackHere" > NUL
 )
 
+if exist "MATERIALS\putMaterialsHere" (
+    del /q /s "MATERIALS\putMaterialsHere" > NUL
+)
+
 if not exist "MATERIALS\" (
     mkdir MATERIALS
 ) else (
