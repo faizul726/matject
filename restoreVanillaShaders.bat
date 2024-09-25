@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 ::pause
 ::goto:EOF
 
-cd %~dp0
+cd "%~dp0"
 cls
 echo This script is used to restore original shader files.
 echo.
