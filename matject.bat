@@ -27,8 +27,6 @@ if exist "MATERIALS\putMaterialsHere" (
 
 if not exist "MATERIALS\" (
     mkdir MATERIALS
-) else (
-    del /q /s MATERIALS > NUL
 )
 
 if exist "tmp" (
