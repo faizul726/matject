@@ -18,6 +18,9 @@ set "skipConfirmation=.settings\.skipConfirmation.txt"
 set "useAutoAlways=.settings\.useAutoAlways.txt"
 set "useManualAlways=.settings\.useManualAlways.txt"
 set "disableCooldown=.settings\.disableCooldown.txt"
+set "noobMode=.settings\.noobMode.txt"
+set "skipBackup=.settings\.skipBackup.txt"
+set "skipSuccessMsg=.settings\.skipSuccessMsg.txt"
 
 title Settings for Matject
 
@@ -30,6 +33,9 @@ if exist "%skipConfirmation%" (set toggle2=%on%) else (set toggle2=%off%)
 if exist "%useAutoAlways%" (set toggle3=%on%) else (set toggle3=%off%)
 if exist "%useManualAlways%" (set toggle4=%on%) else (set toggle4=%off%)
 if exist "%disableCooldown%" (set toggle5=%on%) else (set toggle5=%off%)
+if exist "%noobMode%" (set toggle6=%on%) else (set toggle6=%off%)
+if exist "%skipBackup%" (set toggle7=%on%) else (set toggle7=%off%)
+if exist "%skipSuccessMsg%" (set toggle8=%on%) else (set toggle8=%off%)
 
 echo %WHT%You can change options of Matject here. %RED%[WIP]%RST%
 echo.
@@ -45,12 +51,16 @@ echo %toggle2% 2. Skip confirmation
 echo %toggle3% 3. Always use auto method
 echo %toggle4% 4. Always use manual method
 echo %toggle5% 5. Disable cooldown
+echo %toggle6% 6. Noob mode
+echo %toggle7% 7. Skip backup
+echo %toggle8% 8. Skip success message
+
 echo.
 echo %RED%B. Exit%WHT%
 echo.
 
-echo %WHT%Press number to toggle desired settings. [Press O to turn on all, F to turn off all]%RST%
-choice /c 12345ofb /n
+echo %WHT%Press number to toggle desired settings.%RST%
+choice /c 12345678fb /n
 
 if %errorlevel% equ 1 (
 	if "%toggle1%"=="%off%" (
@@ -90,25 +100,38 @@ if %errorlevel% equ 4 (
 if %errorlevel% equ 5 (
 	if "%toggle5%"=="%off%" (
 		echo 1 > "%disableCooldown%"
-		) else (
-			del "%disableCooldown%"
-)
+		) else del "%disableCooldown%"
 )
 
 if %errorlevel% equ 6 (
-	echo 1 > "%skipIntro%"
-	echo 1 > "%skipConfirmation%"
-	echo 1 > "%disableCooldown%"
+	if "%toggle6%"=="%off%" (
+		echo 1 > "%noobMode%"
+		) else del "%noobMode%"
 )
 
 if %errorlevel% equ 7 (
+	if "%toggle7%"=="%off%" (
+		echo 1 > "%skipBackup%"
+		) else del "%skipBackup%"
+)
+
+if %errorlevel% equ 8 (
+	if "%toggle8%"=="%off%" (
+		echo 1 > "%skipSuccessMsg%"
+		) else del "%skipSuccessMsg%"
+)
+
+if %errorlevel% equ 9 (
 	if "%toggle1%" equ "%on%" del "%skipIntro%"
 	if "%toggle2%" equ "%on%" del "%skipConfirmation%"
 	if "%toggle3%" equ "%on%" del "%useAutoAlways%"
 	if "%toggle4%" equ "%on%" del "%useManualAlways%"
 	if "%toggle5%" equ "%on%" del "%disableCooldown%"
+	if "%toggle6%" equ "%on%" del "%noobMode%"
+	if "%toggle7%" equ "%on%" del "%skipBackup%"
+	if "%toggle8%" equ "%on%" del "%skipSuccessMsg%"
 )
 
-if %errorlevel% equ 8 goto:EOF
+if %errorlevel% equ 10 goto:EOF
 
 goto SETTINGS
