@@ -66,7 +66,6 @@ title [FULL RESTORE RUNNING] DO NOT CLOSE THE WINDOW/DISCONNECT POWER.
 set rstrCount=
 for %%f in ("materials.bak\*") do (
     set /a rstrCount+=1
-    echo !rstrCount!
 )
 
 if not defined rstrCount (
@@ -184,9 +183,9 @@ if !errorlevel! equ 0 (
 echo [WIP]
 echo [*] Restoring modified materials from last injection...
 if exist ".settings\.replaceList.log" (
-    set /p BINS=< ".settings\.bins.log"
-    set /p replaceList=< ".settings\.replaceList.log"
-    robocopy "materials.bak" "tmp" !BINS! /NFL /NDL /NJH /NJS /nc /ns /np
+    set /p BINS2=< ".settings\.bins.log"
+    set /p replaceList2=< ".settings\.replaceList.log"
+    robocopy "materials.bak" "tmp" !BINS2! /NFL /NDL /NJH /NJS /nc /ns /np
     goto restore1
 ) else (
     echo [41;97mNo logs found for previous injection.[0m
@@ -200,7 +199,7 @@ for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
 )
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %replaceList%
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %replaceList2%
 if !errorlevel! neq 0 (
     echo [41;97m[^^!] Please accept UAC.[0m
     echo.
@@ -211,7 +210,6 @@ if !errorlevel! neq 0 (
     echo [92m[*] Partial restore: Step 1/2 succeed^^![0m
 )
 
-echo.
 echo.
 
 :restore2
@@ -234,6 +232,8 @@ if !errorlevel! neq 0 (
 
 :completed
 cls
+if exist ".settings\.replaceList.log" del /q /s ".settings\.replaceList.log" > NUL
+if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" > NUL
 echo [92m[*] BACKUP RESTORED[0m
 pause
 goto:EOF

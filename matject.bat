@@ -8,6 +8,7 @@ REM - ADD DATETIME IN RESTORE CONSENT
 REM - DELETE MATERIALS.BAK IF EMPTY
 REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST
 REM - USE COLORS AS VAR
+REM - ADD FOUND DETAILS IN GETMCDETAILS
 
 :: Matject v2.0
 :: A shader injector for Minecraft.
@@ -226,8 +227,10 @@ echo.
 choice /c yn /n
 
 if !errorlevel! equ 1 (
+    cls
     set RESTORETYPE=full
     call restoreVanillaShaders
+    cls
     title Matject v2.0 - A material replacer for Minecraft
     goto BACKUPCONSENT
 )
@@ -281,7 +284,7 @@ echo Matject will extract the its materials to the MATERIALS folder, and ask to 
 echo.
 
 echo [2] Manual approach
-echo Put .material.bin files in materials folder. Matject will ask to inject provided materials. 
+echo Put .material.bin files in the MATERIALS folder. Matject will ask to inject provided materials. 
 echo.
 echo.
 echo (Press 1 or 2 to confirm your choice)
@@ -357,6 +360,7 @@ echo.
 choice /c yn /n
 
 if !errorlevel! neq 1 (
+    cls
     goto INJECTION
 )
 
@@ -453,7 +457,7 @@ echo Minecraft location: "!MCLOCATION!"
 echo Minecraft version:  v!CURRENTVERSION!
 echo.
 
-echo [TIP] You can add subpack materials from "tmp\subpacks" and refresh the list to use them.
+echo [TIP] You can add subpack materials from "tmp\subpacks" and ^(R^)efresh the list to use them.
 echo.
 
 echo -------- Material list --------
