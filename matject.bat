@@ -3,6 +3,12 @@ setlocal enabledelayedexpansion
 cls
 cd "%~dp0"
 
+REM IDEAS
+REM - ADD DATETIME IN RESTORE CONSENT
+REM - DELETE MATERIALS.BAK IF EMPTY
+REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST
+REM - USE COLORS AS VAR
+
 :: Matject v2.0
 :: A shader injector for Minecraft.
 :: Made by faizul726
@@ -21,12 +27,12 @@ if exist "MCPACK\putMcpackHere" (
     del /q /s "MCPACK\putMcpackHere" > NUL
 )
 
-if exist "MATERIALS\putMaterialsHere" (
-    del /q /s "MATERIALS\putMaterialsHere" > NUL
-)
-
 if not exist "MATERIALS\" (
     mkdir MATERIALS
+)
+
+if exist "MATERIALS\putMaterialsHere" (
+    del /q /s "MATERIALS\putMaterialsHere" > NUL
 )
 
 if exist "tmp" (
@@ -204,15 +210,11 @@ if !errorlevel! neq 1 (
 
     pause
 )
-
-
 cls
+
+
+
 :RESTORECONSENT
-
-
-REM IDEA - ADD DATETIME IN RESTORE CONSENT
-REM IDEA - DELETE MATERIALS.BAK IF EMPTY
-
 if not exist "materials.bak\" goto BACKUPCONSENT
 
 echo [^^!] FOUND OLD BACKUP
@@ -240,13 +242,6 @@ goto INJECTION
 
 
 :BACKUPCONSENT
-if exist "materials.bak\" (
-    cls echo [^^!] BACKUP SKIPPED BECAUSE AN OLDER BACKUP EXISTS
-    echo.
-    echo.
-
-    goto INJECTION
-)
 echo [?] Do you want to backup vanilla materials? [Y/N]
 echo.
 
@@ -378,8 +373,6 @@ echo [*] Extracting shader to temporary folder...
 echo.
 
 powershell -command "Expand-Archive -LiteralPath '%cd%\tmp\mcpack.zip' -DestinationPath '%cd%\tmp'"
-
-REM IDEA - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST
 
 for /r "tmp" %%f in (manifest.json) do (
     if exist "%%f" (

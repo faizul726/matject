@@ -1,25 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-::echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
-::pause
-::goto:EOF
-
 cd "%~dp0"
-cls
-echo This script is used to restore original shader files.
-echo.
-
-if not defined MCLOCATION (
-    echo [*] Getting Minecraft installation location...
-    for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "MCLOCATION=%%i"
-)
-if not defined MCLOCATION (
-    echo [41;97m[^^!] Couldn't find Minecraft installation location.[0m
-    echo.
-    pause
-    goto:EOF
-)
 
 if exist "tmp\" (
     rmdir /s /q tmp
@@ -34,6 +16,21 @@ if "!RESTORETYPE!" equ "full" (
 )
 if "!RESTORETYPE!" equ "partial" (
     goto partialRestore
+)
+
+cls
+echo This script is used to restore original shader files.
+echo.
+
+if not defined MCLOCATION (
+    echo [*] Getting Minecraft installation location...
+    for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "MCLOCATION=%%i"
+)
+if not defined MCLOCATION (
+    echo [41;97m[^^!] Couldn't find Minecraft installation location.[0m
+    echo.
+    pause
+    goto:EOF
 )
 
 if not exist "materials.bak\" (
@@ -185,6 +182,7 @@ if !errorlevel! equ 0 (
 
 :partialRestore
 echo [WIP]
+echo [*] Restoring modified materials from last injection...
 if exist ".settings\.replaceList.log" (
     set /p BINS=< ".settings\.bins.log"
     set /p replaceList=< ".settings\.replaceList.log"
@@ -204,13 +202,13 @@ for %%f in (tmp\*) do (
 
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %replaceList%
 if !errorlevel! neq 0 (
-    echo [41;97mPlease accept UAC.[0m
+    echo [41;97m[^^!] Please accept UAC.[0m
     echo.
     pause
     cls
     goto restore1
 ) else (
-    echo [92mStep 1/2 succeed^^![0m
+    echo [92mP[*] Partial restore: Step 1/2 succeed^^![0m
 )
 
 echo.
@@ -219,13 +217,13 @@ echo.
 :restore2
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! neq 0 (
-    echo [41;97mPlease accept UAC.[0m
+    echo [41;97m[^^!] Please accept UAC.[0m
     echo.
     pause
     cls
     goto restore2
 ) else (
-    echo [92mStep 2/2 succeed^^![0m
+    echo [92m[*] Partial restore: Step 2/2 succeed^^![0m
     del /q /s ".settings\.replaceList.log" > NUL
     del /q /s ".settings\.bins.log" > NUL
     timeout 2 > NUL

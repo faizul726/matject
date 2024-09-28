@@ -1,10 +1,6 @@
 @echo off
 cd "%~dp0"
 
-::echo SINCE MY INJECTOR IS GOING THROUGH FULL REWRITE, IT'S VERY UNSTABLE RIGHT NOW SO I DISABLED THE ABILITY TO USE IT FOR NOW.
-::pause
-::goto:EOF
-
 cls
 echo [*] This script is separate from Matject. It's used to take ownership of WindowsApps folder to list content inside.
 echo.
