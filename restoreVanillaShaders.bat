@@ -208,7 +208,7 @@ if !errorlevel! neq 0 (
     cls
     goto restore1
 ) else (
-    echo [92mP[*] Partial restore: Step 1/2 succeed^^![0m
+    echo [92m[*] Partial restore: Step 1/2 succeed^^![0m
 )
 
 echo.
@@ -224,6 +224,8 @@ if !errorlevel! neq 0 (
     goto restore2
 ) else (
     echo [92m[*] Partial restore: Step 2/2 succeed^^![0m
+    echo.
+    echo.
     del /q /s ".settings\.replaceList.log" > NUL
     del /q /s ".settings\.bins.log" > NUL
     timeout 2 > NUL

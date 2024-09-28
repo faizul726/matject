@@ -357,7 +357,7 @@ echo.
 choice /c yn /n
 
 if !errorlevel! neq 1 (
-    goto:EOF
+    goto INJECTION
 )
 
 
