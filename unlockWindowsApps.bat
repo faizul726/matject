@@ -9,6 +9,7 @@ net session >nul 2>&1
 if %errorlevel% neq 0 (
     echo [41;97mYOU MUST RUN THIS AS ADMIN![0m
     pause 
+    goto:EOF
 )
 
 :: Removed /r /d y from takeown and icacls as those are unnecessary
