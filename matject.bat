@@ -3,12 +3,14 @@ setlocal enabledelayedexpansion
 cls
 cd "%~dp0"
 
-REM IDEAS
+REM TODO
 REM - ADD DATETIME IN RESTORE CONSENT
 REM - DELETE MATERIALS.BAK IF EMPTY
 REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST
 REM - USE COLORS AS VAR
 REM - ADD FOUND DETAILS IN GETMCDETAILS
+REM - STORE SHADER NAME FOR LATER USE
+REM - MERGE UNLOCK...BAT WITH MATJECT
 
 :: Matject v2.0
 :: A shader injector for Minecraft.
@@ -490,7 +492,6 @@ echo [INJECTION CONFIRMED]
 echo.
 echo.
 if exist ".settings\.bins.log" (
-    set /p BINS=< ".settings\.bins.log"
     set "RESTORETYPE=partial"
     call restoreVanillaShaders
 )
@@ -537,6 +538,10 @@ if !errorlevel! neq 0 (
 
 echo [*] Step 2/2 succeed.
 if exist "materials.bak\" echo !REPLACELIST! > ".settings\.replaceList.log" && echo !BINS! > ".settings\.bins.log"
+
+if exist "tmp" (
+    rmdir /q /s tmp
+)
 
 timeout 3 > NUL
 

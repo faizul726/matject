@@ -1,20 +1,20 @@
-# Matject
+# Matject v2.0
 *Previously known as **materialinjector**.*
 
 <br>
 
-A batch script made for Windows to inject `.material.bin` files in Minecraft Bedrock Edition. (aka file replacement method)  
+A batch script made for Windows to dynamically replace Minecraft `.material.bin` shader files of Minecraft Bedrock Edition (aka. file replacement method)  
 
 Thanks to [Stack Overflow](https://stackoverflow.com/) and [ChatGPT](https://chatgpt.com) for some snippets.
 
 <br>
 
-> [!TIP]
-> The script is pretty much usable now.
+> [!NOTE]
+> Although the script is pretty much usable now, the partial restore function may not work properly in certain scenarios. So, make sure PC stays on during all processes.
 
 <br>
 
-### [How to use?](#usage)
+#### [How to use?](#usage)
 
 <br>
 
@@ -54,6 +54,8 @@ A. Well, depends on you. (2)
 >
 > *Thank you <3*
 
+<br>
+
 #### Will do later?
 - [ ] Add GitHub pages
 - [x] Remove remnants
@@ -72,7 +74,7 @@ A. Well, depends on you. (2)
 
 3. Extract the ZIP file
 
-4. Open `matject.bat` or `matject` in Command Prompt
+4. Open `matject.bat` or run `matject` in Command Prompt
 
 5. Further instructions will be there. If you can read English you shouldn't have any problem
 

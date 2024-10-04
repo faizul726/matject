@@ -19,6 +19,7 @@ if "!RESTORETYPE!" equ "partial" (
 )
 
 cls
+title Vanilla Shader Restore Script
 echo This script is used to restore original shader files.
 echo.
 

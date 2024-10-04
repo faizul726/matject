@@ -54,6 +54,7 @@ echo %toggle5% 5. Disable cooldown
 echo %toggle6% 6. Noob mode
 echo %toggle7% 7. Skip backup
 echo %toggle8% 8. Skip success message
+echo [TOGGLE] 9. Skip backup restore confirmation (pseudo)
 
 echo.
 echo %RED%B. Exit%WHT%
