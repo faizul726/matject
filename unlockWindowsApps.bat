@@ -1,6 +1,6 @@
 @echo off
 cd "%~dp0"
-
+title WindowsApps Unlocker
 cls
 echo [*] This script is separate from Matject. It's used to take ownership of WindowsApps folder to list content inside.
 echo.

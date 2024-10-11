@@ -1,6 +1,7 @@
 @echo off
 cls
 setlocal
+title Opening Minecraft folder...
 echo This script has nothing to do with Matject.
 echo It's for opening Minecraft app folder.
 echo.
