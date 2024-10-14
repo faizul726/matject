@@ -1,5 +1,7 @@
 # Matject v2.0
 
+**[How to use?](#how-to-use) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelogs](#changelogs)**
+
 ### What?
 Matject is a material replacer that allows users to use Minecraft shaders. It automates the process of replacing and restoring game files.
 
@@ -7,13 +9,13 @@ Matject is a material replacer that allows users to use Minecraft shaders. It au
 It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
 
 ### Why?
-[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2. Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
+[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Oct 14). Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 So, I made this script so users don't have to go through the hassle of replacing game files by themselves.
 
 <br>
 
 >[!IMPORTANT]  
-> Before you complain about game crashing/unable to see blocks, make sure the shader you're using supports **Windows** and the game version. 
+> Before you complain about game crashing/unable to see blocks, make sure the shader you're using supports **Windows** and the **game version**. 
 
 <br>
 
@@ -26,7 +28,7 @@ So, I made this script so users don't have to go through the hassle of replacing
 * Detect Minecraft version changes and adjust according to that.
 
 <details>
-<summary>Planned features (v3.0)</summary>
+<summary><b>Planned features (v3.0)</b></summary>
 <ul>
 <li>Add colored texts.</li>
 <li>Auto open MCPACK after replacing.</li>
@@ -39,7 +41,7 @@ So, I made this script so users don't have to go through the hassle of replacing
 
 <br><br>
 
-> Thanks to **@JKnife0 , anonymous_user8** and all other people who tested and gave feedback.
+Thanks to **[JKnife0](https://github.com/JKnife0) , anonymous_user8** and all other people who tested and gave feedback.
 
 > [!TIP]  
 > Need help? Join [YSS Discord server](https://discord.gg/yss) and send message in `#windows`. I will be happy to assist you.
@@ -64,7 +66,7 @@ So, I made this script so users don't have to go through the hassle of replacing
 > Original files will be restored automatically after the game is updated.
 
 1. Open `restoreVanillaShaders.bat`.
-2. Select **full restore**.
+2. Select **Full restore (restore all materials)**.
 
 <br>
 
@@ -75,10 +77,33 @@ So, I made this script so users don't have to go through the hassle of replacing
 
 ## FAQ
 **Q. How is this different from [BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/)?**  
-A. BetterRenderDragon uses far more superior 'memory injection', all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders. It's not universal, so BRD devs have to update it for newer Minecraft versions to make it work. *Changes made by Matject persists until next update. It's mostly universal, so it will work with any Minecraft version.*
+A. BetterRenderDragon uses far more superior 'memory injection', all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders. It's not universal, so BRD devs have to update it for newer Minecraft versions to make it work.  
+Changes made by Matject persists until next update. It's mostly universal, so it will work with any Minecraft version.
 
 **Q. Virus?**  
 A. Well, depends on you. (2)
+
+**Q. Does it require internet?**  
+A. It doesn't. It runs fully offline.
+
+**Q. What folders does it access?**  
+A. It accesses the following folders:  
+> ###### READ only:
+> - `%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker` (backbone of Matject)
+> - `%ProgramFiles%\WindowsApps` (to unlock WindowsApps)
+> - Minecraft app location. *Which is obtained using this PowerShell command:*
+> ```powershell
+> Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation
+> ```
+> - `%~dp0\.settings` `%~dp0\MATERIALS` `%~dp0\materials.bak` `%~dp0\MCPACK` `%~dp0\tmp` (**%~dp0** means script location)
+>
+> ###### READ and WRITE:
+> - `Minecraft app location\data\renderer\materials`
+> - `%~dp0\.settings` `%~dp0\MATERIALS` `%~dp0\materials.bak` `%~dp0\tmp`
+
+**Q. মুরগি কি ধান খায়?** 🐓  
+A. হ, খায়।
+
 
 <br>
 
