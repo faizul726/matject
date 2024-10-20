@@ -1,4 +1,4 @@
-# Matject v2.0
+# Matject v2.5
 
 **[How to use?](#how-to-use) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelogs](#changelogs)**
 
@@ -30,7 +30,8 @@ So, I made this script so users don't have to go through the hassle of replacing
 <details>
 <summary><b>Planned features (v3.0)</b></summary>
 <ul>
-<li>Add colored texts.</li>
+<li><s>Add colored texts.</s></li>
+<li>Noob mode by default.</li>
 <li>Auto open MCPACK after replacing.</li>
 <li>Add Minecraft Preview support.</li>
 <li>Add more pictures here for better understanding.</li>
@@ -109,6 +110,12 @@ A. হ, খায়।
 
 ## Changelogs
 <details>
+<summary><b>v2.5</b></summary>
+<details>
+<ul>
+  <li>Add colored texts.</li>
+</ul>
+</details>
 <summary><b>v2.0</b></summary>
 <ul>
   <li>Much more user-friendly than before.</li>
