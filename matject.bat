@@ -3,14 +3,25 @@ setlocal enabledelayedexpansion
 cls
 cd "%~dp0"
 
+:: COLORS
+set "GRY=[90m"
+set "RED=[91m"
+set "GRN=[92m"
+set "YLW=[93m"
+set "BLU=[94m"
+set "CYN=[96m"
+set "WHT=[97m"
+set "RST=[0m"
+set "ERR=[41;97m"
+
 REM TODO
 REM - ADD DATETIME IN RESTORE CONSENT
 REM - DELETE MATERIALS.BAK IF EMPTY
 REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST
-REM - USE COLORS AS VAR
 REM - ADD FOUND DETAILS IN GETMCDETAILS
 REM - STORE SHADER NAME FOR LATER USE
 REM - MERGE UNLOCK...BAT WITH MATJECT
+REM - RENAME MATBAK to Materials (backup)
 
 :: Matject v2.0
 :: A shader injector for Minecraft.
@@ -43,22 +54,20 @@ if exist "tmp" (
 )
 
 
-title Matject v2.0 - A shader injector for Minecraft
+title Matject v2.5 - A shader replacer for Minecraft
 
 
 
 :INTRODUCTION
-echo Matject v2.0
-echo Made by faizul726
+echo !WHT!Matject v2.5 (20241020)!RST!
+echo Made by faizul726.
+echo Source: !CYN!github.com/faizul726/matject!RST!
 echo.
 
 echo A batch script made to replace shader files of Minecraft.
 echo.
 
-echo [^^!] May not work for large number of materials.
-echo.
-
-echo Source: github.com/faizul726/Matject
+echo !RED![^^!] May not work for large number of materials.!RST!
 echo.
 
 pause
@@ -67,20 +76,20 @@ cls
 
 
 :GETMCDETAILS
-echo [*] Getting Minecraft installation location...
+echo !YLW![*] Getting Minecraft installation location...!RST!
 echo.
-
+REM - ADD "FOUND" HERE
 for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation"') do set "MCLOCATION=%%i"
 
 if not defined MCLOCATION (
-    echo [^^!] Couldn't find Minecraft installation location.
+    echo !ERR![^^!] Couldn't find Minecraft installation location.!RST!
     echo.
 
     pause
     goto:EOF
 )
 
-echo [*] Getting Minecraft version...
+echo !YLW![*] Getting Minecraft version...!RST!
 
 for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i"
 
@@ -139,11 +148,14 @@ if exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" if exist "
 :IOBITUNLOCKER
 cls
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
-    echo [^^!] You don't have IObit Unlocker installed.
+    echo !RED![^^!] You don't have IObit Unlocker installed.!RST!
     echo It's required to use Matject.
     echo.
 
-    echo [?] Would you like to download now?
+    echo !YLW![?] Would you like to download now? [Y/N]!RST!
+    REM - Add quitting message for N
+    REM - Move IObit check to first
+    REM - Add :BYE
     echo.
 
     choice /c yn /n
@@ -161,13 +173,14 @@ if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
 
 
 :WINDOWSAPPSUNLOCK
+REM - CUSTOM LAUNCHER SUPPORT NOT SURE IF IT ACTUALLY WORKS
 if /i "%MCLOCATION:~0,28%" neq "C:\Program Files\WindowsApps" (
     echo [%date% %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject. > ".settings\unlockedWindowsApps.txt"
     goto RESTORECONSENT
 )
 
 cls
-echo [?] Have you unlocked the "WindowsApps" folder? [Y/N]
+echo !YLW![?] Have you unlocked the "WindowsApps" folder? [Y=Yes, N=No/Not sure]!RST!
 echo.
 
 choice /c yn /n
@@ -183,7 +196,7 @@ if !errorlevel! equ 1 (
 
 :WAUNLOCKCONSENT
 cls
-echo [?] Do you want to unlock "WindowsApps" folder now? [Y/N]
+echo !YLW![?] Do you want to unlock "WindowsApps" folder now? [Y/N]!RST!
 echo.
 
 choice /c yn /n
@@ -194,21 +207,21 @@ if !errorlevel! neq 1 (
 ) else (
     cls
     :UAC
-    echo [*] Unlocking "WindowsApps"...
+    echo !YLW![*] Unlocking "WindowsApps"...!RST!
     echo.
 
     powershell -command start-process -file unlockWindowsApps.bat -verb runas -Wait
     timeout 1 > NUL
     if not exist ".settings\unlockedWindowsApps.txt" (
-        echo [^^!] Please accept UAC.
+        echo !ERR![^^!] Please accept UAC.!RST!
         echo.
 
-        echo [*] Trying again...
+        echo !YLW![*] Trying again...!RST!
         echo.
-
+        REM - ADD COOLDOWN and QUIT TIP
         goto UAC
     )
-    echo [*] Unlock succeed.
+    echo !GRN![*] Unlock succeed.!RST!
     echo.
 
     pause
@@ -220,10 +233,10 @@ cls
 :RESTORECONSENT
 if not exist "materials.bak\" goto BACKUPCONSENT
 
-echo [^^!] FOUND OLD BACKUP
+echo !YLW![^^!] FOUND OLD BACKUP!RST!
 echo.
 
-echo [?] Do you want to restore the old backup? [Y/N] [BETA]
+echo !YLW![?] Do you want to restore the old backup? [Y/N] [BETA]!RST!
 echo.
 
 choice /c yn /n
@@ -233,12 +246,12 @@ if !errorlevel! equ 1 (
     set RESTORETYPE=full
     call restoreVanillaShaders
     cls
-    title Matject v2.0 - A material replacer for Minecraft
+    title Matject v2.5 - A material replacer for Minecraft
     goto BACKUPCONSENT
 )
 
 cls
-echo [^^!] BACKUP SKIPPED BECAUSE AN OLDER BACKUP EXISTS
+echo !YLW![^^!] BACKUP SKIPPED BECAUSE AN OLDER BACKUP EXISTS!RST!
 echo.
 echo.
 
@@ -247,14 +260,14 @@ goto INJECTION
 
 
 :BACKUPCONSENT
-echo [?] Do you want to backup vanilla materials? [Y/N]
+echo !YLW![?] Do you want to backup vanilla materials? [Y/N]!RST!
 echo.
 
 choice /c yn /n
 
 if !errorlevel! neq 1 (
     cls
-    echo [^^!] BACKUP SKIPPED BY USER
+    echo !RED![^^!] BACKUP SKIPPED BY USER!RST!
     echo.
     echo.
 
@@ -268,7 +281,7 @@ cls
 xcopy "!MCLOCATION!\data\renderer\materials" "materials.bak" /e /i /h /y
 echo.
 
-echo [^^!] Backup done to "%cd%\materials.bak"
+echo !GRN![^^!] Backup done to "%cd%\materials.bak"!RST!
 echo.
 
 pause
@@ -277,19 +290,19 @@ cls
 
 
 :INJECTION
-echo Which method do you want to try?
+echo !YLW!Which method do you want to try?!RST!
 echo.
 
-echo [1] Auto approach
+echo !GRN![1] Auto!RST!
 echo Put shader.mcpack/zip in the MCPACK folder. 
 echo Matject will extract the its materials to the MATERIALS folder, and ask to inject.
 echo.
 
-echo [2] Manual approach
+echo !CYN![2] Manual!RST!
 echo Put .material.bin files in the MATERIALS folder. Matject will ask to inject provided materials. 
 echo.
 echo.
-echo (Press 1 or 2 to confirm your choice)
+echo !YLW!(Press 1 or 2 to confirm your choice)!RST!
 echo.
 
 choice /c 12 /n
@@ -303,12 +316,12 @@ if !errorlevel! neq 1 (
 :AUTO
 cls
 set MCPACKCOUNT=
-echo [AUTO APPROACH SELECTED]
+echo !YLW![AUTO METHOD SELECTED]!RST!
 echo.
 echo.
 echo.
 
-echo [^^!] Please add a mcpack/zip in the MCPACK folder.
+echo !YLW![^^!] Please add a mcpack/zip in the MCPACK folder.!RST!
 echo.
 echo.
 
@@ -328,10 +341,10 @@ for %%f in ("%cd%\MCPACK\*.mcpack" "%cd%\MCPACK\*.zip") do (
 
 if not defined MCPACKCOUNT (
     cls
-    echo [^^!] NO MCPACK/ZIP FOUND.
+    echo !ERR![^^!] NO MCPACK/ZIP FOUND.!RST!
     echo.
 
-    echo [*] Please add mcpack/zip in the MCPACK folder and try again.
+    echo !YLW![*] Please add mcpack/zip in the MCPACK folder and try again.!RST!
     echo.
 
     pause
@@ -341,10 +354,10 @@ if not defined MCPACKCOUNT (
 
 if %MCPACKCOUNT% gtr 1 (
     cls
-    echo [^^!] MULTIPLE MCPACK/ZIP FOUND.
+    echo !ERR![^^!] MULTIPLE MCPACK/ZIP FOUND.!RST!
     echo.
 
-    echo [*] Please keep only one mcpack/zip in MCPACK and try again.
+    echo !YLW![*] Please keep only one mcpack/zip in MCPACK and try again.!RST!
     echo.
 
     pause
@@ -353,10 +366,10 @@ if %MCPACKCOUNT% gtr 1 (
 )
 
 cls
-echo [*] Found MCPACK/ZIP: "!MCPACKNAME!"
+echo !GRN![*] Found MCPACK/ZIP: "!MCPACKNAME!"!RST!
 echo.
 
-echo [?] Would you like to use it for injecting? [Y/N]
+echo !YLW![?] Would you like to use it for injecting? [Y/N]!RST!
 echo.
 
 choice /c yn /n
@@ -375,7 +388,7 @@ echo.
 echo.
 echo.
 
-echo [*] Extracting shader to temporary folder...
+echo !YLW![*] Extracting shader to temporary folder...!RST!
 echo.
 
 powershell -command "Expand-Archive -LiteralPath '%cd%\tmp\mcpack.zip' -DestinationPath '%cd%\tmp'"
@@ -389,9 +402,9 @@ for /r "tmp" %%f in (manifest.json) do (
 
 if not defined MCPACKDIR (
     rmdir /q /s "tmp"
-    echo [^^!] NOT A VALID MCPACK.
+    echo !ERR![^^!] NOT A VALID MCPACK.!RST!
     echo.
-    echo [*] Please add a valid mcpack/zip in the MCPACK folder and try again.
+    echo !YLW![*] Please add a valid mcpack/zip in the MCPACK folder and try again.!RST!
     pause
     cls
     goto INJECTION
@@ -404,12 +417,12 @@ goto SEARCH
 
 :MANUAL
 cls
-echo [MANUAL APPROACH SELECTED]
+echo !YLW![MANUAL METHOD SELECTED]!RST!
 echo.
 echo.
 echo.
 
-echo Please add ".material.bin" files in the "MATERIALS" folder.
+echo !YLW!Please add ".material.bin" files in the "MATERIALS" folder.!RST!
 echo.
 echo.
 
@@ -427,7 +440,7 @@ set REPLACELIST=
 set BINS=
 set SRCCOUNT=
 
-echo [*] Looking for .bin files in the "MATERIALS" folder...
+echo !YLW![*] Looking for .bin files in the "MATERIALS" folder...!RST!
 echo.
 
 for %%f in (MATERIALS\*) do (
@@ -438,10 +451,10 @@ for %%f in (MATERIALS\*) do (
 )
 
 if not defined SRCLIST (
-    echo [^^!] NO MATERIALS FOUND.
+    echo !ERR![^^!] NO MATERIALS FOUND.!RST!
     echo.
 
-    echo [*] Please add .bin files the MATERIALS folder and try again.
+    echo !YLW![*] Please add .bin files the MATERIALS folder and try again.!RST!
     echo.
 
     pause
@@ -452,14 +465,14 @@ if not defined SRCLIST (
 set "SRCLIST=%SRCLIST:~1%"
 set "REPLACELIST=%REPLACELIST:~1%"
 
-echo [*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.
+echo !GRN![*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.!RST!
 echo.
 
-echo Minecraft location: "!MCLOCATION!"
-echo Minecraft version:  v!CURRENTVERSION!
+echo !WHT!Minecraft location:!RST! !MCLOCATION!
+echo !WHT!Minecraft version:!RST!  v!CURRENTVERSION!
 echo.
 
-echo [TIP] You can add subpack materials from "tmp\subpacks" and ^(R^)efresh the list to use them.
+echo !CYN![TIP] You can add subpack materials from "tmp\subpacks" and ^(R^)efresh the list to use them.!RST!
 echo.
 
 echo -------- Material list --------
@@ -472,7 +485,7 @@ echo.
 
 
 :INJECTCONSENT
-echo [?] Do you want to proceed with injecting? [Y/R/N]
+echo !YLW![?] Do you want to proceed with injecting? [Y/R/N]!RST!
 echo.
 
 choice /c yrn /n
@@ -488,7 +501,7 @@ cls
 if exist "tmp\" (
     rmdir /q /s tmp
 )
-echo [INJECTION CONFIRMED]
+echo !YLW![INJECTION CONFIRMED]!YLW!
 echo.
 echo.
 if exist ".settings\.bins.log" (
@@ -499,15 +512,16 @@ if exist ".settings\.bins.log" (
 
 
 :STEP1
-echo [*] Deleting vanilla materials... ^(Step 1/2^)
+echo !YLW![*] Deleting vanilla materials... ^(Step 1/2^)!RST!
 echo.
 
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete !REPLACELIST!
 
 if !errorlevel! neq 0 (
     cls
-    echo [^^!] PLEASE ACCEPT UAC.
-    echo [*] Trying again...
+    echo !ERR![^^!] PLEASE ACCEPT UAC.!RST!
+    echo !YLW![*] Trying again...!RST!
+    REM - ADD COOLDOWN
     echo.
 
     goto STEP1
@@ -515,28 +529,28 @@ if !errorlevel! neq 0 (
 
 
 
-echo [*] Step 1/2 succeed.
+echo !GRN![*] Step 1/2 succeed.!RST!
 echo.
 echo.
 
 
 
 :STEP2
-echo [*] Replacing with provided materials... ^(Step 2/2^)
+echo !YLW![*] Replacing with provided materials... ^(Step 2/2^)!RST!
 echo.
 
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials"
 
 if !errorlevel! neq 0 (
     cls
-    echo [^^!] PLEASE ACCEPT UAC.
-    echo [*] Trying again...
+    echo !ERR![^^!] PLEASE ACCEPT UAC.!RST!
+    echo !YLW![*] Trying again...!RST!
     goto STEP2
     echo.
 
 )
 
-echo [*] Step 2/2 succeed.
+echo !GRN![*] Step 2/2 succeed.!RST!
 if exist "materials.bak\" echo !REPLACELIST! > ".settings\.replaceList.log" && echo !BINS! > ".settings\.bins.log"
 
 if exist "tmp" (
@@ -550,14 +564,14 @@ timeout 3 > NUL
 
 :SUCCESS
 cls
-echo [*] INJECTION SUCCEED.
+echo !GRN![*] INJECTION SUCCEED.!RST!
 echo.
 
-echo [TIP] Import and activate the shader resource pack for optimal experience.
+echo !GRN![TIP] Import and activate the shader resource pack for optimal experience.!RST!
 echo.
 echo.
 
-echo Thanks for using Matject, have a good day.
+echo !CYN!Thanks for using Matject, have a good day.!RST!
 echo.
 
 pause
