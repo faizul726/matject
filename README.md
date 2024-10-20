@@ -110,10 +110,11 @@ A. হ, খায়।
 
 ## Changelogs
 <details>
-<summary><b>v2.5</b></summary>
+<summary><b>v2.5 - Oct 20, 2024</b></summary>
 <details>
 <ul>
   <li>Add colored texts.</li>
+  <li>Removed settings.bat placeholder as it's not required before v3.0.</li>
 </ul>
 </details>
 <summary><b>v2.0</b></summary>
