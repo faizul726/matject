@@ -1,6 +1,6 @@
-# Matject v2.5
+# Matject v3.0
 
-**[How to use?](#how-to-use) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelogs](#changelogs)**
+**[How to use?](#how-to-use) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
 
 ### What?
 Matject is a material replacer that allows users to use Minecraft shaders. It automates the process of replacing and restoring game files.
@@ -19,6 +19,11 @@ So, I made this script so users don't have to go through the hassle of replacing
 
 <br>
 
+## What's new in v3.0?
+Check [Changelog](#changelogs).
+
+<br>
+
 ## Features
 * Easy to use.
 * Takes less than 2 minutes to use a shader.
@@ -26,19 +31,6 @@ So, I made this script so users don't have to go through the hassle of replacing
 * Automatically process provided MCPACK/ZIP file.
 * Backup/restore game files.
 * Detect Minecraft version changes and adjust according to that.
-
-<details>
-<summary><b>Planned features (v3.0)</b></summary>
-<ul>
-<li><s>Add colored texts.</s></li>
-<li>Noob mode by default.</li>
-<li>Auto open MCPACK after replacing.</li>
-<li>Add Minecraft Preview support.</li>
-<li>Add more pictures here for better understanding.</li>
-<li>Update <code>settings.bat</code> for more customizable experience.</li>
-<li>🐥 Touch some grass.</li>
-</ul>
-</details>
 
 <br><br>
 
@@ -87,7 +79,7 @@ A. Well, depends on you. (2)
 **Q. Does it require internet?**  
 A. It doesn't. It runs fully offline.
 
-**Q. What folders does it access?**  
+**Q. What folders does it access? (OUTDATED)**  
 A. It accesses the following folders:  
 > ###### READ only:
 > - `%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker` (backbone of Matject)
@@ -108,13 +100,31 @@ A. হ, খায়।
 
 <br>
 
-## Changelogs
-<details>
+## Changelog
+<details open>
+  <summary><b>v3.0 - Nov 06, 2024</b></summary>
+  <ul>
+    <li>Fix dynamic restore</li>
+    <li>Added <a href=https://github.com/mcbegamerxx954/material-updater/>material-updater</a> support</li>
+    <li>Added help (but not helpful)</li>
+    <li>Added settings</li>
+    <li>Added date for backup</li>
+    <li>Added the ability to open MCPACK automatically after injection</li>
+    <li>Added first run message</li>
+    <li>Made backup mandatory</li>
+    <li>Improved home screen</li>
+    <li>Only accept <code>.material.bin</code> files</li>
+    <li>Removed <code>openMinecraftFolder.bat</code> and added it as a separate option</li>
+  </ul>
+  <br>
+</details>
+<details> 
 <summary><b>v2.5 - Oct 20, 2024</b></summary>
 <ul>
   <li>Add colored texts.</li>
   <li>Removed settings.bat placeholder as it's not required before v3.0.</li>
 </ul>
+  <br>
 </details>
 
 <details>
@@ -133,6 +143,7 @@ A. হ, খায়।
   <li>Added <code>openMinecraftFolder.bat</code> to open the Minecraft folder.</li>
   <li>Simplified <code>WindowsApps</code> unlock procedure; now it unlocks instantly.</li>
 </ul>
+  <br>
 </details>
 
 <details><summary><b>v1.0</b></summary>
