@@ -20,7 +20,7 @@ So, I made this script so users don't have to go through the hassle of replacing
 <br>
 
 ## What's new in v3.0?
-Check [Changelog](#changelogs).
+Check [Changelog](#changelog).
 
 <br>
 
