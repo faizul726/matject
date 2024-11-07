@@ -1,5 +1,4 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 net session >nul 2>&1
 if %errorlevel% neq 0 (
