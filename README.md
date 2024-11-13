@@ -1,4 +1,5 @@
-# Matject v3.0
+# Matject v3.0.1
+*Last updated: Nov 13, 2024*
 
 **[How to use?](#how-to-use) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
 
@@ -9,24 +10,28 @@ Matject is a material replacer that allows users to use Minecraft shaders. It au
 It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
 
 ### Why?
-[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Oct 14). Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
+[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Nov 13).  
+Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 So, I made this script so users don't have to go through the hassle of replacing game files by themselves.
 
 <br>
 
 >[!IMPORTANT]  
-> Before you complain about game crashing/unable to see blocks, make sure the shader you're using supports **Windows** and the **game version**. 
+> Before you complain about game crashing/invisible blocks, make sure the shader you're using supports **Windows** and the **game version**.  
+> 
+> *You can also enable material-updater in settings to fix invisible blocks*
 
 <br>
 
-## What's new in v3.0?
-Check [Changelog](#changelog).
+## What's new in v3.0.1?
+See [Changelog](#changelog).
 
 <br>
 
 ## Features
 * Easy to use.
 * Takes less than 2 minutes to use a shader.
+* Uses [material-updater](https://github.com/mcbegamerxx954/material-updater) to update outdated materials. (not enabled by default)
 * Dynamically replace game files.
 * Automatically process provided MCPACK/ZIP file.
 * Backup/restore game files.
@@ -34,7 +39,7 @@ Check [Changelog](#changelog).
 
 <br><br>
 
-Thanks to **[JKnife0](https://github.com/JKnife0) , anonymous_user8** and all other people who tested and gave feedback.
+Thanks to **[Sharkitty](https://github.com/Sharkitty) , anonymous_user8** and all other people who tested and gave feedback.
 
 > [!TIP]  
 > Need help? Join [YSS Discord server](https://discord.gg/yss) and send message in `#windows`. I will be happy to assist you.
@@ -77,7 +82,7 @@ Changes made by Matject persists until next update. It's mostly universal, so it
 A. Well, depends on you. (2)
 
 **Q. Does it require internet?**  
-A. It doesn't. It runs fully offline.
+A. ~~It doesn't. It runs fully offline.~~ Starting from v3.0 Matject can use internet if user decides to download [material-updater](https://github.com/mcbegamerxx954/material-updater) within the window.
 
 **Q. What folders does it access? (OUTDATED)**  
 A. It accesses the following folders:  
@@ -94,6 +99,8 @@ A. It accesses the following folders:
 > - `Minecraft app location\data\renderer\materials`
 > - `%~dp0\.settings` `%~dp0\MATERIALS` `%~dp0\materials.bak` `%~dp0\tmp`
 
+</br>
+
 **Q. মুরগি কি ধান খায়?** 🐓  
 A. হ, খায়।
 
@@ -101,11 +108,20 @@ A. হ, খায়।
 <br>
 
 ## Changelog
-<details open>
+<details open><summary><b>v3.0.1 - Nov 13, 2024</summary>
+<ul>
+  <li>Fix unlockWindowsApps not saving result</li>
+  <li>Updated "about" details</li>
+  <li>Semantic Versioning (something that I still don't understand properly)
+</ul>
+</br>
+</details>
+
+<details>
   <summary><b>v3.0 - Nov 06, 2024</b></summary>
   <ul>
     <li>Fix dynamic restore</li>
-    <li>Added <a href=https://github.com/mcbegamerxx954/material-updater/>material-updater</a> support</li>
+    <li>Added <a href=https://github.com/mcbegamerxx954/material-updater>material-updater</a> support</li>
     <li>Added help (but not helpful)</li>
     <li>Added settings</li>
     <li>Added date for backup</li>

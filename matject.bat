@@ -4,7 +4,7 @@ cls
 cd "%~dp0"
 
 set "murgi=KhayDhan"
-set "title=Matject v3.0"
+set "title=Matject v3.0.1"
 set "oldMinecraftVersion=.settings\oldMinecraftVersion.txt"
 set "matbak=Backups\Materials (backup)"
 set "exitmsg=echo. && echo Press any key to exit... && pause > NUL && exit"
