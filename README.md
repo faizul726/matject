@@ -1,6 +1,11 @@
 # Matject v3.0.2
 *Last updated: Nov 15, 2024*
 
+<br>
+
+> [!WARNING]
+> Some information here is a bit outdated. Will update soon.
+
 **[How to use?](#how-to-use) | [Features](#features) | [Credits](#credits) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
 
 ### What?
