@@ -119,7 +119,7 @@ A. হ, খায়।
 <br>
 
 ## Changelog
-<details open><summary><b>v3.0.2 - Nov 15, 2024</summary>
+<details open><summary><b>v3.0.2 - Nov 15, 2024</b></summary>
 <ul>
   <li>Fix directory changing and unlockWindowsApps (thanks to <a href=https://github.com/Theffyxz>@Theffyxz</a>)</li>
   <li>Add update checker module as a placeholder</li>
@@ -128,7 +128,7 @@ A. হ, খায়।
 </br>
 </details>
 
-<details><summary><b>v3.0.1 - Nov 13, 2024</summary>
+<details><summary><b>v3.0.1 - Nov 13, 2024</b></summary>
 <ul>
   <li>Fix unlockWindowsApps not saving result</li>
   <li>Updated "about" details</li>
