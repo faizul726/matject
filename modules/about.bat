@@ -5,10 +5,10 @@ title About %title%
 cls
 
 echo !YLW!What's new in %title%?!RST!
-echo !YLW!Released on: Nov 13, 2024!RST!
+echo !YLW!Released on: Nov 15, 2024!RST!
 echo.
-echo  - Fixed WindowsApps unlock
-echo                                                                               !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+echo - Fixed directory changing and unlockWindowsApps (thanks to @Theffyxz)
+echo - Added update checker module as a placeholder                                !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
 echo                                                                               !p1!              !p1!
 echo                                                                               !p1!  !p1!  !p1!      !p1!
 echo                                                                               !p1!  !p1!        !p1!
@@ -19,7 +19,7 @@ echo It allows user to use shaders easily without going through the hassle of ma
 echo.
 echo Thanks to those who made Matject better:
 echo !WHT!YSS Community, Newb Community, @Sharkitty, @mcbegamerxx954, @MrWang2408, @FlaredRoverCodes
-echo @CallMeSoumya2063, anonymous_user8 and many more...!RST!
+echo @CallMeSoumya2063, anonymous_user8, @Theffyxz and many more...!RST!
 echo.
 echo Also thanks to the creators of !BLU!IObit Unlocker!RST!, !BLU!material-updater!RST!
 

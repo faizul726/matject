@@ -1,6 +1,6 @@
 @echo off
 
-cd "%~dp0%\.."
+pushd "%~dp0.."
 
 net session >nul 2>&1
 if %errorlevel% neq 0 (

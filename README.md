@@ -1,7 +1,7 @@
-# Matject v3.0.1
-*Last updated: Nov 13, 2024*
+# Matject v3.0.2
+*Last updated: Nov 15, 2024*
 
-**[How to use?](#how-to-use) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
+**[How to use?](#how-to-use) | [Features](#features) | [Credits](#credits) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
 
 ### What?
 Matject is a material replacer that allows users to use Minecraft shaders. It automates the process of replacing and restoring game files.
@@ -10,7 +10,7 @@ Matject is a material replacer that allows users to use Minecraft shaders. It au
 It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
 
 ### Why?
-[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Nov 13).  
+[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Nov 15).  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 So, I made this script so users don't have to go through the hassle of replacing game files by themselves.
 
@@ -19,11 +19,11 @@ So, I made this script so users don't have to go through the hassle of replacing
 >[!IMPORTANT]  
 > Before you complain about game crashing/invisible blocks, make sure the shader you're using supports **Windows** and the **game version**.  
 > 
-> *You can also enable material-updater in settings to fix invisible blocks*
+> *You can also enable material-updater in settings to fix invisible blocks.*
 
 <br>
 
-## What's new in v3.0.1?
+## What's new in v3.0.2?
 See [Changelog](#changelog).
 
 <br>
@@ -37,12 +37,22 @@ See [Changelog](#changelog).
 * Backup/restore game files.
 * Detect Minecraft version changes and adjust according to that.
 
-<br><br>
+<br>
 
-Thanks to **[Sharkitty](https://github.com/Sharkitty) , anonymous_user8** and all other people who tested and gave feedback.
+## Credits
+* **[IObit Unlocker](https://www.iobit.com/en/iobit-unlocker.php)** (backbone of Matject)
+* **[material-updater by mcbegamerxx954](https://github.com/mcbegamerxx954/material-updater)** (used to update materials)  
+
+
+**Honorable Mentions**  
+People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409) and [Newb Community](https://discord.gg/newb-community-844591537430069279) for their humble support.  
+[@Theffyxz](https://github.com/Theffyxz) for helping me to fix folder changing.  
+[@Sharkitty](https://github.com/Sharkitty) , anonymous_user8 and all other people who tested and gave feedback.
+
+</br>
 
 > [!TIP]  
-> Need help? Join [YSS Discord server](https://discord.gg/yss) and send message in `#windows`. I will be happy to assist you.
+> Need help? Join [YSS Discord server](https://discord.gg/years-static-shader-group-738688684223889409) and send message in `#windows`. I will be happy to assist you.
 
 <br>
 
@@ -70,6 +80,7 @@ Thanks to **[Sharkitty](https://github.com/Sharkitty) , anonymous_user8** and al
 
 ## Known issues
 * Doesn't support long folder path and too many user provided shader files.
+* Custom Minecraft installation compatibility is not guaranteed.
 
 <br>
 
@@ -108,7 +119,16 @@ A. হ, খায়।
 <br>
 
 ## Changelog
-<details open><summary><b>v3.0.1 - Nov 13, 2024</summary>
+<details open><summary><b>v3.0.2 - Nov 15, 2024</summary>
+<ul>
+  <li>Fix directory changing and unlockWindowsApps (thanks to [@Theffyxz](https://github.com/Theffyxz))</li>
+  <li>Add update checker module as a placeholder</li>
+  <li>Add credits section in README</li>
+</ul>
+</br>
+</details>
+
+<details><summary><b>v3.0.1 - Nov 13, 2024</summary>
 <ul>
   <li>Fix unlockWindowsApps not saving result</li>
   <li>Updated "about" details</li>

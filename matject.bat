@@ -1,10 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 cls
-cd "%~dp0"
+pushd "%~dp0"
 
 set "murgi=KhayDhan"
-set "title=Matject v3.0.1"
+set "version=v3.0.2"
+set "title=Matject %version%"
 set "oldMinecraftVersion=.settings\oldMinecraftVersion.txt"
 set "matbak=Backups\Materials (backup)"
 set "exitmsg=echo. && echo Press any key to exit... && pause > NUL && exit"
@@ -24,8 +25,11 @@ set "materialUpdaterArg=.settings\materialUpdaterArg.txt"
 set "autoOpenMCPACK=.settings\autoOpenMCPACK"
 set "backupDate=.settings\backupDate.txt"
 set "ranOnce=.settings\ranOnce.txt"
+set "doCheckUpdates=.settings\doCheckUpdates.txt"
+set "doNotCheckUpdates=.settings\doNotCheckUpdates.txt"
 
 REM TODO
+REM - Move variables to modules
 REM - ADD DATETIME IN RESTORE CONSENT [DONE]
 REM - DELETE MATERIALS.BAK IF EMPTY
 REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST [DONE]

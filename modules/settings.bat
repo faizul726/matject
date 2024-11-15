@@ -54,6 +54,7 @@ if not defined toggle8 (
 
 echo !toggleOff! 9. Use custom Minecraft data path ^(doesn't work for now^)
 echo !toggleOff! 0. Use custom IObit Unlocker path ^(doesn't work for now^)
+echo !toggleOff! U. Check for updates at startup ^(WIP^)
 echo.
 echo !GRY![D] DEBUG MODE ^(does nothing for now^) !toggle10!!RST!
 echo.
