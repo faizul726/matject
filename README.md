@@ -121,7 +121,7 @@ A. হ, খায়।
 ## Changelog
 <details open><summary><b>v3.0.2 - Nov 15, 2024</summary>
 <ul>
-  <li>Fix directory changing and unlockWindowsApps (thanks to [@Theffyxz](https://github.com/Theffyxz))</li>
+  <li>Fix directory changing and unlockWindowsApps (thanks to <a href=https://github.com/Theffyxz>@Theffyxz</a>)</li>
   <li>Add update checker module as a placeholder</li>
   <li>Add credits section in README</li>
 </ul>
