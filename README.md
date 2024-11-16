@@ -5,6 +5,12 @@
 
 **[How to use?](#how-to-use) | [Features](#features) | [Credits](#credits) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
 
+</br>
+
+![image](https://github.com/user-attachments/assets/8899970c-ad17-4e62-868c-94b89da73070)
+
+</br>
+
 ### What?
 Matject is a material replacer that allows users to use Minecraft shaders. It automates the process of replacing and restoring game files.
 
