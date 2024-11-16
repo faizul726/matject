@@ -5,14 +5,14 @@ title About %title%
 cls
 
 echo !YLW!What's new in %title%?!RST!
-echo !YLW!Released on: Nov 15, 2024!RST!
+echo !YLW!Released on: Nov 16, 2024!RST!
 echo.
-echo - Fixed directory changing and unlockWindowsApps (thanks to @Theffyxz)
-echo - Added update checker module as a placeholder                                !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
-echo                                                                               !p1!              !p1!
-echo                                                                               !p1!  !p1!  !p1!      !p1!
-echo                                                                               !p1!  !p1!        !p1!
-echo                                                                               !p1!  !p1!!p1!!p1!    !p1!
+echo - Added update checker ^(thanks to anonymous_user8^)
+echo - Moved variables to variables.bat                                            !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+echo - Fixed some typos                                                            !p1!              !p1!
+echo - Delete backup date file after full restore                                  !p1!  !p1!  !p1!      !p1!
+echo - Added GitHub link in others                                                 !p1!  !p1!        !p1!
+echo - Changed "pushd" to "cd /d"                                                  !p1!  !p1!!p1!!p1!    !p1!
 echo.
 echo Matject is a material replacer for Minecraft Bedrock Edition.
 echo It allows user to use shaders easily without going through the hassle of making backups and placing files.

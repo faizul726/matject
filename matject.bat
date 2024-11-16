@@ -1,35 +1,20 @@
 @echo off
 setlocal enabledelayedexpansion
 cls
-pushd "%~dp0"
+cd /d "%~dp0"
 
-set "murgi=KhayDhan"
-set "version=v3.0.2"
+:: A material replacer for Minecraft.
+:: Made by faizul726
+:: https://faizul726.github.io/matject
+
+set "version=v3.0.3"
 set "title=Matject %version%"
-set "oldMinecraftVersion=.settings\oldMinecraftVersion.txt"
-set "matbak=Backups\Materials (backup)"
-set "exitmsg=echo. && echo Press any key to exit... && pause > NUL && exit"
-set "backmsg=echo. && echo Press any key to go back... && pause > NUL && goto:EOF"
-set "unlocked=.settings\unlockedWindowsApps.txt"
-set "customMinecraftPath=.settings\customMinecraftPath.txt"
-
-set useAutoAlways=".settings\useAutoAlways"
-set useManualAlways=".settings\useManualAlways"
-set thanksMcbegamerxx954=".settings\thanksMcbegamerxx954"
-set "disableConfirmation=.settings\disableConfirmation"
-set "disableInterruptionCheck=.settings\disableInterruptionCheck"
-set "disableRetainOldBackups=.settings\disableRetainOldBackups"
-set "disableSuccessMsg=.settings\disableSuccessMsg"
-set "customMinecraftPath=.settings\customMinecraftPath.txt"
-set "materialUpdaterArg=.settings\materialUpdaterArg.txt"
-set "autoOpenMCPACK=.settings\autoOpenMCPACK"
-set "backupDate=.settings\backupDate.txt"
-set "ranOnce=.settings\ranOnce.txt"
-set "doCheckUpdates=.settings\doCheckUpdates.txt"
-set "doNotCheckUpdates=.settings\doNotCheckUpdates.txt"
+set "murgi=KhayDhan"
+:: Load other variables
+call "modules\variables"
 
 REM TODO
-REM - Move variables to modules
+REM - Move variables to modules [DONE]
 REM - ADD DATETIME IN RESTORE CONSENT [DONE]
 REM - DELETE MATERIALS.BAK IF EMPTY
 REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST [DONE]
@@ -38,9 +23,6 @@ REM - STORE SHADER NAME FOR LATER USE
 REM - MERGE UNLOCK...BAT WITH MATJECT
 REM - RENAME MATBAK to Materiasls (backup) [DONE]
 
-:: A material replacer for Minecraft.
-:: Made by faizul726
-:: https://faizul726.github.io/matject
 
 :: WORK DIRECTORY SETUP
 if not exist ".settings\" (mkdir .settings)
@@ -50,7 +32,7 @@ if not exist "MATERIALS\" (mkdir MATERIALS)
 if exist "MATERIALS\putMaterialsHere" (del /q /s "MATERIALS\putMaterialsHere" > NUL)
 if exist "tmp" (rmdir /q /s tmp > NUL)
 
-title %title%%
+title %title%
 
 :: Load modules
 call "modules\colors"
@@ -80,14 +62,29 @@ if "!firstRun!" neq "yes" (
     echo Press any key to exit... && pause > NUL && exit
 ) else (
     echo !GRN![*] Confirmed.!RST!
-    echo.
-
     echo First ran on: %date% - %time%>"!ranOnce!"
-
     timeout 2 > NUL
+    cls
+    echo Matject is somewhat experimental.
+    echo So, I ^(creator^) want people to use the latest version whenever possible.
+    echo.
+    echo !YLW![?] Do you want to check for updates at Matject startup?!RST! !RED!^(requires internet^)!RST!
+    echo.
+    echo [Y] Yes, check for updates at Matject startup. ^(only informs about update^)
+    echo [N] No, do not check for updates.
+    echo.
+    echo !GRN![TIP] You can enable/disable update checking from settings later.!RST!
+    echo.
+    choice /c yn /n
+    if !errorlevel! equ 1 echo.>%doCheckUpdates%
+    echo.
 )
 
 :firstRunDone
+if exist %doCheckUpdates% (
+    call "modules\checkUpdates"
+)
+
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     echo !RED![^^!] You don't have IObit Unlocker installed.!RST!
     echo     It's required to use Matject.
@@ -98,9 +95,6 @@ if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
 
     echo [Y] Yes, open the site for me !CYN!^(www.iobit.com/en/iobit-unlocker.php^)!RST!
     echo [N] No, I will download later ^(exit^)
-    REM - Add quitting message for N
-    REM - Move IObit check to first
-    REM - Add :BYE
     echo.
 
     choice /c yn /n
@@ -158,7 +152,7 @@ if not exist "%unlocked%" (
     if "!errorlevel!" equ "1" (
         cls
         title %title% ^(unlocking WindowsApps^)
-        echo !YLW![*] Unlocking...
+        echo [*] Unlocking...
         powershell -command start-process -file "modules\unlockWindowsApps.bat" -verb runas -Wait
         echo.
         if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED.!RST! && %exitmsg%) else (echo !GRN![*] Unlocked.!RST!)
@@ -283,14 +277,19 @@ echo !WHT!
 echo [1] Restore default materials
 echo [2] Open Minecraft app folder
 echo [3] Open Minecraft data folder
+echo !GRN![4] View Matject on GitHub :^)
 echo !RST!
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 123b /n
+choice /c 1234b /n
 goto others!errorlevel!
 
-:others4
+:others5
 goto INTRODUCTION
+
+:others4
+start https://faizul726.github.io/matject
+goto option7
 
 :others3
 explorer "%localAppData%\packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang"
@@ -517,7 +516,7 @@ if !errorlevel! equ 3 cls && pause && goto:EOF
 
 :INJECTIONCONFIRMED
 cls
-echo !YLW![INJECTION CONFIRMED]!YLW!
+echo !YLW![INJECTION CONFIRMED]!RST!
 echo.
 
 if exist %thanksMcbegamerxx954% call "modules\updateMaterials"

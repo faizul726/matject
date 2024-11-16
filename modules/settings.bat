@@ -27,8 +27,9 @@ if exist %disableInterruptionCheck% (set toggle4=!toggleOn!) else (set toggle4=!
 if exist %disableRetainOldBackups% (set toggle5=!toggleOn!) else (set toggle5=!toggleOff!)
 if exist %disableSuccessMsg% (set toggle6=!toggleOn!) else (set "toggle6=!toggleOff!")
 if exist %autoOpenMCPACK% (set toggle7=!toggleOn!) else (set "toggle7=!toggleOFF!")
-if exist %customMinecraftPath% (set toggle8=1) else (set "toggle8=")
-if exist ".settings\debugMode.txt" (set toggle10=!RED![ON]!RST!) else (set toggle10=!GRN![OFF]!RST!)
+if exist %customMinecraftPath% (set toggle8=murgi) else (set "toggle8=")
+if exist %doCheckUpdates% (set toggle13=!toggleOn!) else (set toggle13=!toggleOff!)
+if exist ".settings\debugMode.txt" (set toggle12=!RED![ON]!RST!) else (set toggle12=!GRN![OFF]!RST!)
 echo !RED!^< [B] Back!RST!
 echo.
 echo.
@@ -54,14 +55,17 @@ if not defined toggle8 (
 
 echo !toggleOff! 9. Use custom Minecraft data path ^(doesn't work for now^)
 echo !toggleOff! 0. Use custom IObit Unlocker path ^(doesn't work for now^)
-echo !toggleOff! U. Check for updates at startup ^(WIP^)
 echo.
-echo !GRY![D] DEBUG MODE ^(does nothing for now^) !toggle10!!RST!
+echo !toggle13! U. Check for updates at Matject startup !RED!^(requires internet^)!RST!
+echo.
+echo [M] Check for updates manually !RED!^(requires internet^)!RST!
+echo.
+echo !GRY![D] DEBUG MODE ^(does nothing for now^) !toggle12!!RST!
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option.!RST!
 echo.
-choice /c 1234567890bd /n
+choice /c 1234567890bdum /n
 
 goto toggle!errorlevel!
 
@@ -167,4 +171,12 @@ goto:EOF
 
 :toggle12
 if not exist ".settings\debugMode.txt" (echo You are now a developer^^! [%date% - %time%]>".settings\debugMode.txt" && set debugMode=1) else (del /q /s ".settings\debugMode.txt" > NUL && set debugMode=)
+goto settings
+
+:toggle13
+if not exist %doCheckUpdates% (echo.>%doCheckUpdates%) else (del /q /s %doCheckUpdates% > NUL)
+goto settings
+
+:toggle14
+call "modules\checkUpdates"
 goto settings

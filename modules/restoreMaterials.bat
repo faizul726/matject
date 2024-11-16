@@ -227,5 +227,6 @@ if !errorlevel! neq 0 (
 cls
 if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" > NUL
 if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" > NUL
+if exist "%backupDate%" del /q /s "%backupDate%" > NUL
 echo !GRN![*] BACKUP RESTORE OK!RST!
 %exitmsg%

@@ -1,10 +1,7 @@
-# Matject v3.0.2
-*Last updated: Nov 15, 2024*
+# Matject v3.0.3
+*Last updated: Nov 16, 2024*
 
 <br>
-
-> [!WARNING]
-> Some information here is a bit outdated. Will update soon.
 
 **[How to use?](#how-to-use) | [Features](#features) | [Credits](#credits) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)**
 
@@ -28,7 +25,7 @@ So, I made this script so users don't have to go through the hassle of replacing
 
 <br>
 
-## What's new in v3.0.2?
+## What's new in v3.0.3?
 See [Changelog](#changelog).
 
 <br>
@@ -78,8 +75,9 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 > [!TIP]  
 > Original files will be restored automatically after the game is updated.
 
-1. Open `restoreVanillaShaders.bat`.
-2. Select **Full restore (restore all materials)**.
+1. Open Matject.
+2. Go to [O] Others
+3. Select Partial Restore or Full Restore (full restore takes bit more time)
 
 <br>
 
@@ -124,7 +122,19 @@ A. হ, খায়।
 <br>
 
 ## Changelog
-<details open><summary><b>v3.0.2 - Nov 15, 2024</b></summary>
+<details open><summary><b>v3.0.3 - Nov 16, 2024</b></summary>
+<ul>
+  <li>Add update checker (thanks to anonymous_user8)</li>
+  <li>Moved variables to variables.bat</li>
+  <li>Fixed some typos</li>
+  <li>Delete backup date file after full restore</li>
+  <li>Added GitHub link in others</li>
+  <li>Changed <code>pushd</code> to <code>cd /d</code></li>
+</ul>
+</br>
+</details>
+
+<details><summary><b>v3.0.2 - Nov 15, 2024</b></summary>
 <ul>
   <li>Fix directory changing and unlockWindowsApps (thanks to <a href=https://github.com/Theffyxz>@Theffyxz</a>)</li>
   <li>Add update checker module as a placeholder</li>

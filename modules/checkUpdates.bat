@@ -1,77 +1,83 @@
 @echo off
-setlocal enabledelayedexpansion
+
+if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 cls
-echo [97mRandom version comparator // Born on 20241115_1710[0m
-echo Matject will use this script in the future.
-echo Currently serves as a placeholder.
+echo !YLW![*] Checking for updates...!RST!
 echo.
+echo Current version: %version%
+::set "version=v3.0.2"
 
-set /p "current_version=Enter current version: "
-echo.
-echo [93mYou entered [0m"%current_version%".
-::echo.
-::echo [93mTrimming input...[0m
-set "current_version2=%current_version:~1%"
-set "current_version2=%current_version2:.=%"
-::echo.
-echo [93mTrimmed input:[0m "%current_version2%"
-::echo.
-::echo [93mChecking if the input is 4 digit...[0m
-set /a minus=%current_version2%-1000
-
-if %minus% geq 10 (echo [91m%current_version% ^(current version^) is 4 digit[0m && set cver_4digit=true) else (echo [92m%current_version% ^(current version^) is NOT 4 digit[0m && set cver_4digit=false)
-echo.
-echo [93mGetting latest release tag...[0m
-
+set "version2=%version:~1%"
+set "version2=%version2:.=%"
+set /a minus=%version2%-1000
+if %minus% geq 10 (set cver_4digit=true) else (set cver_4digit=false)
 for /f "delims=" %%i in ('curl -Ls -o NUL -w "%%{url_effective}" "https://github.com/faizul726/matject/releases/latest"') do set "latesturl=%%i"
-
-::set "latesturl=https://github.com/faizul726/matject/releases/tag/v3.1.34"
-
+::set "latesturl=https://github.com/faizul726/matject/releases/tag/v2.9.2"
 echo.
-echo [93mLatest tag is:[0m %latesturl:~50%
-set latesturl2=%latesturl:~51%
-set latesturl2=%latesturl2:.=%
-echo [93mTrimmed latest tag:[0m %latesturl2% 
-::echo.
-::echo [93mChecking if latest version is 4 digit...[0m
-set /a minus=%latesturl2%-1000
+if "%latesturl%" equ "https://github.com/faizul726/matject/releases/latest" (
+    echo !ERR![^^!] Failed to check for updates.!RST!
+    echo !YLW!Please check your internet connection.!RST!
+    echo.
+    echo Press any key to use Matject offline...
+    pause >nul
+    cls
+    goto:EOF
+)
+
+set latestversion=%latesturl:~51%
+set latestversion=%latestversion:.=%
+set /a minus=%latestversion%-1000
 
 if %minus% geq 10 (
     if "!cver_4digit!" equ "false" (
-        set /a current_version2=%current_version2:~0,2%0%current_version2:~2,1%
+        set /a version2=%version2:~0,2%0%version2:~2,1%
     )
-    echo [91m%latesturl:~50% ^(latest version^) is 4 digit[0m
-    echo.
-    if !current_version2! equ !latesturl2! (
-        echo [92mYou are using LATEST version[0m
-        echo Because, !current_version2! = !latesturl2!
+    if !version2! equ !latestversion! (
+        echo !GRN![*] Matject is up to date.!RST!
+        timeout 2 >nul
     )
-    if !current_version2! gtr !latesturl2! (
-        echo [93m%current_version% is NEWER than %latesturl:~50%[0m
-        echo Because, !current_version2! ^> !latesturl2!
+    if !version2! gtr !latestversion! (
+        echo !WHT!o_O You must be a time traveler because !YLW!%version%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
+        echo.
+        echo Have we achieved global peace yet?
+        echo.
+        echo !GRY!Jokes aside, press any key to use Matject...!RST!
+        pause >nul
     ) 
-     if !current_version2! lss !latesturl2! (
-        echo [91m%current_version% is OLDER than %latesturl:~50%[0m
-        echo Because, !current_version2! ^< !latesturl2!
+    if !version2! lss !latestversion! (
+        echo !YLW![*] New update is available. !RST!^(%version% -^> %latesturl:~50%^)
+        echo.
+        echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
+        echo.
+        echo or press any key to use Matject...
+        echo.
+        pause >nul
     )
 ) else (
     if "!cver_4digit!" equ "true" (
-        set /a latesturl2=%latesturl2:~0,2%0%latesturl2:~2,1%
+        set /a latestversion=%latestversion:~0,2%0%latestversion:~2,1%
     )
-    echo [92m%latesturl:~50% ^(latest version^) is NOT 4 digit[0m
-    echo.
-    if !current_version2! equ !latesturl2! (
-        echo [92mYou are using LATEST version[0m
-        echo Because, !current_version2! = !latesturl2!
+    if !version2! equ !latestversion! (
+        echo !GRN![*] Matject is up to date.!RST!
+        timeout 2 >nul
     )
-    if !current_version2! gtr !latesturl2! (
-        echo [93m%current_version% is NEWER than %latesturl:~50%[0m
-        echo Because, !current_version2! ^> !latesturl2!
+    if !version2! gtr !latestversion! (
+        echo !WHT!o_O You must be a time traveler because !YLW!%version%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
+        echo.
+        echo Have we achieved global peace yet?
+        echo.
+        echo !GRY!Jokes aside, press any key to use Matject...!RST!
+        pause >nul
     ) 
-    if !current_version2! lss !latesturl2! (
-        echo [91m%current_version% is OLDER than %latesturl:~50%[0m
-        echo Because, !current_version2! ^< !latesturl2!
+    if !version2! lss !latestversion! (
+        echo !YLW![*] New update is available. !RST!^(%version% -^> %latesturl:~50%^)
+        echo.
+        echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
+        echo.
+        echo or press any key to use Matject...
+        echo.
+        pause >nul
     )
 )
-cmd /k
+cls

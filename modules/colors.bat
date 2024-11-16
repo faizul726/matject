@@ -12,4 +12,3 @@ set "RST=[0m"
 set "ERR=[41;97m"
 
 set "p1=[46m  [0m"
-set "p2=[100m  [0m"
