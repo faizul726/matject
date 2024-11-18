@@ -55,7 +55,7 @@ See [Changelog](#changelog).
 **Honorable Mentions**  
 People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409) and [Newb Community](https://discord.gg/newb-community-844591537430069279) for their humble support.  
 [@Theffyxz](https://github.com/Theffyxz) for helping me to fix folder changing.  
-[@Sharkitty](https://github.com/Sharkitty) , anonymous_user8 and all other people who tested and gave feedback.
+[@Sharkitty](https://github.com/Sharkitty) , [@Jcau8](https://github.com/jcau8) and all other people who tested and gave feedback.
 
 </br>
 
@@ -130,7 +130,7 @@ A. হ, খায়।
 ## Changelog
 <details open><summary><b>v3.0.3 - Nov 16, 2024</b></summary>
 <ul>
-  <li>Add update checker (thanks to anonymous_user8)</li>
+  <li>Add update checker (thanks to <a href=https://github.com/jcau8>@Jcau8</a>)</li>
   <li>Moved variables to variables.bat</li>
   <li>Fixed some typos</li>
   <li>Delete backup date file after full restore</li>
