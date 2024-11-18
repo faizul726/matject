@@ -130,7 +130,7 @@ A. হ, খায়।
 ## Changelog
 <details open><summary><b>v3.0.3 - Nov 16, 2024</b></summary>
 <ul>
-  <li>Add update checker (thanks to <a href=(https://github.com/jcau8)>@Jcau8<a/>)</li>
+  <li>Add update checker (thanks to <a href=https://github.com/jcau8>@Jcau8</a>)</li>
   <li>Moved variables to variables.bat</li>
   <li>Fixed some typos</li>
   <li>Delete backup date file after full restore</li>
