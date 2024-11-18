@@ -1,5 +1,5 @@
-# Matject v3.0.3
-*Last updated: Nov 16, 2024*
+# Matject v3.1.0
+*Last updated: Nov 18, 2024*
 
 <br>
 
@@ -31,7 +31,7 @@ So, I made this script so users don't have to go through the hassle of replacing
 
 <br>
 
-## What's new in v3.0.3?
+## What's new in v3.1.0?
 See [Changelog](#changelog).
 
 <br>
@@ -128,7 +128,15 @@ A. হ, খায়।
 <br>
 
 ## Changelog
-<details open><summary><b>v3.0.3 - Nov 16, 2024</b></summary>
+<details open><summary><b>v3.1.0 - Nov 18, 2024</b></summary>
+<ul>
+  <li>Bump version from 3.0.3</li>
+  <li>Fix credit names <a href=https://github.com/faizul726/matject/pull/4>#4</a></>
+</ul>
+</br>
+</details>
+
+<details><summary><b>v3.0.3 - Nov 16, 2024</b></summary>
 <ul>
   <li>Add update checker (thanks to <a href=https://github.com/jcau8>@Jcau8</a>)</li>
   <li>Moved variables to variables.bat</li>

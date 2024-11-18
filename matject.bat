@@ -7,7 +7,7 @@ cd /d "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.0.3"
+set "version=v3.1.0"
 set "title=Matject %version%"
 set "murgi=KhayDhan"
 :: Load other variables
