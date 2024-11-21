@@ -4,6 +4,7 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 if "!RESTORETYPE!" equ "full" (
     echo !YLW![*] Restore type: Full!RST!
     echo.
+    set "RESTORETYPE="
     goto fullRestore
 )
 if "!RESTORETYPE!" equ "partial" (
@@ -164,6 +165,8 @@ if !errorlevel! equ 0 (
     goto fr-move
 )
 
+
+
 :partialRestore
 echo [*] Restoring modified materials from last injection...
 echo.
@@ -172,7 +175,15 @@ if exist ".settings\.restoreList.log" (
         rmdir /q /s tmp
         mkdir "tmp"
     ) else mkdir "tmp"
-    set /p COPYBINS=< ".settings\.bins.log"
+    set /p COPYBINS=<".settings\.bins.log"
+    if "!RESTORETYPE!" equ "partial" (
+        set "RESTORETYPE="
+        if not defined isGoingVanilla (
+            if "!COPYBINS!" equ "!BINS!" goto:EOF
+        ) else (
+            set "isGoingVanilla="
+        )
+    )
     set /p restoreList=< ".settings\.restoreList.log"
     set "restoreList=!restoreList:-=.material.bin!"
     set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"

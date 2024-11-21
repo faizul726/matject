@@ -7,11 +7,13 @@ cd /d "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.1.0"
+set "version=v3.2.0"
 set "title=Matject %version%"
 set "murgi=KhayDhan"
+
 :: Load other variables
 call "modules\variables"
+if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
 
 REM TODO
 REM - Move variables to modules [DONE]
@@ -191,29 +193,16 @@ for /f "tokens=2 delims==" %%a in ('"wmic os get localdatetime /value"') do (
 )
 
 
-if exist %useAutoAlways% (
-    set mode=1
-    set "userMode=Auto mode"
-    goto userMode
-) else (
-    if exist %useManualAlways% (
-        set mode=2
-        set "userMode=Manual mode"
-        goto userMode
-    ) else (
-        goto INTRODUCTION
-    )
+if exist %defaultMethod% (
+    set /p selectedMethod=<%defaultMethod%
+    echo !YLW![*] Opening !selectedMethod! method in 2 seconds...!RST!
+    echo.
+    echo !YLW!    Press [S] to open settings directly...!RST!
+    choice /c s0 /t 2 /d 0 /n > NUL
+    if !errorlevel! equ 1 goto option6
+    cls
+    goto !selectedMethod!
 )
-:userMode
-echo !YLW![*] Opening !userMode! in 2 seconds...!RST!
-echo !YLW!    Press [S] to open settings directly...!RST!
-echo.
-
-choice /c s0 /t 2 /d 0 /n > NUL
-
-if !errorlevel! equ 1 goto option6
-cls
-goto option!mode!
 
 
 :INTRODUCTION
@@ -246,12 +235,9 @@ echo !BLU![2] Manual!RST!
 echo Put .material.bin files in the MATERIALS folder.
 echo Matject will ask to inject provided materials. 
 echo.
-
-if defined matjectNEXT (
-    echo [3] matjectNEXT Auto
-    echo Dhan
-    echo.
-)
+echo !RED![3] matjectNEXT [BETA]!RST!
+echo Draco for Windows but not really.
+echo.
 
 echo.
 echo !WHT![H] Help    [A] About    [S] Settings    [O] Others!RST!
@@ -303,6 +289,7 @@ goto option7
 call "modules\restoreMaterials"
 goto option7
 
+
 :option6
 call "modules\settings"
 title %title%
@@ -319,9 +306,22 @@ title %title%
 goto INTRODUCTION
 
 :option3
-if not defined matjectNEXT goto INTRODUCTION
+:matjectNEXT
+if "%debugMode%" neq "true" (
+    cls
+    echo !YLW![^^!] matjectNEXT is experimental. You can't use it without enabling DEBUG MODE.!RST!
+    echo.
+    %backmsg:~0,56%
+    goto INTRODUCTION
+) else (
+    call "modules\matjectNEXT\main"
+    title Matject %version%
+)
+
+goto INTRODUCTION
 
 :option1
+:auto
 cls
 set MCPACKCOUNT=
 echo !YLW![AUTO METHOD SELECTED]!RST!
@@ -432,6 +432,7 @@ goto SEARCH
 
 
 :option2
+:manual
 cls
 echo !YLW![MANUAL METHOD SELECTED]!RST!
 echo.

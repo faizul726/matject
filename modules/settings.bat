@@ -10,10 +10,17 @@ title %title% Settings
 cls
 
 
-set "toggleone=!RED![None]!GRY!  /  Auto  /  Manual!RST!"
-set toggle1=!toggleOff!
-if exist %useAutoAlways% set "toggle1=!toggleOn!" && set "toggleone=!GRY! None   / !GRN![Auto]!GRY! /  Manual!RST!"
-if exist %useManualAlways% set "toggle1=!toggleOn!" && set "toggleone=!GRY! None   /  Auto  / !BLU![Manual]!RST!"
+if not exist %defaultMethod% (
+    set "toggleone=!RED![None]!GRY! /  Auto  /  Manual  /  matjectNEXT!RST!"
+    set toggle1=!toggleOff!
+    set "selectedMethod="
+) else (
+    set "toggle1=!toggleOn!"
+    set /p selectedMethod=<%defaultMethod%
+    if "!selectedMethod!" equ "Auto" set "toggleone=!GRY! None  / !GRN![Auto]!GRY! /  Manual  /  matjectNEXT!RST!"
+    if "!selectedMethod!" equ "Manual" set "toggleone=!GRY! None  /  Auto  / !BLU![Manual]!GRY! /  matjectNEXT!RST!"
+    if "!selectedMethod!" equ "matjectNEXT" set "toggleone=!GRY! None  /  Auto  /  Manual  / !RED![matjectNEXT]!RST!"
+)
 
 if exist %thanksMcbegamerxx954% (
     if not exist "modules\material-updater.exe" (
@@ -29,7 +36,7 @@ if exist %disableSuccessMsg% (set toggle6=!toggleOn!) else (set "toggle6=!toggle
 if exist %autoOpenMCPACK% (set toggle7=!toggleOn!) else (set "toggle7=!toggleOFF!")
 if exist %customMinecraftPath% (set toggle8=murgi) else (set "toggle8=")
 if exist %doCheckUpdates% (set toggle13=!toggleOn!) else (set toggle13=!toggleOff!)
-if exist ".settings\debugMode.txt" (set toggle12=!RED![ON]!RST!) else (set toggle12=!GRN![OFF]!RST!)
+if "%debugMode%" equ "true" (set toggle12=!RED![ON]!RST!) else (set toggle12=!GRN![OFF]!RST!)
 echo !RED!^< [B] Back!RST!
 echo.
 echo.
@@ -70,24 +77,11 @@ choice /c 1234567890bdum /n
 goto toggle!errorlevel!
 
 :toggle1
-if not exist %useAutoAlways% (
-    if not exist %useManualAlways% (
-        echo.>%useAutoAlways%
-        goto settings
-    ) else (
-        del /q /s %useManualAlways% > NUL
-        goto settings
-    )
-) else (
-    del /q /s %useAutoAlways% > NUL
-    if not exist %useManualAlways% (
-        echo.>%useManualAlways%
-        goto settings
-    ) else (
-        del /q /s %useManualAlways% > NUL
-        goto settings
-    )
-)
+if not defined selectedMethod (echo Auto>%defaultMethod%) else (
+    if "!selectedMethod!" equ "Auto" echo Manual>%defaultMethod%
+    if "!selectedMethod!" equ "Manual" echo matjectNEXT>%defaultMethod%
+    if "!selectedMethod!" equ "matjectNEXT" del /q /s %defaultMethod% >nul
+) 
 
 goto settings
 
@@ -170,7 +164,7 @@ goto settings
 goto:EOF
 
 :toggle12
-if not exist ".settings\debugMode.txt" (echo You are now a developer^^! [%date% - %time%]>".settings\debugMode.txt" && set debugMode=1) else (del /q /s ".settings\debugMode.txt" > NUL && set debugMode=)
+if "%debugMode%" neq "true" (echo You are now a developer^^! [%date% - %time%]>".settings\debugMode.txt" && set "debugMode=true") else (del /q /s ".settings\debugMode.txt" > NUL && set "debugMode=")
 goto settings
 
 :toggle13
