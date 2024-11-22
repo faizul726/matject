@@ -35,6 +35,7 @@ if exist %disableRetainOldBackups% (set toggle5=!toggleOn!) else (set toggle5=!t
 if exist %disableSuccessMsg% (set toggle6=!toggleOn!) else (set "toggle6=!toggleOff!")
 if exist %autoOpenMCPACK% (set toggle7=!toggleOn!) else (set "toggle7=!toggleOFF!")
 if exist %customMinecraftPath% (set toggle8=murgi) else (set "toggle8=")
+if exist %customUnlockerPath% (set toggle10=!toggleOn!) else (set toggle10=!toggleOff!)
 if exist %doCheckUpdates% (set toggle13=!toggleOn!) else (set toggle13=!toggleOff!)
 if "%debugMode%" equ "true" (set toggle12=!RED![ON]!RST!) else (set toggle12=!GRN![OFF]!RST!)
 echo !RED!^< [B] Back!RST!
@@ -61,13 +62,13 @@ if not defined toggle8 (
 )
 
 echo !toggleOff! 9. Use custom Minecraft data path ^(doesn't work for now^)
-echo !toggleOff! 0. Use custom IObit Unlocker path ^(doesn't work for now^)
+echo !toggleOff! 0. Use custom IObit Unlocker path ^(WIP^)
 echo.
 echo !toggle13! U. Check for updates at Matject startup !RED!^(requires internet^)!RST!
 echo.
 echo [M] Check for updates manually !RED!^(requires internet^)!RST!
 echo.
-echo !GRY![D] DEBUG MODE ^(does nothing for now^) !toggle12!!RST!
+echo !GRY![D] DEBUG MODE ^(for testing matjectNEXT^) !toggle12!!RST!
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option.!RST!
@@ -87,7 +88,11 @@ goto settings
 
 
 :toggle2
-if exist %thanksMcbegamerxx954% (del /q /s %thanksMcbegamerxx954% > NUL && goto settings) 
+if exist %thanksMcbegamerxx954% (
+    del /q /s %thanksMcbegamerxx954% > NUL
+    if exist ".settings\materialUpdaterArg.txt" del /q /s ".settings\materialUpdaterArg.txt" >nul
+    goto settings
+) 
 if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") else (if not exist %thanksMcbegamerxx954% (echo. > %thanksMcbegamerxx954%))
 goto settings
 
@@ -159,6 +164,13 @@ goto settings
 :toggle9
 :toggle10
 goto settings
+
+:: WIP START
+cls
+set /p "unlockerpath=!YLW!Enter custom IObit Unlocker path ^(leave empty to cancel^): "
+if not exist "!unlockerpath!\IObitUnlocker.exe" (echo !ERR!Wrong folder.!RST! && %backmsg:~0,56%) else (!unlockerpath!)
+goto settings
+:: WIP END
 
 :toggle11
 goto:EOF

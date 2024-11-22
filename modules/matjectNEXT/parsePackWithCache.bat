@@ -20,8 +20,8 @@ set packPath=!%packUuid%_%packVer2%!
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!%packPath%!\manifest.json"') do set "packName=%%i"
 for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
 
-echo !WHT!^> First activated pack: !GRN!!packName! !BLU!v!packVer!!RST!!RST!
-echo !WHT!^> hasSubpack: !GRN!!hasSubpack!!RST!
+echo !WHT!^> First activated pack: !Red!!packName! !GRN!v!packVer!!RST!!RST!
+echo !WHT!^> hasSubpack:!RST! !hasSubpack!
 if "!hasSubpack!" equ "true" (
     call "modules\matjectNEXT\parseSubpack"
     set "currentPack2=!packName!_!packVer2!_!subpackName!" && set currentPack2=!currentPack2: =!
@@ -30,4 +30,4 @@ if "!hasSubpack!" equ "true" (
     set "currentPack2=!packName!_!packVer2!" && set currentPack2=!currentPack2: =!
 )
 
-echo !WHT!^> Pack path: !GRN!!packPath!!RST!
+echo !WHT!^> Pack path: !GRY!!packPath!!RST!

@@ -33,5 +33,3 @@ echo.
 echo.
 
 title matjectNEXT %version%
-
-pause

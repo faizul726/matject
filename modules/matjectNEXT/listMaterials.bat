@@ -16,10 +16,10 @@ echo.
 if not exist "MATERIALS" mkdir MATERIALS
 
 copy "!packPath!\renderer\materials\*.bin" "%cd%\MATERIALS\" >nul
-echo Copied main materials...
+echo !YLW![*] Copied main materials...!RST!
 echo.
 if "!hasSubpack!" equ "true" copy "!packPath!\subpacks\!subpackName!\renderer\materials\*.bin" "%cd%\MATERIALS" >nul
-echo Copied "!subpackName!" ^(subpack^) materials...
+echo !YLW![*] Copied "!subpackName!" ^(subpack^) materials...!RST!
 echo.
 for %%f in (MATERIALS\*.material.bin) do (
     set "SRCLIST=!SRCLIST!,"%cd%\%%f""
@@ -33,13 +33,12 @@ set "SRCLIST=%SRCLIST:~1%"
 set "REPLACELIST=%REPLACELIST:~1%"
 set "REPLACELISTEXPORT=%REPLACELIST%"
 
-echo Materials count: !SRCCOUNT!
+echo !WHT!Materials count:!RST! !SRCCOUNT!
 echo.
 echo !GRY!Source list: !SRCLIST!
 echo.
-echo Replace list: !REPLACELIST!
+echo !WHT!Replace list:!GRY! !REPLACELIST!!RST!
 set "REPLACELIST=!REPLACELIST:_=%MCLOCATION%\data\renderer\materials\!"
 set "REPLACELIST=!REPLACELIST:-=.material.bin!"
 echo.
-pause
 goto:EOF

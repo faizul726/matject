@@ -5,6 +5,7 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 set "autoOpenMCPACK=.settings\autoOpenMCPACK"
 set "backupDate=.settings\backupDate.txt"
 set "customMinecraftPath=.settings\customMinecraftPath.txt"
+set "customUnlockerPath=.settings\customUnlockerPath.txt"
 set "defaultMethod=.settings\defaultMethod.txt"
 set "disableConfirmation=.settings\disableConfirmation"
 set "disableInterruptionCheck=.settings\disableInterruptionCheck"

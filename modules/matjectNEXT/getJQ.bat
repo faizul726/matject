@@ -40,7 +40,7 @@ if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
     )
 )
 
-if exist "modules\jq.exe" (echo !GRN![*] Downloaded!RST!) else (echo !RED![*] Download FAILED!RST! && echo Press any key to close... && pause > NUL && exit)
+if exist "modules\jq.exe" (echo !GRN![*] Downloaded.!RST!) else (echo !RED![*] Download FAILED.!RST! && echo Press any key to close... && pause > NUL && exit)
 echo.
 pause && goto:EOF
 

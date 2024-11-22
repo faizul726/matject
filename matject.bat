@@ -1,13 +1,13 @@
 @echo off
 setlocal enabledelayedexpansion
 cls
-cd /d "%~dp0"
+pushd "%~dp0"
 
 :: A material replacer for Minecraft.
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.2.0"
+set "version=v3.2.1"
 set "title=Matject %version%"
 set "murgi=KhayDhan"
 
@@ -52,6 +52,9 @@ echo * Make sure the shader you are using SUPPORTS Windows ^(or says merged^).
 echo * It may not work properly with ransomware protection and encryption.
 echo * The worst thing that can happen with is material corruption.
 echo   In that case you can restore materials or reinstall Minecraft.
+echo * Minecraft Preview is not supported ^(yet^)
+echo * Custom Minecraft Launcher is not supported ^(yet^)
+echo * Some packs may need extra steps for Matject auto/manual method.
 echo * English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
 echo.
@@ -86,6 +89,8 @@ if "!firstRun!" neq "yes" (
 if exist %doCheckUpdates% (
     call "modules\checkUpdates"
 )
+
+
 
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     echo !RED![^^!] You don't have IObit Unlocker installed.!RST!
@@ -157,7 +162,7 @@ if not exist "%unlocked%" (
         echo [*] Unlocking...
         powershell -command start-process -file "modules\unlockWindowsApps.bat" -verb runas -Wait
         echo.
-        if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED.!RST! && %exitmsg%) else (echo !GRN![*] Unlocked.!RST!)
+        if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED. Saved log as in .settings\unlockLog.txt. You might need it for finding the issue later.!RST! && %exitmsg%) else (echo !GRN![*] Unlocked.!RST!)
         echo.
         ) else (if "!errorlevel!" equ "2" exit)
 )
@@ -208,7 +213,7 @@ if exist %defaultMethod% (
 :INTRODUCTION
 cls
 if exist "%customMinecraftPath%" (
-    echo !YLW![*] Using custom Minecraft path: "!MCLOCATION!"!RST!
+    echo !GRY![*] Using custom Minecraft path: "!MCLOCATION!"!RST!
     echo.
 )
 if "%deiteu%" equ "0726" echo !BLU!Happy birthday rwxrw-r-- U+1F337 ^(%imy%^)!RST!
@@ -240,14 +245,14 @@ echo Draco for Windows but not really.
 echo.
 
 echo.
-echo !WHT![H] Help    [A] About    [S] Settings    [O] Others!RST!
+echo !WHT![H] Help    [A] About    [S] Settings    [R] Restore ^& Others!RST!
 echo.
 echo.
 echo !RED![B] Exit!RST!
 echo.
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 123hasob /n
+choice /c 123hasrb /n
 
 goto option!errorlevel!
 

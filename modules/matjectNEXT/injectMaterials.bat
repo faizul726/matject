@@ -4,7 +4,7 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 echo !GRN![*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.!RST!
 echo.
 
-if exist %disableInjectionPrompt% (goto inject)
+if exist %disableConfirmation% (goto inject)
 msg * Resource packs changed, injecting new materials...
 echo !YLW![*] Press [Y] to confirm injection or [B] to cancel.!RST!
 echo.
@@ -13,6 +13,7 @@ if !errorlevel! neq 1 goto:EOF
 
 :inject
 echo !YLW![*] Injecting !RED!!packName! !GRN!v!packVer2!!RST! + !BLU!!subpackName!!RST!
+echo.
 echo.
 
 if exist %thanksMcbegamerxx954% call "modules\updateMaterials"

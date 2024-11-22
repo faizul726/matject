@@ -1,12 +1,11 @@
 @echo off
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
-
 echo !YLW![*] Updating materials using material-updater... [BETA]!RST!
 echo.
 
 :askVer
 if not exist %materialUpdaterArg% (
-    echo !YLW![?] Which is your Minecraft version?!RST!
+    echo !YLW![?] material-updater: Which is your Minecraft version?!RST!
     echo !WHT!
     echo [1] v1.21.20+
     echo [2] v1.20.80 - v1.21.2
@@ -29,3 +28,5 @@ echo.
 for %%m in ("MATERIALS\*.material.bin") do ("modules\material-updater" "%%m" -o "%%m" -t !targetVer!)
 echo.
 echo !GRN![*] Materials updated to support current version!RST!
+echo.
+echo.

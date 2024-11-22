@@ -27,7 +27,7 @@ echo !WHT![*] Backup made on: !backupTimestamp!!RST!
 echo.
 echo !YLW![?] How would you like to restore?!RST!
 echo.
-echo [1] Full restore ^(restore all materials^)
+echo [1] Full restore ^(slow, restore all materials^)
 echo [2] Partial restore ^(only restore the ones modified in previous injection^)
 echo.
 choice /c 12b /n 
@@ -39,6 +39,7 @@ if !errorlevel! equ 1 (
 )
 if !errorlevel! equ 2 (
     cls
+    set "goingVanillaSir=true"
     echo !YLW![*] Restore type: Partial!RST!
     echo.
     goto partialRestore
@@ -229,6 +230,10 @@ if !errorlevel! neq 0 (
     echo.
     del /q /s ".settings\.restoreList.log" > NUL
     del /q /s ".settings\.bins.log" > NUL
+    if defined goingVanillaSir (
+        if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
+        set "goingVanillaSir="
+    )
     if exist "tmp\" rmdir /q /s tmp
     timeout 2 > NUL
     goto:EOF
@@ -238,6 +243,7 @@ if !errorlevel! neq 0 (
 cls
 if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" > NUL
 if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" > NUL
+if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
 if exist "%backupDate%" del /q /s "%backupDate%" > NUL
-echo !GRN![*] BACKUP RESTORE OK!RST!
+echo !GRN![*] BACKUP RESTORE OK.!RST!
 %exitmsg%

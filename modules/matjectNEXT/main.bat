@@ -16,6 +16,8 @@ echo - It only works if Minecraft is not moved from C: Drive to somewhere else.
 echo - Resource pack from world is not supported.
 echo - development_resource_packs are not supported.
 echo - Still missing some not required but important features.
+echo - Some packs might be incompatible.
+echo - May not work with caps UUIDs.
 echo.
 echo !YLW!- DO NOT mix Matject and matjectNEXT. Use only one as preferred option.
 echo - You MUST start with original materials. For a fresh start, you can perform Others -^> Full restore.!RST!
@@ -41,12 +43,6 @@ if exist ".settings\.restoreList.txt" (
     %backmsg%
 )
 
-echo !YLW![?] Are you sure you have original materials?!RST! [Y/N]
-echo.
-choice /c yn /n
-
-if "%errorlevel%" neq "1" (goto:EOF)
-
 if not exist "modules\jq.exe" (
     cls
     call "modules\matjectNEXT\getJQ"
@@ -64,7 +60,7 @@ echo.
 choice /c yn /n
 
 if "!errorlevel!" neq "1" (goto:EOF)
-
+cls
 for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "packUuid=%%i"
 if "!packuuid!" equ "null" (
     set "lastPack=rwxrwr-r"
@@ -93,16 +89,16 @@ if "!hasSubpack!" equ "true" (
 :monitorstart
 echo !YLW![*] Monitoring resource packs...!RST! ^(cooldown 5s^)
 echo.
-echo.
 if "!packuuid!" equ "null" (
-    echo Current pack: ^(no pack applied^)
+    echo !WHT!Current pack:!RST! ^(no pack applied^)
 ) else (
     if "!hasSubpack!" equ "true" (
-        echo Current pack: !RED!!packName!!RST! + !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!
+        echo !WHT!Current pack: !RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!
     ) else (
-        echo Current pack: !RED!!packName!!RST! + !GRN!v!packVer!!RST!
+        echo !WHT!Current pack: !RED!!packName!!RST! !GRN!v!packVer!!RST!
     )
 )
+echo.
 
 :monitor
 for /f %%z in ('forfiles /p "%gamedata%\minecraftpe" /m global_resource_packs.json /c "cmd /c echo @fdate__@ftime"') do set "modifytime=%%z"
@@ -112,15 +108,16 @@ if defined modtime (
         title matjectNEXT %version%
         set monitoring=
         echo.
-        echo !YLW!^### Resource packs changed ^(!modifytime!^)!RST!
+        echo !YLW![*] Resource packs changed ^(!modifytime!^)!RST!
         echo.
         set "modtime=!modifytime!"
-        call "modules\matjectNEXT\parsePackWithCache"
+        call "modules\matjectNEXT\parsePackWithCache" && echo.
+        echo !WHT!Old:!RST! !lastPack!
+        echo !WHT!New:!RST! !currentPack2! 
         echo.
-        echo Old: !lastPack!
-        echo New: !currentPack2! 
         if "!currentPack2!" equ "!lastPack!" (
-            echo !YLW![*] Top pack unchanged!RST!
+            echo !GRN![*] Top pack unchanged.!RST!
+            echo.
             echo.
             goto monitorstart
         )
@@ -133,11 +130,13 @@ if defined modtime (
                 call "modules\restoreMaterials"
                 set "isGoingVanilla="
                 del /q /s ".settings\lastPack.txt" > NUL
-                echo !YLW![*] Monitoring resource packs...!RST! ^(cooldown 5s^)
+                echo.
+                echo.
                 set "lastPack=rwxrwr-r"
-                goto monitor
+                goto monitorstart
             ) else (
-                echo !YLW![*] Already using vanilla materials, no need to restore.!RST!
+                echo !GRN![*] Already using vanilla materials, no need to restore.!RST!
+                echo.
                 echo.
                 set "lastPack=rwxrwr-r"
                 goto monitorstart
@@ -153,10 +152,12 @@ if defined modtime (
                     set "isGoingVanilla="
                     del /q /s ".settings\lastPack.txt" > NUL
                     echo.
+                    echo.
                     if "!hasSubpack!" equ "true" (set "lastPack=!packName!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packName!_!packVer2!" && set lastPack=!lastPack: =!)
                     goto monitorstart
                 ) else (
-                    echo !YLW![*] Already using vanilla materials, no need to restore.!RST!
+                    echo !GRN![*] Already using vanilla materials, no need to restore.!RST!
+                    echo.
                     echo.
                     if "!hasSubpack!" equ "true" (set "lastPack=!packName!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packName!_!packVer2!" && set lastPack=!lastPack: =!)
                     goto monitorstart
@@ -165,16 +166,15 @@ if defined modtime (
                 call modules\matjectNEXT\listMaterials
                 call modules\matjectNEXT\injectMaterials
                 if "!hasSubpack!" equ "true" (set "lastPack=!packName!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packName!_!packVer2!" && set lastPack=!lastPack: =!)
+                echo.
+                echo.
                 goto monitorstart
             )
         )
     )
     :loading
-    timeout 1 >nul &&  title matjectNEXT %version% [monitoring] ^|
-    timeout 1 >nul &&  title matjectNEXT %version% [monitoring] /
-    timeout 1 >nul &&  title matjectNEXT %version% [monitoring] -
-    timeout 1 >nul &&  title matjectNEXT %version% [monitoring] \
-    timeout 1 >nul &&  title matjectNEXT %version% [monitoring] :D
+    title matjectNEXT %version% [monitoring]
+    timeout 5 >nul
     goto monitor
 ) else (
     set "modtime=!modifytime!"
