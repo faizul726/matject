@@ -12,7 +12,7 @@ choice /c yb /N
 if !errorlevel! neq 1 goto:EOF
 
 :inject
-echo !YLW![*] Injecting !RED!!packName! !GRN!v!packVer2!!RST! + !BLU!!subpackName!!RST!
+echo !YLW![*] Injecting !RED!!packName! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!
 echo.
 echo.
 
