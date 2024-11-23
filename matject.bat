@@ -7,7 +7,7 @@ pushd "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.2.2"
+set "version=v3.2.3"
 set "title=Matject %version%-dev ^(20241123^)"
 set "murgi=KhayDhan"
 
@@ -394,7 +394,7 @@ if !errorlevel! neq 1 (
 :AUTOEXTRACT
 set MCPACKDIR=
 if not exist "tmp\" mkdir tmp
-copy "!MCPACK!" "tmp\mcpack.zip" > NUL
+copy /d "!MCPACK!" "tmp\mcpack.zip" > NUL
 echo.
 echo.
 echo.
@@ -468,7 +468,7 @@ echo.
 for %%f in (MATERIALS\*.material.bin) do (
     set "MTBIN=%%~nf"
     set "SRCLIST=!SRCLIST!,"%cd%\%%f""
-    set "BINS=!BINS!"!MTBIN:~0,-9!-" "
+    set "BINS=!BINS!"_!MTBIN:~0,-9!-" "
     set "REPLACELISTEXPORT=!REPLACELISTEXPORT!,"_!MTBIN:~0,-9!-""
     set /a SRCCOUNT+=1
 )
@@ -587,6 +587,7 @@ echo.
 if exist %autoOpenMCPACK% (
     if "!MCPACKNAME:~-7,7!" equ ".mcpack" "MCPACK\!MCPACKNAME!"
 ) 
+
 if not exist %autoOpenMCPACK% (
     if "!MCPACKNAME:~-7,7!" neq ".mcpack" goto skip
     echo !YLW![?] Do you want to import the MCPACK for full experience?!RST!
@@ -596,7 +597,7 @@ if not exist %autoOpenMCPACK% (
     choice /c yn /n
     if "!errorlevel!" equ "2" goto skip
 
-    echo !GRN![TIP] You can enable Auto open MCPACK from settings.!RST!
+    echo [TIP] You can enable Auto open MCPACK from settings.
     "MCPACK\!MCPACKNAME!"
 )
 

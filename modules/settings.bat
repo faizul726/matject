@@ -93,7 +93,7 @@ if exist %thanksMcbegamerxx954% (
     if exist ".settings\materialUpdaterArg.txt" del /q /s ".settings\materialUpdaterArg.txt" >nul
     goto settings
 ) 
-if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") else (if not exist %thanksMcbegamerxx954% (echo. > %thanksMcbegamerxx954%))
+if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") else (if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%))
 goto settings
 
 :toggle3

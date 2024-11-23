@@ -185,10 +185,14 @@ if exist ".settings\.restoreList.log" (
             set "isGoingVanilla="
         )
     )
+    set "COPYBINS=!COPYBINS:_=%matbak%\!"
+    set "COPYBINS=!COPYBINS:-=.material.bin!"
     set /p restoreList=< ".settings\.restoreList.log"
     set "restoreList=!restoreList:-=.material.bin!"
     set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"
-    robocopy "%matbak%" "tmp" !COPYBINS:-=.material.bin! /NFL /NDL /NJH /NJS /nc /ns /np
+    for %%f in (!COPYBINS!) do (
+        copy /d %%f "tmp" >nul
+    )
     goto restore1
 ) else (
     echo !ERR![^^!] No logs found for previous injection.!RST!
@@ -200,6 +204,7 @@ if exist ".settings\.restoreList.log" (
 for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
 )
+set "SRCLIST2=!SRCLIST2:~1!"
 
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %restoreList%
 if !errorlevel! neq 0 (

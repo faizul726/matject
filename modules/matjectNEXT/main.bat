@@ -71,9 +71,11 @@ for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minec
 if "!hasSubpack!" equ "true" (
     for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i"
     set "currentPack2=!packName!_!packVer2!_!subpackName!"
+    set "lastPack=!currentPack2: =!"
 ) else (
     set "subpackName="
     set "currentPack2=!packName!_!packVer2!"
+    set "lastPack=!currentPack2: =!"
 )
 
 set "packVer2=!packVer:.=!"

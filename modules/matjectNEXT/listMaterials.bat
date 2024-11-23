@@ -15,16 +15,16 @@ echo.
 echo.
 if not exist "MATERIALS" mkdir MATERIALS
 
-copy "!packPath!\renderer\materials\*.bin" "%cd%\MATERIALS\" >nul
+copy /d "!packPath!\renderer\materials\*.bin" "%cd%\MATERIALS\" >nul
 echo !YLW![*] Copied main materials...!RST!
 echo.
-if "!hasSubpack!" equ "true" copy "!packPath!\subpacks\!subpackName!\renderer\materials\*.bin" "%cd%\MATERIALS" >nul
+if "!hasSubpack!" equ "true" copy /d "!packPath!\subpacks\!subpackName!\renderer\materials\*.bin" "%cd%\MATERIALS" >nul
 echo !YLW![*] Copied "!subpackName!" ^(subpack^) materials...!RST!
 echo.
 for %%f in (MATERIALS\*.material.bin) do (
     set "SRCLIST=!SRCLIST!,"%cd%\%%f""
     set "MTBIN=%%~nf"
-    set "BINS=!BINS!"!MTBIN:~0,-9!-" "
+    set "BINS=!BINS!"_!MTBIN:~0,-9!-" "
     set "REPLACELIST=!REPLACELIST!,"_!MTBIN:~0,-9!-""
     set /a SRCCOUNT+=1
 )
