@@ -17,7 +17,7 @@ if not defined %packUuid%_%packVer2% (
 )
 
 set packPath=!%packUuid%_%packVer2%!
-for /f "delims=" %%i in ('modules\jq -r ".header.name" "!%packPath%!\manifest.json"') do set "packName=%%i"
+for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
 
 echo !WHT!^> First activated pack: !Red!!packName! !GRN!v!packVer!!RST!!RST!

@@ -59,7 +59,7 @@ if not exist "!packPath!\renderer\" (
     echo.
     goto nopacks
 )
-for /f "delims=" %%i in ('modules\jq -r ".header.name" "!%packPath%!\manifest.json"') do set "packName=%%i"
+for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 if "!hasSubpack!" equ "true" (
     echo !WHT!Pack details:         "!RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!"
     set "currentPack=!packName!_!packVer2!_!subpackName!"

@@ -78,7 +78,7 @@ if "!hasSubpack!" equ "true" (
 
 set "packVer2=!packVer:.=!"
 set "packPath=!%packuuid%_%packVer2%!"
-for /f "delims=" %%i in ('modules\jq -r ".header.name" "!%packPath%!\manifest.json"') do set "packName=%%i"
+for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 
 if "!hasSubpack!" equ "true" (
     set "lastPack=!packName!_!packVer2!_!subpackName!"

@@ -7,8 +7,8 @@ pushd "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.2.1"
-set "title=Matject %version%"
+set "version=v3.2.2"
+set "title=Matject %version%-dev ^(20241123^)"
 set "murgi=KhayDhan"
 
 :: Load other variables
