@@ -62,12 +62,12 @@ if not exist "!packPath!\renderer\" (
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 if "!hasSubpack!" equ "true" (
     echo !WHT!Pack details:         "!RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!"
-    set "currentPack=!packName!_!packVer2!_!subpackName!"
+    set "currentPack2=!packuuid!_!packVer2!_!subpackName!"
 ) else (
     echo !WHT!Pack details:         "!RED!!packName!!RST! !GRN!v!packVer!!RST!"
-    set "currentPack=!packName!_!packVer2!"
+    set "currentPack2=!packuuid!_!packVer2!"
 )
-set "currentPack2=%currentPack: =%"
+set "currentPack2=%currentPack2: =%"
 ::echo Current pack ID ^(trimmed^): "!currentPack2!"
 echo.
 

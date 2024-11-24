@@ -28,7 +28,7 @@ echo.
 echo !YLW![?] How would you like to restore?!RST!
 echo.
 echo [1] Full restore ^(slow, restore all materials^)
-echo [2] Partial restore ^(only restore the ones modified in previous injection^)
+echo [2] Dynamic restore ^(only restore the ones modified in previous injection^)
 echo.
 choice /c 12b /n 
 if !errorlevel! equ 1 (
@@ -40,7 +40,7 @@ if !errorlevel! equ 1 (
 if !errorlevel! equ 2 (
     cls
     set "goingVanillaSir=true"
-    echo !YLW![*] Restore type: Partial!RST!
+    echo !YLW![*] Restore type: Dynamic!RST!
     echo.
     goto partialRestore
 )
@@ -148,9 +148,8 @@ for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
     echo !YLW![Moving]!RST! %%~nxf
 )
-if defined SRCLIST2 set "SRCLIST2=%SRCLIST2:~1%" 
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! equ 0 (
     cls
     set /a rstrCount-=20
@@ -201,10 +200,10 @@ if exist ".settings\.restoreList.log" (
 
 
 :restore1
+set "SRCLIST2="
 for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
 )
-set "SRCLIST2=!SRCLIST2:~1!"
 
 "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %restoreList%
 if !errorlevel! neq 0 (
@@ -215,13 +214,13 @@ if !errorlevel! neq 0 (
     cls
     goto restore1
 ) else (
-    echo !GRN![*] Partial restore: Step 1/2 succeed^^!!RST!
+    echo !GRN![*] Dynamic restore: Step 1/2 succeed^^!!RST!
 )
 
 echo.
 
 :restore2
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! neq 0 (
     echo !ERR![^^!] Please accept UAC.!RST!
     echo.
@@ -230,7 +229,7 @@ if !errorlevel! neq 0 (
     cls
     goto restore2
 ) else (
-    echo !GRN![*] Partial restore: Step 2/2 succeed^^!!RST!
+    echo !GRN![*] Dynamic restore: Step 2/2 succeed^^!!RST!
     echo.
     echo.
     del /q /s ".settings\.restoreList.log" > NUL

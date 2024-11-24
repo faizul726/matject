@@ -7,8 +7,10 @@ pushd "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.2.4"
-set "title=Matject %version%-dev ^(20241124^)-dev ^(20241124^)"
+set "dev=-dev ^(20241124^)"
+
+set "version=v3.2.5"
+set "title=Matject %version%%dev%"
 set "murgi=KhayDhan"
 
 :: Load other variables
@@ -131,7 +133,7 @@ if exist "%customMinecraftPath%" (
             set /p CURRENTVERSION=<%oldMinecraftVersion%
             set /p OLDVERSION=<%oldMinecraftVersion%
         ) else (
-            for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i && set "OLDVERSION=%%i"
+            for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i" && set "OLDVERSION=%%i" 
         )
     )
 ) else (
@@ -185,6 +187,9 @@ if exist "%matbak%\" (
         rename "%matbak%" "Old Materials Backup (v!OLDVERSION!)"
     )
     if exist %materialUpdaterArg% del /q /s %materialUpdaterArg% > NUL
+    if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" >nul
+    if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" >nul
+    if exist ".settings\.lastPack.txt" del /q /s ".settings\.lastPack.txt" >nul
     echo !CURRENTVERSION!>%oldMinecraftVersion%
     call "modules\backupMaterials"
     timeout 2 > NUL
@@ -256,7 +261,7 @@ choice /c 123hasrb /n
 
 goto option!errorlevel!
 
-cls
+:: OTHER OPTIONS
 
 :option8
 exit
@@ -264,19 +269,44 @@ exit
 :option7
 cls
 echo !RED!^< [B] Back!RST!
-echo !WHT!
+echo.
 echo [1] Restore default materials
 echo [2] Open Minecraft app folder
 echo [3] Open Minecraft data folder
+echo.
 echo !GRN![4] View Matject on GitHub :^)
+echo !WHT![5] Visit jq website
+echo [6] View material-updater on mcbegamerxx954's GitHub
+echo.
+echo !GRY![7] Reset Global Resource Packs ^(use this if you want to deactivate all active packs^)
 echo !RST!
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 1234b /n
+choice /c 1234567b /n
 goto others!errorlevel!
 
-:others5
+:others8
 goto INTRODUCTION
+
+:others7
+cls
+echo !YLW![?] Are you sure? This will deactivate all active global resource packs.!RST!
+echo.
+echo [Y] Yes
+echo [N] No, go back
+echo.
+choice /c yn /n
+if !errorlevel! neq 1 (goto option7)
+if exist "%gamedata%\minecraftpe\global_resource_packs.json" del /q /s "%gamedata%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gamedata%\minecraftpe\global_resource_packs.json"
+goto option7
+
+:others6
+start https://github.com/mcbegamerxx954/material-updater
+goto option7
+
+:others5
+start https://jqlang.github.io/jq/
+goto option7
 
 :others4
 start https://faizul726.github.io/matject
@@ -294,6 +324,7 @@ goto option7
 call "modules\restoreMaterials"
 goto option7
 
+:: HOME OPTIONS
 
 :option6
 call "modules\settings"
@@ -320,7 +351,7 @@ if "%debugMode%" neq "true" (
     goto INTRODUCTION
 ) else (
     call "modules\matjectNEXT\main"
-    title Matject %version%-dev ^(20241124^)
+    title Matject %version%%dev%
 )
 
 goto INTRODUCTION

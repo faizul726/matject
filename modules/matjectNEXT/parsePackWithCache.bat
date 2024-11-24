@@ -24,10 +24,11 @@ echo !WHT!^> First activated pack: !Red!!packName! !GRN!v!packVer!!RST!!RST!
 echo !WHT!^> hasSubpack:!RST! !hasSubpack!
 if "!hasSubpack!" equ "true" (
     call "modules\matjectNEXT\parseSubpack"
-    set "currentPack2=!packName!_!packVer2!_!subpackName!" && set currentPack2=!currentPack2: =!
+    set "currentPack2=!packuuid!_!packVer2!_!subpackName!" && set currentPack2=!currentPack2: =!
 ) else (
     set "subpackName="
-    set "currentPack2=!packName!_!packVer2!" && set currentPack2=!currentPack2: =!
+    set "currentPack2=!packuuid!_!packVer2!" && set currentPack2=!currentPack2: =!
 )
 
 echo !WHT!^> Pack path: !GRY!!packPath!!RST!
+echo.

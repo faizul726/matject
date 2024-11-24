@@ -1,7 +1,7 @@
 @echo off
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
-title matjectNEXT %version%-dev ^(20241124^) [caching packs]
+title matjectNEXT %version%%dev% [caching packs]
 
 set packName=
 set counter=
@@ -32,4 +32,4 @@ set "cachedPacks=true"
 echo.
 echo.
 
-title matjectNEXT %version%-dev ^(20241124^)
+title matjectNEXT %version%%dev%

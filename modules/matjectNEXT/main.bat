@@ -2,7 +2,7 @@
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 cls
-title matjectNEXT %version%-dev ^(20241124^)
+title matjectNEXT %version%%dev%
 
 if exist %matjectNEXTenabled% goto lessgo
 
@@ -37,6 +37,11 @@ if "!mjnInput!" equ "matjectNEXT" (
 
 
 :lessgo
+if not exist ".settings\envOK.txt" (
+    call "modules\matjectNEXT\testEnv"
+    if not exist ".settings\envOK.txt" (echo !ERR![^^!] jq test FAILED. You can't use matjectNEXT on this PC.!RST! & %backmsg%)
+)
+
 if exist ".settings\.restoreList.txt" (
     echo !YLW![^^!] You already have modified materials.
     echo     Please perform a full restore before you can use matjectNEXT.!RST!
@@ -70,10 +75,10 @@ for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\".\")" "%gamedata
 for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
 if "!hasSubpack!" equ "true" (
     for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i"
-    set "currentPack2=!packName!_!packVer2!_!subpackName!"
+    set "currentPack2=!packuuid!_!packVer2!_!subpackName!"
 ) else (
     set "subpackName="
-    set "currentPack2=!packName!_!packVer2!"
+    set "currentPack2=!packuuid!_!packVer2!"
 )
 
 set "packVer2=!packVer:.=!"
@@ -81,9 +86,9 @@ set "packPath=!%packuuid%_%packVer2%!"
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 
 if "!hasSubpack!" equ "true" (
-    set "lastPack=!packName!_!packVer2!_!subpackName!"
+    set "lastPack=!packuuid!_!packVer2!_!subpackName!"
 ) else (
-    set "lastPack=!packName!_!packVer2!"
+    set "lastPack=!packuuid!_!packVer2!"
 )
 
 set "lastPack=!currentPack2: =!"
@@ -108,13 +113,13 @@ for /f %%z in ('forfiles /p "%gamedata%\minecraftpe" /m global_resource_packs.js
 
 if defined modtime (
     if "!modtime!" neq "!modifytime!" (
-        title matjectNEXT %version%-dev ^(20241124^)
+        title matjectNEXT %version%%dev%
         set monitoring=
         echo.
         echo !YLW![*] Resource packs changed ^(!modifytime!^)!RST!
         echo.
         set "modtime=!modifytime!"
-        call "modules\matjectNEXT\parsePackWithCache" && echo.
+        call "modules\matjectNEXT\parsePackWithCache"
         echo !WHT!Old:!RST! !lastPack!
         echo !WHT!New:!RST! !currentPack2! 
         echo.
@@ -156,26 +161,26 @@ if defined modtime (
                     del /q /s ".settings\lastPack.txt" > NUL
                     echo.
                     echo.
-                    if "!hasSubpack!" equ "true" (set "lastPack=!packName!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packName!_!packVer2!" && set lastPack=!lastPack: =!)
+                    if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVer2!" && set lastPack=!lastPack: =!)
                     goto monitorstart
                 ) else (
                     echo !GRN![*] Already using vanilla materials, no need to restore.!RST!
                     echo.
                     echo.
-                    if "!hasSubpack!" equ "true" (set "lastPack=!packName!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packName!_!packVer2!" && set lastPack=!lastPack: =!)
+                    if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVer2!" && set lastPack=!lastPack: =!)
                     goto monitorstart
                 )
             ) else (
                 call modules\matjectNEXT\listMaterials
                 call modules\matjectNEXT\injectMaterials
-                if "!hasSubpack!" equ "true" (set "lastPack=!packName!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packName!_!packVer2!" && set lastPack=!lastPack: =!)
+                if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVer2!" && set lastPack=!lastPack: =!)
                 echo.
                 echo.
                 goto monitorstart
             )
         )
     )
-    title matjectNEXT %version%-dev ^(20241124^) [monitoring]
+    title matjectNEXT %version%%dev% [monitoring]
     choice /c b0 /t 5 /d 0 /n > NUL
     if !errorlevel! equ 1 goto:EOF
     goto monitor
