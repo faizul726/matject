@@ -2,7 +2,7 @@
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 cls
-title matjectNEXT %version%
+title matjectNEXT %version%-dev ^(20241124^)
 
 if exist %matjectNEXTenabled% goto lessgo
 
@@ -71,11 +71,9 @@ for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minec
 if "!hasSubpack!" equ "true" (
     for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i"
     set "currentPack2=!packName!_!packVer2!_!subpackName!"
-    set "lastPack=!currentPack2: =!"
 ) else (
     set "subpackName="
     set "currentPack2=!packName!_!packVer2!"
-    set "lastPack=!currentPack2: =!"
 )
 
 set "packVer2=!packVer:.=!"
@@ -87,6 +85,8 @@ if "!hasSubpack!" equ "true" (
 ) else (
     set "lastPack=!packName!_!packVer2!"
 )
+
+set "lastPack=!currentPack2: =!"
 
 :monitorstart
 echo !YLW![*] Monitoring resource packs...!RST! ^(cooldown 5s^)
@@ -100,6 +100,7 @@ if "!packuuid!" equ "null" (
         echo !WHT!Current pack: !RED!!packName!!RST! !GRN!v!packVer!!RST!
     )
 )
+echo !GRY!Press [B] to stop monitoring...!RST!
 echo.
 
 :monitor
@@ -107,7 +108,7 @@ for /f %%z in ('forfiles /p "%gamedata%\minecraftpe" /m global_resource_packs.js
 
 if defined modtime (
     if "!modtime!" neq "!modifytime!" (
-        title matjectNEXT %version%
+        title matjectNEXT %version%-dev ^(20241124^)
         set monitoring=
         echo.
         echo !YLW![*] Resource packs changed ^(!modifytime!^)!RST!
@@ -174,9 +175,9 @@ if defined modtime (
             )
         )
     )
-    :loading
-    title matjectNEXT %version% [monitoring]
-    timeout 5 >nul
+    title matjectNEXT %version%-dev ^(20241124^) [monitoring]
+    choice /c b0 /t 5 /d 0 /n > NUL
+    if !errorlevel! equ 1 goto:EOF
     goto monitor
 ) else (
     set "modtime=!modifytime!"

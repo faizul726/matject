@@ -5,7 +5,7 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 cls
 echo !YLW![*] Checking for updates...!RST!
 echo.
-echo Current version: %version%
+echo Current version: %version%-dev ^(20241124^)
 ::set "version=v3.0.2"
 
 set "version2=%version:~1%"
@@ -38,7 +38,7 @@ if %minus% geq 10 (
         timeout 2 >nul
     )
     if !version2! gtr !latestversion! (
-        echo !WHT!o_O You must be a time traveler because !YLW!%version%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
+        echo !WHT!o_O You must be a time traveler because !YLW!%version%-dev ^(20241124^)!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
         echo.
         echo Have we achieved global peace yet?
         echo.
@@ -46,7 +46,7 @@ if %minus% geq 10 (
         pause >nul
     ) 
     if !version2! lss !latestversion! (
-        echo !YLW![*] New update is available. !RST!^(%version% -^> %latesturl:~50%^)
+        echo !YLW![*] New update is available. !RST!^(%version%-dev ^(20241124^) -^> %latesturl:~50%^)
         echo.
         echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
         echo.
@@ -63,7 +63,7 @@ if %minus% geq 10 (
         timeout 2 >nul
     )
     if !version2! gtr !latestversion! (
-        echo !WHT!o_O You must be a time traveler because !YLW!%version%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
+        echo !WHT!o_O You must be a time traveler because !YLW!%version%-dev ^(20241124^)!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
         echo.
         echo Have we achieved global peace yet?
         echo.
@@ -71,7 +71,7 @@ if %minus% geq 10 (
         pause >nul
     ) 
     if !version2! lss !latestversion! (
-        echo !YLW![*] New update is available. !RST!^(%version% -^> %latesturl:~50%^)
+        echo !YLW![*] New update is available. !RST!^(%version%-dev ^(20241124^) -^> %latesturl:~50%^)
         echo.
         echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
         echo.

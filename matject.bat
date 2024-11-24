@@ -7,8 +7,8 @@ pushd "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.2.3"
-set "title=Matject %version%-dev ^(20241123^)"
+set "version=v3.2.4"
+set "title=Matject %version%-dev ^(20241124^)-dev ^(20241124^)"
 set "murgi=KhayDhan"
 
 :: Load other variables
@@ -320,7 +320,7 @@ if "%debugMode%" neq "true" (
     goto INTRODUCTION
 ) else (
     call "modules\matjectNEXT\main"
-    title Matject %version%
+    title Matject %version%-dev ^(20241124^)
 )
 
 goto INTRODUCTION

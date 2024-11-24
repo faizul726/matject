@@ -5,7 +5,7 @@ set packUuid=
 set hasSubpack=
 for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "packUuid=%%i"
 if "!packUuid!" equ "null" (
-    set "lastPack=!currentPack2!"
+    set "lastPack=!currentPack2: =!"
     set "currentPack2=rwxrwr-r"
     goto:EOF
 )
