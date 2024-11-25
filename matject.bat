@@ -7,9 +7,9 @@ pushd "%~dp0"
 :: Made by faizul726
 :: https://faizul726.github.io/matject
 
-set "dev=-dev ^(20241124^)"
+set "dev=-dev ^(20241125^)"
 
-set "version=v3.2.5"
+set "version=v3.2.6"
 set "title=Matject %version%%dev%"
 set "murgi=KhayDhan"
 

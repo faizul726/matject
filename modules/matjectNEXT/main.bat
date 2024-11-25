@@ -37,6 +37,11 @@ if "!mjnInput!" equ "matjectNEXT" (
 
 
 :lessgo
+if not exist "modules\jq.exe" (
+    cls
+    call "modules\matjectNEXT\getJQ"
+)
+
 if not exist ".settings\envOK.txt" (
     call "modules\matjectNEXT\testEnv"
     if not exist ".settings\envOK.txt" (echo !ERR![^^!] jq test FAILED. You can't use matjectNEXT on this PC.!RST! & %backmsg%)
@@ -46,11 +51,6 @@ if exist ".settings\.restoreList.txt" (
     echo !YLW![^^!] You already have modified materials.
     echo     Please perform a full restore before you can use matjectNEXT.!RST!
     %backmsg%
-)
-
-if not exist "modules\jq.exe" (
-    cls
-    call "modules\matjectNEXT\getJQ"
 )
 
 if not defined cachedPacks (
