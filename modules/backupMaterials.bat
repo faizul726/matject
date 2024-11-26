@@ -7,6 +7,6 @@ xcopy /g "!MCLOCATION!\data\renderer\materials\*" "%matbak%\" /e /i /h /y > NUL
 echo %date% // %time%>%backupDate%
 title %title%
 echo.
-echo !GRN![*] Materials backup OK!RST!
+echo !GRN![*] Backed up materials to "Backups\Materials (backup)"!RST!
 echo.
 timeout 5

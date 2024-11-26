@@ -108,5 +108,5 @@ set packPath=!%packUuid%_%packVer2%!
 
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packpath!\sample-manifest.json"') do set "packName=%%i"
 rmdir /q /s "tmp"
-if "!subpackname!" equ "subpackthree" (echo !GRN![*] jq test OK. Means you can use matjectNEXT.!RST! & echo. & echo OK>".settings\envOK.txt" && pause)
+if "!subpackname!" equ "subpackthree" (echo !GRN![*] jq test OK. Means you can use matjectNEXT.!RST! & echo. & echo jq test passed %date% // %time%>".settings\jqTestOK.txt" && pause)
 echo.

@@ -24,5 +24,5 @@ set "useAutoAlways=.settings\useAutoAlways"
 set "useManualAlways=.settings\useManualAlways"
 set "usematjectNEXTAlways=.settings\usematjectNEXTAlways"
 
-set "exitmsg=echo. && echo Press any key to exit... && pause > NUL && exit"
 set "backmsg=echo. && echo Press any key to go back... && pause > NUL && goto:EOF"
+set "exitmsg=echo. && echo Press any key to exit... && pause > NUL && exit"

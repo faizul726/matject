@@ -1,7 +1,7 @@
 @echo off
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
-echo !GRN![*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.!RST!
+::echo !GRN![*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.!RST!
 echo.
 
 if exist %disableConfirmation% (goto inject)

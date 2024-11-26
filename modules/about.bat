@@ -5,10 +5,10 @@ title About %title%
 cls
 
 echo !YLW!What's new in %title%?!RST!
-echo !YLW!Released on: Nov 18, 2024!RST!
+echo !YLW!Released on: Nov 26, 2024!RST!
 echo.
-echo - Bump version from v3.0.3
-echo - Fixed credit names                                                          !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+echo -                   
+echo -                                                                             !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
 echo                                                                               !p1!              !p1!
 echo                                                                               !p1!  !p1!  !p1!      !p1!
 echo                                                                               !p1!  !p1!        !p1!

@@ -4,12 +4,12 @@ cls
 pushd "%~dp0"
 
 :: A material replacer for Minecraft.
-:: Made by faizul726
+:: Made by @faizul726
 :: https://faizul726.github.io/matject
 
-set "dev=-dev ^(20241125^)"
+::set "dev=-dev ^(20241125^)"
 
-set "version=v3.2.6"
+set "version=v3.2.0"
 set "title=Matject %version%%dev%"
 set "murgi=KhayDhan"
 
@@ -55,7 +55,7 @@ echo * It may not work properly with ransomware protection and encryption.
 echo * The worst thing that can happen with is material corruption.
 echo   In that case you can restore materials or reinstall Minecraft.
 echo * Minecraft Preview is not supported ^(yet^)
-echo * Custom Minecraft Launcher is not supported ^(yet^)
+echo * Custom Minecraft Launcher is not fully supported.
 echo * Some packs may need extra steps for Matject auto/manual method.
 echo * English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
@@ -190,6 +190,7 @@ if exist "%matbak%\" (
     if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" >nul
     if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" >nul
     if exist ".settings\.lastPack.txt" del /q /s ".settings\.lastPack.txt" >nul
+    if exist "%backupDate%" del /q /s "%backupDate%" >nul
     echo !CURRENTVERSION!>%oldMinecraftVersion%
     call "modules\backupMaterials"
     timeout 2 > NUL
@@ -297,7 +298,7 @@ echo [N] No, go back
 echo.
 choice /c yn /n
 if !errorlevel! neq 1 (goto option7)
-if exist "%gamedata%\minecraftpe\global_resource_packs.json" del /q /s "%gamedata%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gamedata%\minecraftpe\global_resource_packs.json"
+if exist "%gamedata%\minecraftpe\global_resource_packs.json" (del /q /s "%gamedata%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gamedata%\minecraftpe\global_resource_packs.json") else (echo []>"%gamedata%\minecraftpe\global_resource_packs.json")
 goto option7
 
 :others6

@@ -4,7 +4,7 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 cls
 
-where curl 2>nul
+where curl >nul 2>&1
 if !errorlevel! neq 0 echo !RED![^^!] curl executable is not present. It is required to check for updates.!RST! & %backmsg%
 
 echo !YLW![*] Checking for updates...!RST!
@@ -52,6 +52,8 @@ if %minus% geq 10 (
     if !version2! lss !latestversion! (
         echo !YLW![*] New update is available. !RST!^(%version%%dev% -^> %latesturl:~50%^)
         echo.
+        echo !WHT!Make sure to restore backup before using new version!RST!
+        echo.
         echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
         echo.
         echo or press any key to use Matject...
@@ -76,6 +78,8 @@ if %minus% geq 10 (
     ) 
     if !version2! lss !latestversion! (
         echo !YLW![*] New update is available. !RST!^(%version%%dev% -^> %latesturl:~50%^)
+        echo.
+        echo !WHT!Make sure to restore backup before using new version!RST!
         echo.
         echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
         echo.

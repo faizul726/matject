@@ -18,6 +18,7 @@ echo - development_resource_packs are not supported.
 echo - Still missing some not required but important features.
 echo - Some packs might be incompatible.
 echo - May not work with caps UUIDs.
+echo - Packs with // or /* */ comments are not supported.
 echo.
 echo !YLW!- DO NOT mix Matject and matjectNEXT. Use only one as preferred option.
 echo - You MUST start with original materials. For a fresh start, you can perform Others -^> Full restore.!RST!
@@ -37,14 +38,16 @@ if "!mjnInput!" equ "matjectNEXT" (
 
 
 :lessgo
+if not exist "%gamedata%\minecraftpe\global_resource_packs.json" (echo []>"%gamedata%\minecraftpe\global_resource_packs.json")
+
 if not exist "modules\jq.exe" (
     cls
     call "modules\matjectNEXT\getJQ"
 )
 
-if not exist ".settings\envOK.txt" (
-    call "modules\matjectNEXT\testEnv"
-    if not exist ".settings\envOK.txt" (echo !ERR![^^!] jq test FAILED. You can't use matjectNEXT on this PC.!RST! & %backmsg%)
+if not exist ".settings\jqTestOK.txt" (
+    call "modules\matjectNEXT\testJQ"
+    if not exist ".settings\jqTestOK.txt" (echo !ERR![^^!] jq test FAILED. You can't use matjectNEXT on this PC.!RST! & %backmsg%)
 )
 
 if exist ".settings\.restoreList.txt" (
@@ -58,9 +61,9 @@ if not defined cachedPacks (
 )
 call modules\matjectNEXT\syncMaterials
 cls
-if "!errorlevel!" equ "0" echo !GRN![*] Sync OK.!RST!
+if "!errorlevel!" equ "0" echo !GRN![*] Sync OK. Materials from top pack are applied. You can exit now.!RST!
 echo.
-echo !YLW![?] Do you want to start monitoring for changes?!RST! [Y/N]
+echo !YLW![?] Or... Do you want to start monitoring for further changes?!RST! [Y/N]
 echo.
 choice /c yn /n
 
@@ -94,7 +97,7 @@ if "!hasSubpack!" equ "true" (
 set "lastPack=!currentPack2: =!"
 
 :monitorstart
-echo !YLW![*] Monitoring resource packs...!RST! ^(cooldown 5s^)
+echo !YLW![*] Monitoring global resource packs for changes...!RST! ^(cooldown 5s^)
 echo.
 if "!packuuid!" equ "null" (
     echo !WHT!Current pack:!RST! ^(no pack applied^)

@@ -5,11 +5,10 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 set SRCCOUNT=
 set SRCLIST=
 set REPLACELIST=
-set REPLACELIST3=
 set BINS=
 set MTBIN=
 
-echo Current directory: "%cd%"
+echo !WHT!Current directory:!GRY! "%cd%"!RST!
 
 echo.
 echo.
@@ -35,7 +34,7 @@ set "REPLACELISTEXPORT=%REPLACELIST%"
 
 echo !WHT!Materials count:!RST! !SRCCOUNT!
 echo.
-echo !GRY!Source list: !SRCLIST!
+echo !WHT!Source list:!GRY! !SRCLIST!!RST!
 echo.
 echo !WHT!Replace list:!GRY! !REPLACELIST!!RST!
 set "REPLACELIST=!REPLACELIST:_=%MCLOCATION%\data\renderer\materials\!"

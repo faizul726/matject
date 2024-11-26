@@ -48,7 +48,7 @@ echo.
 
 echo !toggle1! 1. Default method: %toggleone%
 echo !toggle2! 2. Use material-updater to update materials ^(fixes invisible blocks^)
-echo !toggle3! 3. Disable confirmation
+echo !toggle3! 3. Disable confirmations
 echo !toggle4! 4. Disable interruption check ^(doesn't work for now^)
 echo !toggle5! 5. Don't keep old backups
 echo !toggle6! 6. Disable success message
