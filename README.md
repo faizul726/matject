@@ -28,6 +28,8 @@ I made this script so that users don't have to go through the hassle of replacin
 > Before you complain about game crashing/invisible blocks, make sure the shader you're using supports **Windows** and the **game version**.  
 > 
 > *You can also enable material-updater in settings to fix invisible blocks.*
+>
+> **Non RenderDragon shaders (aka HAL) are not supported.**
 
 </br>
 
@@ -39,6 +41,7 @@ I made this script so that users don't have to go through the hassle of replacin
 
 ## Features
 * Easy to use.
+* Automatically inject shaders based on Global Resource Packs (matjectNEXT).
 * Takes less than 2 minutes to apply a shader.
 * Uses [material-updater](https://github.com/mcbegamerxx954/material-updater) to update outdated materials. (not enabled by default)
 * Dynamically replace game files.
@@ -63,7 +66,8 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 </br>
 
 > [!TIP]  
-> Need help? Join [YSS Discord server](https://discord.gg/years-static-shader-group-738688684223889409) and send message in `#windows`. I will be happy to assist you.
+> Need help?  
+> Join [YSS Discord server](https://discord.gg/years-static-shader-group-738688684223889409) and send message in `#windows`. I will be happy to assist you.
 
 </br>
 
@@ -77,7 +81,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 
 3. Extract the ZIP file.
 4. Open `matject.bat`.
-5. Further instructions will be there. The rest is self explanatory.
+5. The rest is self explanatory.
 </br>
 
 ### How to restore to default?
@@ -85,14 +89,14 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 > Original files will be restored automatically after the game is updated.
 
 1. Open Matject.
-2. Go to [R] Restore & Others
-3. Select Dynamic Restore or Full Restore (full restore takes bit more time)
+2. Go to **[R] Restore & Others**.
+3. Select **Dynamic Restore** or **Full Restore** (full restore takes bit more time).
 
 </br>
 
 ## Known issues
 * Some terms may be a bit too technical. Suggestions are appreciated.
-* Doesn't support manifests with // or /**/ comments. (matjectNEXT)
+* Doesn't support manifests with // or /**/ comments (matjectNEXT).
 * Doesn't support long folder path and too many shader files.
 * Custom Minecraft Launcher compatibility is not guaranteed.
 
@@ -101,7 +105,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 ## FAQ
 **Q. What is matjectNEXT?**  
 A. matjectNEXT is an advanced version of Matject that replaces materials based on the pack the user has set in Global Resource Packs, with help of **[jq](https://jqlang.github.io/jq)**.  
-*Inspired by **[Draco by @mcbegamerxx954](https://github.com/mcbegamerxx954/draco-injector)***.
+*Inspired by [Draco by @mcbegamerxx954](https://github.com/mcbegamerxx954/draco-injector)*.
 
 **Q. How is this different from [BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/)?**  
 A. BetterRenderDragon uses *memory injection*, all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders.  
@@ -127,13 +131,13 @@ A. It accesses the following folders:
 > ```
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (for matjectNEXT)
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\*` (for matjectNEXT)
-> - `.settings` `MATERIALS` `materials.bak` `\MCPACK` `modules\*` `tmp`
+> - `.settings` `Backups\*` `MATERIALS` `MCPACK` `modules\*` `tmp`
 >
 > ###### READ and WRITE:
 > - `%ProgramFiles%\WindowsApps` (to unlock WindowsApps)
 > - `%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*_*__8wekyb3d8bbwe\data\renderer\materials`
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (to reset global packs)
-> - `.settings` `MATERIALS` `materials.bak` `tmp`
+> - `.settings` `Backups\*` `MATERIALS` `tmp`
 
 </br>
 
@@ -142,6 +146,16 @@ A. হ, খায়।
 
 
 </br>
+
+
+<!-- maybe add later? ¯\_(ツ)_/¯
+## Support me / Donate / Donations
+Matject is, and always wiil be, free, and open source (tho it already is).
+You can however show me that you care by making a donation. (copied from Magisk lol)
+
+Binance: <uid>
+USDT BEP20: <address>
+-->
 
 ## Changelog
 <!--TEMPLATE
@@ -172,7 +186,7 @@ A. হ, খায়।
 
 <details><summary><b>v3.1.0 - Nov 18, 2024</b></summary>
 <ul>
-  <li>Bump version from 3.0.3.</li>
+  <li>Bump version.</li>
   <li>Fix credit names <a href=https://github.com/faizul726/matject/pull/4>PR #4</a>.</li>
 </ul>
 </br>
