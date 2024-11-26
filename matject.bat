@@ -8,7 +8,6 @@ pushd "%~dp0"
 :: https://faizul726.github.io/matject
 
 ::set "dev=-dev ^(20241125^)"
-
 set "version=v3.2.0"
 set "title=Matject %version%%dev%"
 set "murgi=KhayDhan"
@@ -25,7 +24,7 @@ REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST [DONE]
 REM - ADD FOUND DETAILS IN GETMCDETAILS [DONE]
 REM - STORE SHADER NAME FOR LATER USE
 REM - MERGE UNLOCK...BAT WITH MATJECT
-REM - RENAME MATBAK to Materiasls (backup) [DONE]
+REM - RENAME MATBAK to Materials (backup) [DONE]
 
 
 :: WORK DIRECTORY SETUP

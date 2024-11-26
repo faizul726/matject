@@ -1,6 +1,6 @@
 @echo off
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
-echo !YLW![*] Updating materials using material-updater... [BETA]!RST!
+echo !YLW![*] Updating materials using material-updater...!RST!
 echo.
 
 :askVer
@@ -27,6 +27,6 @@ if "%targetVer%" equ "v1-18-30" echo !YLW![*] Updating for v1.18.30 - v1.19.51!R
 echo.
 for %%m in ("MATERIALS\*.material.bin") do ("modules\material-updater" "%%m" -o "%%m" -t !targetVer!)
 echo.
-echo !GRN![*] Materials updated to support current version!RST!
+echo !GRN![*] Materials updated to support current version.!RST!
 echo.
 echo.
