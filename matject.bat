@@ -1,17 +1,20 @@
 @echo off
 setlocal enabledelayedexpansion
 cls
-cd /d "%~dp0"
+pushd "%~dp0"
 
 :: A material replacer for Minecraft.
-:: Made by faizul726
+:: Made by @faizul726
 :: https://faizul726.github.io/matject
 
-set "version=v3.1.0"
-set "title=Matject %version%"
+::set "dev=-dev ^(20241125^)"
+set "version=v3.2.0"
+set "title=Matject %version%%dev%"
 set "murgi=KhayDhan"
+
 :: Load other variables
 call "modules\variables"
+if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
 
 REM TODO
 REM - Move variables to modules [DONE]
@@ -21,7 +24,7 @@ REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST [DONE]
 REM - ADD FOUND DETAILS IN GETMCDETAILS [DONE]
 REM - STORE SHADER NAME FOR LATER USE
 REM - MERGE UNLOCK...BAT WITH MATJECT
-REM - RENAME MATBAK to Materiasls (backup) [DONE]
+REM - RENAME MATBAK to Materials (backup) [DONE]
 
 
 :: WORK DIRECTORY SETUP
@@ -50,6 +53,9 @@ echo * Make sure the shader you are using SUPPORTS Windows ^(or says merged^).
 echo * It may not work properly with ransomware protection and encryption.
 echo * The worst thing that can happen with is material corruption.
 echo   In that case you can restore materials or reinstall Minecraft.
+echo * Minecraft Preview is not supported ^(yet^)
+echo * Custom Minecraft Launcher is not fully supported.
+echo * Some packs may need extra steps for Matject auto/manual method.
 echo * English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
 echo.
@@ -84,6 +90,8 @@ if "!firstRun!" neq "yes" (
 if exist %doCheckUpdates% (
     call "modules\checkUpdates"
 )
+
+
 
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     echo !RED![^^!] You don't have IObit Unlocker installed.!RST!
@@ -124,7 +132,7 @@ if exist "%customMinecraftPath%" (
             set /p CURRENTVERSION=<%oldMinecraftVersion%
             set /p OLDVERSION=<%oldMinecraftVersion%
         ) else (
-            for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i && set "OLDVERSION=%%i"
+            for /f "tokens=*" %%i in ('powershell -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i" && set "OLDVERSION=%%i" 
         )
     )
 ) else (
@@ -155,7 +163,7 @@ if not exist "%unlocked%" (
         echo [*] Unlocking...
         powershell -command start-process -file "modules\unlockWindowsApps.bat" -verb runas -Wait
         echo.
-        if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED.!RST! && %exitmsg%) else (echo !GRN![*] Unlocked.!RST!)
+        if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED. Saved log as in .settings\unlockLog.txt. You might need it for finding the issue later.!RST! && %exitmsg%) else (echo !GRN![*] Unlocked.!RST!)
         echo.
         ) else (if "!errorlevel!" equ "2" exit)
 )
@@ -178,6 +186,10 @@ if exist "%matbak%\" (
         rename "%matbak%" "Old Materials Backup (v!OLDVERSION!)"
     )
     if exist %materialUpdaterArg% del /q /s %materialUpdaterArg% > NUL
+    if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" >nul
+    if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" >nul
+    if exist ".settings\.lastPack.txt" del /q /s ".settings\.lastPack.txt" >nul
+    if exist "%backupDate%" del /q /s "%backupDate%" >nul
     echo !CURRENTVERSION!>%oldMinecraftVersion%
     call "modules\backupMaterials"
     timeout 2 > NUL
@@ -191,35 +203,22 @@ for /f "tokens=2 delims==" %%a in ('"wmic os get localdatetime /value"') do (
 )
 
 
-if exist %useAutoAlways% (
-    set mode=1
-    set "userMode=Auto mode"
-    goto userMode
-) else (
-    if exist %useManualAlways% (
-        set mode=2
-        set "userMode=Manual mode"
-        goto userMode
-    ) else (
-        goto INTRODUCTION
-    )
+if exist %defaultMethod% (
+    set /p selectedMethod=<%defaultMethod%
+    echo !YLW![*] Opening !selectedMethod! method in 2 seconds...!RST!
+    echo.
+    echo !YLW!    Press [S] to open settings directly...!RST!
+    choice /c s0 /t 2 /d 0 /n > NUL
+    if !errorlevel! equ 1 goto option6
+    cls
+    goto !selectedMethod!
 )
-:userMode
-echo !YLW![*] Opening !userMode! in 2 seconds...!RST!
-echo !YLW!    Press [S] to open settings directly...!RST!
-echo.
-
-choice /c s0 /t 2 /d 0 /n > NUL
-
-if !errorlevel! equ 1 goto option6
-cls
-goto option!mode!
 
 
 :INTRODUCTION
 cls
 if exist "%customMinecraftPath%" (
-    echo !YLW![*] Using custom Minecraft path: "!MCLOCATION!"!RST!
+    echo !GRY![*] Using custom Minecraft path: "!MCLOCATION!"!RST!
     echo.
 )
 if "%deiteu%" equ "0726" echo !BLU!Happy birthday rwxrw-r-- U+1F337 ^(%imy%^)!RST!
@@ -246,26 +245,23 @@ echo !BLU![2] Manual!RST!
 echo Put .material.bin files in the MATERIALS folder.
 echo Matject will ask to inject provided materials. 
 echo.
-
-if defined matjectNEXT (
-    echo [3] matjectNEXT Auto
-    echo Dhan
-    echo.
-)
+echo !RED![3] matjectNEXT [BETA]!RST!
+echo Draco for Windows but not really.
+echo.
 
 echo.
-echo !WHT![H] Help    [A] About    [S] Settings    [O] Others!RST!
+echo !WHT![H] Help    [A] About    [S] Settings    [R] Restore ^& Others!RST!
 echo.
 echo.
 echo !RED![B] Exit!RST!
 echo.
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 123hasob /n
+choice /c 123hasrb /n
 
 goto option!errorlevel!
 
-cls
+:: OTHER OPTIONS
 
 :option8
 exit
@@ -273,19 +269,44 @@ exit
 :option7
 cls
 echo !RED!^< [B] Back!RST!
-echo !WHT!
+echo.
 echo [1] Restore default materials
 echo [2] Open Minecraft app folder
 echo [3] Open Minecraft data folder
+echo.
 echo !GRN![4] View Matject on GitHub :^)
+echo !WHT![5] Visit jq website
+echo [6] View material-updater on mcbegamerxx954's GitHub
+echo.
+echo !GRY![7] Reset Global Resource Packs ^(use this if you want to deactivate all active packs^)
 echo !RST!
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 1234b /n
+choice /c 1234567b /n
 goto others!errorlevel!
 
-:others5
+:others8
 goto INTRODUCTION
+
+:others7
+cls
+echo !YLW![?] Are you sure? This will deactivate all active global resource packs.!RST!
+echo.
+echo [Y] Yes
+echo [N] No, go back
+echo.
+choice /c yn /n
+if !errorlevel! neq 1 (goto option7)
+if exist "%gamedata%\minecraftpe\global_resource_packs.json" (del /q /s "%gamedata%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gamedata%\minecraftpe\global_resource_packs.json") else (echo []>"%gamedata%\minecraftpe\global_resource_packs.json")
+goto option7
+
+:others6
+start https://github.com/mcbegamerxx954/material-updater
+goto option7
+
+:others5
+start https://jqlang.github.io/jq/
+goto option7
 
 :others4
 start https://faizul726.github.io/matject
@@ -303,6 +324,8 @@ goto option7
 call "modules\restoreMaterials"
 goto option7
 
+:: HOME OPTIONS
+
 :option6
 call "modules\settings"
 title %title%
@@ -319,9 +342,22 @@ title %title%
 goto INTRODUCTION
 
 :option3
-if not defined matjectNEXT goto INTRODUCTION
+:matjectNEXT
+if "%debugMode%" neq "true" (
+    cls
+    echo !YLW![^^!] matjectNEXT is experimental. You can't use it without enabling DEBUG MODE.!RST!
+    echo.
+    %backmsg:~0,56%
+    goto INTRODUCTION
+) else (
+    call "modules\matjectNEXT\main"
+    title Matject %version%%dev%
+)
+
+goto INTRODUCTION
 
 :option1
+:auto
 cls
 set MCPACKCOUNT=
 echo !YLW![AUTO METHOD SELECTED]!RST!
@@ -389,7 +425,7 @@ if !errorlevel! neq 1 (
 :AUTOEXTRACT
 set MCPACKDIR=
 if not exist "tmp\" mkdir tmp
-copy "!MCPACK!" "tmp\mcpack.zip" > NUL
+copy /d "!MCPACK!" "tmp\mcpack.zip" > NUL
 echo.
 echo.
 echo.
@@ -432,6 +468,7 @@ goto SEARCH
 
 
 :option2
+:manual
 cls
 echo !YLW![MANUAL METHOD SELECTED]!RST!
 echo.
@@ -462,7 +499,7 @@ echo.
 for %%f in (MATERIALS\*.material.bin) do (
     set "MTBIN=%%~nf"
     set "SRCLIST=!SRCLIST!,"%cd%\%%f""
-    set "BINS=!BINS!"!MTBIN:~0,-9!-" "
+    set "BINS=!BINS!"_!MTBIN:~0,-9!-" "
     set "REPLACELISTEXPORT=!REPLACELISTEXPORT!,"_!MTBIN:~0,-9!-""
     set /a SRCCOUNT+=1
 )
@@ -581,6 +618,7 @@ echo.
 if exist %autoOpenMCPACK% (
     if "!MCPACKNAME:~-7,7!" equ ".mcpack" "MCPACK\!MCPACKNAME!"
 ) 
+
 if not exist %autoOpenMCPACK% (
     if "!MCPACKNAME:~-7,7!" neq ".mcpack" goto skip
     echo !YLW![?] Do you want to import the MCPACK for full experience?!RST!
@@ -590,7 +628,7 @@ if not exist %autoOpenMCPACK% (
     choice /c yn /n
     if "!errorlevel!" equ "2" goto skip
 
-    echo !GRN![TIP] You can enable Auto open MCPACK from settings.!RST!
+    echo [TIP] You can enable Auto open MCPACK from settings.
     "MCPACK\!MCPACKNAME!"
 )
 

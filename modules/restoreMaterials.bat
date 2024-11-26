@@ -4,6 +4,7 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 if "!RESTORETYPE!" equ "full" (
     echo !YLW![*] Restore type: Full!RST!
     echo.
+    set "RESTORETYPE="
     goto fullRestore
 )
 if "!RESTORETYPE!" equ "partial" (
@@ -26,8 +27,8 @@ echo !WHT![*] Backup made on: !backupTimestamp!!RST!
 echo.
 echo !YLW![?] How would you like to restore?!RST!
 echo.
-echo [1] Full restore ^(restore all materials^)
-echo [2] Partial restore ^(only restore the ones modified in previous injection^)
+echo [1] Full restore ^(slow, restore all materials^)
+echo [2] Dynamic restore ^(only restore the ones modified in previous injection^)
 echo.
 choice /c 12b /n 
 if !errorlevel! equ 1 (
@@ -38,7 +39,8 @@ if !errorlevel! equ 1 (
 )
 if !errorlevel! equ 2 (
     cls
-    echo !YLW![*] Restore type: Partial!RST!
+    set "goingVanillaSir=true"
+    echo !YLW![*] Restore type: Dynamic!RST!
     echo.
     goto partialRestore
 )
@@ -146,9 +148,8 @@ for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
     echo !YLW![Moving]!RST! %%~nxf
 )
-if defined SRCLIST2 set "SRCLIST2=%SRCLIST2:~1%" 
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! equ 0 (
     cls
     set /a rstrCount-=20
@@ -164,6 +165,8 @@ if !errorlevel! equ 0 (
     goto fr-move
 )
 
+
+
 :partialRestore
 echo [*] Restoring modified materials from last injection...
 echo.
@@ -172,11 +175,23 @@ if exist ".settings\.restoreList.log" (
         rmdir /q /s tmp
         mkdir "tmp"
     ) else mkdir "tmp"
-    set /p COPYBINS=< ".settings\.bins.log"
+    set /p COPYBINS=<".settings\.bins.log"
+    if "!RESTORETYPE!" equ "partial" (
+        set "RESTORETYPE="
+        if not defined isGoingVanilla (
+            if "!COPYBINS!" equ "!BINS!" goto:EOF
+        ) else (
+            set "isGoingVanilla="
+        )
+    )
+    set "COPYBINS=!COPYBINS:_=%matbak%\!"
+    set "COPYBINS=!COPYBINS:-=.material.bin!"
     set /p restoreList=< ".settings\.restoreList.log"
     set "restoreList=!restoreList:-=.material.bin!"
     set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"
-    robocopy "%matbak%" "tmp" !COPYBINS:-=.material.bin! /NFL /NDL /NJH /NJS /nc /ns /np
+    for %%f in (!COPYBINS!) do (
+        copy /d %%f "tmp" >nul
+    )
     goto restore1
 ) else (
     echo !ERR![^^!] No logs found for previous injection.!RST!
@@ -185,6 +200,7 @@ if exist ".settings\.restoreList.log" (
 
 
 :restore1
+set "SRCLIST2="
 for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
 )
@@ -198,13 +214,13 @@ if !errorlevel! neq 0 (
     cls
     goto restore1
 ) else (
-    echo !GRN![*] Partial restore: Step 1/2 succeed^^!!RST!
+    echo !GRN![*] Dynamic restore: Step 1/2 succeed^^!!RST!
 )
 
 echo.
 
 :restore2
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials"
+"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials"
 if !errorlevel! neq 0 (
     echo !ERR![^^!] Please accept UAC.!RST!
     echo.
@@ -213,11 +229,15 @@ if !errorlevel! neq 0 (
     cls
     goto restore2
 ) else (
-    echo !GRN![*] Partial restore: Step 2/2 succeed^^!!RST!
+    echo !GRN![*] Dynamic restore: Step 2/2 succeed^^!!RST!
     echo.
     echo.
     del /q /s ".settings\.restoreList.log" > NUL
     del /q /s ".settings\.bins.log" > NUL
+    if defined goingVanillaSir (
+        if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
+        set "goingVanillaSir="
+    )
     if exist "tmp\" rmdir /q /s tmp
     timeout 2 > NUL
     goto:EOF
@@ -227,6 +247,7 @@ if !errorlevel! neq 0 (
 cls
 if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" > NUL
 if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" > NUL
+if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
 if exist "%backupDate%" del /q /s "%backupDate%" > NUL
-echo !GRN![*] BACKUP RESTORE OK!RST!
+echo !GRN![*] BACKUP RESTORE OK.!RST!
 %exitmsg%

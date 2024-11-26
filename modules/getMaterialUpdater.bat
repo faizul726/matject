@@ -3,8 +3,8 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 cls
 if "%PROCESSOR_ARCHITECTURE%" neq "AMD64" (
-    echo !RED![^^!] Unfortunately, your PC is running a 32-bit ^(x86^) system.
-    echo Since material-updater has no x86 support, you can't enable this option.!RST!
+    echo !RED![^^!] Unfortunately, your PC is running a 32-bit ^(x86^) / ARM Windows.
+    echo Since material-updater has no x86/ARM support, you can't enable this option.!RST!
     echo.
 
     echo Press any key to go back...
@@ -46,10 +46,10 @@ echo.
 
 if not exist "tmp\" mkdir tmp
 echo !YLW![*] Downloading...!RST!
-powershell -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo. > %thanksMcbegamerxx954%)
+powershell -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
 rmdir tmp /q /s
 echo.
-if exist "modules\material-updater.exe" (echo !GRN![*] Downloaded!RST!) else (echo !RED![*] Download FAILED!RST! && echo Press any key to go back... && pause > NUL && goto:EOF)
+if exist "modules\material-updater.exe" (echo !GRN![*] Downloaded to "modules\material-updater.exe"!RST!) else (echo !RED![*] Download FAILED.!RST! && echo Press any key to go back... && pause > NUL && goto:EOF)
 echo.
 pause && goto:EOF
 

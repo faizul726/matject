@@ -10,10 +10,17 @@ title %title% Settings
 cls
 
 
-set "toggleone=!RED![None]!GRY!  /  Auto  /  Manual!RST!"
-set toggle1=!toggleOff!
-if exist %useAutoAlways% set "toggle1=!toggleOn!" && set "toggleone=!GRY! None   / !GRN![Auto]!GRY! /  Manual!RST!"
-if exist %useManualAlways% set "toggle1=!toggleOn!" && set "toggleone=!GRY! None   /  Auto  / !BLU![Manual]!RST!"
+if not exist %defaultMethod% (
+    set "toggleone=!RED![None]!GRY! /  Auto  /  Manual  /  matjectNEXT!RST!"
+    set toggle1=!toggleOff!
+    set "selectedMethod="
+) else (
+    set "toggle1=!toggleOn!"
+    set /p selectedMethod=<%defaultMethod%
+    if "!selectedMethod!" equ "Auto" set "toggleone=!GRY! None  / !GRN![Auto]!GRY! /  Manual  /  matjectNEXT!RST!"
+    if "!selectedMethod!" equ "Manual" set "toggleone=!GRY! None  /  Auto  / !BLU![Manual]!GRY! /  matjectNEXT!RST!"
+    if "!selectedMethod!" equ "matjectNEXT" set "toggleone=!GRY! None  /  Auto  /  Manual  / !RED![matjectNEXT]!RST!"
+)
 
 if exist %thanksMcbegamerxx954% (
     if not exist "modules\material-updater.exe" (
@@ -28,8 +35,9 @@ if exist %disableRetainOldBackups% (set toggle5=!toggleOn!) else (set toggle5=!t
 if exist %disableSuccessMsg% (set toggle6=!toggleOn!) else (set "toggle6=!toggleOff!")
 if exist %autoOpenMCPACK% (set toggle7=!toggleOn!) else (set "toggle7=!toggleOFF!")
 if exist %customMinecraftPath% (set toggle8=murgi) else (set "toggle8=")
+if exist %customUnlockerPath% (set toggle10=!toggleOn!) else (set toggle10=!toggleOff!)
 if exist %doCheckUpdates% (set toggle13=!toggleOn!) else (set toggle13=!toggleOff!)
-if exist ".settings\debugMode.txt" (set toggle12=!RED![ON]!RST!) else (set toggle12=!GRN![OFF]!RST!)
+if "%debugMode%" equ "true" (set toggle12=!RED![ON]!RST!) else (set toggle12=!GRN![OFF]!RST!)
 echo !RED!^< [B] Back!RST!
 echo.
 echo.
@@ -40,7 +48,7 @@ echo.
 
 echo !toggle1! 1. Default method: %toggleone%
 echo !toggle2! 2. Use material-updater to update materials ^(fixes invisible blocks^)
-echo !toggle3! 3. Disable confirmation
+echo !toggle3! 3. Disable confirmations
 echo !toggle4! 4. Disable interruption check ^(doesn't work for now^)
 echo !toggle5! 5. Don't keep old backups
 echo !toggle6! 6. Disable success message
@@ -54,13 +62,13 @@ if not defined toggle8 (
 )
 
 echo !toggleOff! 9. Use custom Minecraft data path ^(doesn't work for now^)
-echo !toggleOff! 0. Use custom IObit Unlocker path ^(doesn't work for now^)
+echo !toggleOff! 0. Use custom IObit Unlocker path ^(WIP^)
 echo.
 echo !toggle13! U. Check for updates at Matject startup !RED!^(requires internet^)!RST!
 echo.
 echo [M] Check for updates manually !RED!^(requires internet^)!RST!
 echo.
-echo !GRY![D] DEBUG MODE ^(does nothing for now^) !toggle12!!RST!
+echo !GRY![D] DEBUG MODE ^(for testing matjectNEXT^) !toggle12!!RST!
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option.!RST!
@@ -70,31 +78,22 @@ choice /c 1234567890bdum /n
 goto toggle!errorlevel!
 
 :toggle1
-if not exist %useAutoAlways% (
-    if not exist %useManualAlways% (
-        echo.>%useAutoAlways%
-        goto settings
-    ) else (
-        del /q /s %useManualAlways% > NUL
-        goto settings
-    )
-) else (
-    del /q /s %useAutoAlways% > NUL
-    if not exist %useManualAlways% (
-        echo.>%useManualAlways%
-        goto settings
-    ) else (
-        del /q /s %useManualAlways% > NUL
-        goto settings
-    )
-)
+if not defined selectedMethod (echo Auto>%defaultMethod%) else (
+    if "!selectedMethod!" equ "Auto" echo Manual>%defaultMethod%
+    if "!selectedMethod!" equ "Manual" echo matjectNEXT>%defaultMethod%
+    if "!selectedMethod!" equ "matjectNEXT" del /q /s %defaultMethod% >nul
+) 
 
 goto settings
 
 
 :toggle2
-if exist %thanksMcbegamerxx954% (del /q /s %thanksMcbegamerxx954% > NUL && goto settings) 
-if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") else (if not exist %thanksMcbegamerxx954% (echo. > %thanksMcbegamerxx954%))
+if exist %thanksMcbegamerxx954% (
+    del /q /s %thanksMcbegamerxx954% > NUL
+    if exist ".settings\materialUpdaterArg.txt" del /q /s ".settings\materialUpdaterArg.txt" >nul
+    goto settings
+) 
+if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") else (if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%))
 goto settings
 
 :toggle3
@@ -166,11 +165,18 @@ goto settings
 :toggle10
 goto settings
 
+:: WIP START
+cls
+set /p "unlockerpath=!YLW!Enter custom IObit Unlocker path ^(leave empty to cancel^): "
+if not exist "!unlockerpath!\IObitUnlocker.exe" (echo !ERR!Wrong folder.!RST! && %backmsg:~0,56%) else (!unlockerpath!)
+goto settings
+:: WIP END
+
 :toggle11
 goto:EOF
 
 :toggle12
-if not exist ".settings\debugMode.txt" (echo You are now a developer^^! [%date% - %time%]>".settings\debugMode.txt" && set debugMode=1) else (del /q /s ".settings\debugMode.txt" > NUL && set debugMode=)
+if "%debugMode%" neq "true" (echo You are now a developer^^! [%date% - %time%]>".settings\debugMode.txt" && set "debugMode=true") else (del /q /s ".settings\debugMode.txt" > NUL && set "debugMode=")
 goto settings
 
 :toggle13

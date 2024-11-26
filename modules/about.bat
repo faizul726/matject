@@ -5,14 +5,15 @@ title About %title%
 cls
 
 echo !YLW!What's new in %title%?!RST!
-echo !YLW!Released on: Nov 18, 2024!RST!
+echo !YLW!Released on: Nov 26, 2024!RST!
 echo.
-echo - Bump version from v3.0.3
-echo - Fixed credit names                                                          !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
-echo                                                                               !p1!              !p1!
-echo                                                                               !p1!  !p1!  !p1!      !p1!
-echo                                                                               !p1!  !p1!        !p1!
-echo                                                                               !p1!  !p1!!p1!!p1!    !p1!
+echo - Added matjectNEXT               
+echo - Fixed writing on encrypted drives                                           !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+echo - Added curl check                                                            !p1!              !p1!
+echo - Renamed Partial Restore to Dynamic Restore                                  !p1!  !p1!  !p1!      !p1!
+echo - Improved Dynamic Restore speed                                              !p1!  !p1!        !p1!
+echo - Fixed some typos                                                            !p1!  !p1!!p1!!p1!    !p1!
+echo - Other minor bug fixes
 echo.
 echo Matject is a material replacer for Minecraft Bedrock Edition.
 echo It allows user to use shaders easily without going through the hassle of making backups and placing files.
