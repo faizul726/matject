@@ -7,7 +7,7 @@ echo !WHT!How to use %title%?!RST!
 echo.
 echo.
 echo !YLW!Q. How to use it?!RST!
-echo A. This is a Text-based user interface.
+echo A. This is a text-based user interface.
 echo    Means you have to navigate using keyboard buttons.
 echo    All actions are labeled with what key to press.
 echo    Everything is self explanatory. So, just explore by yourself.

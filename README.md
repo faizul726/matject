@@ -1,5 +1,5 @@
-# Matject v3.2.0
-*Last updated: Nov 26, 2024*
+# Matject v3.2.1
+*Last updated: Dec 04, 2024*
 
 </br>
 
@@ -7,7 +7,7 @@
 
 </br>
 
-![screenshot](https://github.com/user-attachments/assets/7a18f1f8-d386-4d9d-9f8e-7f72733678c6)
+![screenshot](https://github.com/user-attachments/assets/7c128df1-4189-4def-b72b-5ad32ed0b9a4)
 
 </br>
 
@@ -18,7 +18,7 @@ Matject is a material replacer that allows users to use Minecraft shaders. It au
 It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
 
 ### Why?
-**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Nov 26).**  
+**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Dec 04).**  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 I made this script so that users don't have to go through the hassle of replacing game files by themselves.
 
@@ -33,8 +33,9 @@ I made this script so that users don't have to go through the hassle of replacin
 
 </br>
 
-## What's new in v3.2.0?
-* **Added matjectNEXT** 
+## What's new in v3.2.1?
+* Fixed matjectNEXT (thanks to [@jcau8](https://github.com/jcau8))
+* Added material compatibility check (thanks to thanks to [@Veka0](https://github.com/Veka0))
 * [See full changelog](#changelog)
 
 </br>
@@ -55,13 +56,15 @@ I made this script so that users don't have to go through the hassle of replacin
 * **[IObit Unlocker](https://www.iobit.com/en/iobit-unlocker.php)** (backbone of Matject)
 * **[jq](https://jqlang.github.io/jq)** (used to process JSON files for matjectNEXT)
 * **[material-updater by @mcbegamerxx954](https://github.com/mcbegamerxx954/material-updater)** (used to update materials)  
+* **[@Veka0](https://github.com/Veka0)** (material compatibility checker)
+* **[@jcau8](https://github.com/jcau8)** (critical bug fixes)
 
 
 **Honorable Mentions**  
 People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409) and [Newb Community](https://discord.gg/newb-community-844591537430069279) for their humble support.  
 
-[@jcau8](https://github.com/jcau8) and [@Theffyxz](https://github.com/Theffyxz) for helping me to fix bugs.  
-[@Sharkitty](https://github.com/Sharkitty) and all other people who tested and gave feedback.
+[@Theffyxz](https://github.com/Theffyxz) for helping me to fix bugs.  
+[@Sharkitty](https://github.com/Sharkitty), [@FlaredRoverCodes](https://github.com/FlaredRoverCodes) and all other people who tested and gave feedback.
 
 </br>
 
@@ -82,6 +85,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 3. Extract the ZIP file.
 4. Open `matject.bat`.
 5. The rest is self explanatory.
+
 </br>
 
 ### How to restore to default?
@@ -90,7 +94,8 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 
 1. Open Matject.
 2. Go to **[R] Restore & Others**.
-3. Select **Dynamic Restore** or **Full Restore** (full restore takes bit more time).
+3. Go to **[1] Restore default materials**
+4. Select **Dynamic Restore** or **Full Restore** (full restore takes bit more time).
 
 </br>
 
@@ -105,7 +110,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 ## FAQ
 **Q. What is matjectNEXT?**  
 A. matjectNEXT is an advanced version of Matject that replaces materials based on the pack the user has set in Global Resource Packs, with help of **[jq](https://jqlang.github.io/jq)**.  
-*Inspired by [Draco by @mcbegamerxx954](https://github.com/mcbegamerxx954/draco-injector)*.
+*Inspired by [Draco](https://github.com/mcbegamerxx954/draco-injector) by @mcbegamerxx954*.
 
 **Q. How is this different from [BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/)?**  
 A. BetterRenderDragon uses *memory injection*, all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders.  
@@ -117,7 +122,7 @@ A. Well, depends on you. (2)
 
 **Q. Does it require internet?**  
 A. Yes, optionally...
-* To check for updates (not download).
+* To check for updates (not to download).
 * To get [jq](https://jqlang.github.io/jq) by itself (for matjectNEXT).  
 * To get [material-updater](https://github.com/mcbegamerxx954/material-updater) by itself.  
 
@@ -131,13 +136,13 @@ A. It accesses the following folders:
 > ```
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (for matjectNEXT)
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\*` (for matjectNEXT)
-> - `.settings` `Backups\*` `MATERIALS` `MCPACK` `modules\*` `tmp`
+> - `.settings` `Backups\*` `logs` `MATERIALS` `MCPACK` `modules\*` `tmp`
 >
 > ###### READ and WRITE:
 > - `%ProgramFiles%\WindowsApps` (to unlock WindowsApps)
 > - `%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*_*__8wekyb3d8bbwe\data\renderer\materials`
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (to reset global packs)
-> - `.settings` `Backups\*` `MATERIALS` `tmp`
+> - `.settings` `Backups\*` `logs` `MATERIALS` `tmp`
 
 </br>
 
@@ -147,6 +152,8 @@ A. হ, খায়।
 
 </br>
 
+
+#### *Should I start taking donations?*
 
 <!-- maybe add later? ¯\_(ツ)_/¯
 ## Support me / Donate / Donations
@@ -171,7 +178,20 @@ USDT BEP20: <address>
 </details>
 -->
 
-<details open><summary><b>v3.2.0 - Nov 26, 2024</b></summary>
+<details open><summary><b>v3.2.1 - Dec 04, 2024</b></summary>
+<ul>
+  <li>Fixed matjectNEXT unable to find pack path (once again thanks to <a href=https://github.com/jcau8>@jcau8</a>)</li>
+  <li>Added compatibility check for materials (thanks to <a href=https://github.com/Veka0>@Veka0</a>)</li>
+  <li>Revamped settings page with tabs</li>
+  <li>Several small improvements to functionality</li>
+  <li>Added development_resource_packs support (matjectNEXT)</li>
+  <li>Improved MCPACK detection</li>
+  <li>Added the ability to replace backup using ZIP file (Restore & Others)</li>
+</ul>
+</br>
+</details>
+
+<details><summary><b>v3.2.0 - Nov 26, 2024</b></summary>
 <ul>
   <li>Added matjectNEXT.</li>
   <li>Fixed writing on encrypted drives. (thanks to <a href=https://github.com/jcau8>@jcau8</a>)</li>

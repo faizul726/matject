@@ -4,6 +4,8 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 cls
 title matjectNEXT %version%%dev%
 
+if not exist "logs\" mkdir logs
+
 if exist %matjectNEXTenabled% goto lessgo
 
 echo !RED![^^!] matjectNEXT works very differently from Matject.!RST!
@@ -12,20 +14,18 @@ echo.
 echo !YLW!Keep in mind,!RST!
 echo - matjectNEXT is not extensively tested. It may or may not work for you.
 echo - It only works if Minecraft is installed from Microsoft Store.
-echo - It only works if Minecraft is not moved from C: Drive to somewhere else.
+echo - It only works if Minecraft is not moved from C: Drive to somewhere else. ^(not sure^)
 echo - Resource pack from world is not supported.
-echo - development_resource_packs are not supported.
-echo - Still missing some not required but important features.
 echo - Some packs might be incompatible.
 echo - May not work with caps UUIDs.
-echo - Packs with // or /* */ comments are not supported.
+echo - Manifests with // or /**/ comments are not supported.
 echo.
 echo !YLW!- DO NOT mix Matject and matjectNEXT. Use only one as preferred option.
 echo - You MUST start with original materials. For a fresh start, you can perform Others -^> Full restore.!RST!
 echo.
 
 set "mjnInput="
-set /p "mjnInput=Enter "matjectNEXT" to continue (case sensitive): !RED!"
+set /p "mjnInput=Enter !RED!matjectNEXT!RST! to continue (case sensitive): !RED!"
 echo !RST!
 
 if "!mjnInput!" equ "matjectNEXT" (
@@ -45,9 +45,10 @@ if not exist "modules\jq.exe" (
     call "modules\matjectNEXT\getJQ"
 )
 
-if not exist ".settings\jqTestOK.txt" (
-    call "modules\matjectNEXT\testJQ"
-    if not exist ".settings\jqTestOK.txt" (echo !ERR![^^!] jq test FAILED. You can't use matjectNEXT on this PC.!RST! & %backmsg%)
+if not exist ".settings\compatibilityTestOK.txt" (
+    call "modules\matjectNEXT\testCompatibility"
+    echo.
+    if not exist ".settings\compatibilityTestOK.txt" (echo !ERR![^^!] Compatibility test FAILED. You can't use matjectNEXT.!RST! & %backmsg%)
 )
 
 if exist ".settings\.restoreList.txt" (
@@ -63,6 +64,13 @@ call modules\matjectNEXT\syncMaterials
 cls
 if "!errorlevel!" equ "0" echo !GRN![*] Sync OK. Materials from top pack are applied. You can exit now.!RST!
 echo.
+if exist "%syncThenExit%" (
+    echo !CYN!Thanks for using Matject, have a good day.!RST!
+    echo.
+    echo Exiting in 5 seconds...
+    timeout 5 >nul
+    exit 0
+)
 echo !YLW![?] Or... Do you want to start monitoring for further changes?!RST! [Y/N]
 echo.
 choice /c yn /n
@@ -71,30 +79,31 @@ if "!errorlevel!" neq "1" (goto:EOF)
 cls
 for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "packUuid=%%i"
 if "!packuuid!" equ "null" (
-    set "lastPack=rwxrwr-r"
+    set "lastPack=none"
+    set "currentPack=none"
     goto monitorstart
 )
 for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\".\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set packVer=%%a
 for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
 if "!hasSubpack!" equ "true" (
     for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i"
-    set "currentPack2=!packuuid!_!packVer2!_!subpackName!"
+    set "currentPack=!packuuid!_!packVerInt!_!subpackName!"
 ) else (
     set "subpackName="
-    set "currentPack2=!packuuid!_!packVer2!"
+    set "currentPack=!packuuid!_!packVerInt!"
 )
 
-set "packVer2=!packVer:.=!"
-set "packPath=!%packuuid%_%packVer2%!"
+set "packVerInt=!packVer:.=!"
+set "packPath=!%packuuid%_%packVerInt%!"
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 
 if "!hasSubpack!" equ "true" (
-    set "lastPack=!packuuid!_!packVer2!_!subpackName!"
+    set "lastPack=!packuuid!_!packVerInt!_!subpackName!"
 ) else (
-    set "lastPack=!packuuid!_!packVer2!"
+    set "lastPack=!packuuid!_!packVerInt!"
 )
 
-set "lastPack=!currentPack2: =!"
+set "lastPack=!currentPack: =!"
 
 :monitorstart
 echo !YLW![*] Monitoring global resource packs for changes...!RST! ^(cooldown 5s^)
@@ -103,7 +112,7 @@ if "!packuuid!" equ "null" (
     echo !WHT!Current pack:!RST! ^(no pack applied^)
 ) else (
     if "!hasSubpack!" equ "true" (
-        echo !WHT!Current pack: !RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!
+        echo !WHT!Current pack: !RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST! 
     ) else (
         echo !WHT!Current pack: !RED!!packName!!RST! !GRN!v!packVer!!RST!
     )
@@ -124,15 +133,15 @@ if defined modtime (
         set "modtime=!modifytime!"
         call "modules\matjectNEXT\parsePackWithCache"
         echo !WHT!Old:!RST! !lastPack!
-        echo !WHT!New:!RST! !currentPack2! 
+        echo !WHT!New:!RST! !currentPack! 
         echo.
-        if "!currentPack2!" equ "!lastPack!" (
+        if "!currentPack!" equ "!lastPack!" (
             echo !GRN![*] Top pack unchanged.!RST!
             echo.
             echo.
             goto monitorstart
         )
-        if !packUuid! equ null (
+        if "!packUuid!" equ "null" (
             echo !RED![^^!] No pack is enabled, restoring to default...!RST!
             echo.
             if exist ".settings\lastPack.txt" (
@@ -143,17 +152,17 @@ if defined modtime (
                 del /q /s ".settings\lastPack.txt" > NUL
                 echo.
                 echo.
-                set "lastPack=rwxrwr-r"
+                set "lastPack=none"
                 goto monitorstart
             ) else (
                 echo !GRN![*] Already using vanilla materials, no need to restore.!RST!
                 echo.
                 echo.
-                set "lastPack=rwxrwr-r"
+                set "lastPack=none"
                 goto monitorstart
             )
         ) else (
-            if not exist "!packPath!\renderer\" (
+            if not exist "!packPath!\renderer\materials\*.material.bin" (
                 echo !RED![^^!] Not a shader, restoring to default...!RST!
                 echo.
                 if exist ".settings\lastPack.txt" (
@@ -164,19 +173,35 @@ if defined modtime (
                     del /q /s ".settings\lastPack.txt" > NUL
                     echo.
                     echo.
-                    if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVer2!" && set lastPack=!lastPack: =!)
+                    if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVerInt!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVerInt!" && set lastPack=!lastPack: =!)
                     goto monitorstart
                 ) else (
                     echo !GRN![*] Already using vanilla materials, no need to restore.!RST!
                     echo.
                     echo.
-                    if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVer2!" && set lastPack=!lastPack: =!)
+                    if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVerInt!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVerInt!" && set lastPack=!lastPack: =!)
                     goto monitorstart
                 )
             ) else (
                 call modules\matjectNEXT\listMaterials
+                if !errorlevel! neq 0 (
+                    echo !RED![^^!] Shader is not for Windows. Skipping...!RST!
+                    echo.
+                    if exist "tmp" (rmdir /q /s "tmp")
+                    del /q /s MATERIALS\* >nul
+                    echo.
+                    if exist ".settings\lastPack.txt" (
+                        set "RESTORETYPE=partial"
+                        set "isGoingVanilla=true"
+                        call "modules\restoreMaterials"
+                        set "isGoingVanilla="
+                        del /q /s ".settings\lastPack.txt" > NUL
+                        if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVerInt!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVerInt!" && set lastPack=!lastPack: =!)
+                    )
+                    goto monitorstart
+                )
                 call modules\matjectNEXT\injectMaterials
-                if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVer2!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVer2!" && set lastPack=!lastPack: =!)
+                if "!hasSubpack!" equ "true" (set "lastPack=!packuuid!_!packVerInt!_!subpackName!" && set lastPack=!lastPack: =!) else (set "lastPack=!packuuid!_!packVerInt!" && set lastPack=!lastPack: =!)
                 echo.
                 echo.
                 goto monitorstart

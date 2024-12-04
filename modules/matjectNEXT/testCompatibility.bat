@@ -2,8 +2,17 @@
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 cls
-echo !YLW![*] Testing environment for jq!RST!
+echo !YLW![*] Testing compatibility for matjectNEXT!RST!
 echo.
+
+echo !YLW![*] Checking if Minecraft data exists...!RST!
+echo.
+if exist "%gamedata%\minecraftpe\options.txt" (echo !GRN![*] Minecraft data folder found.!RST!) else (echo !RED![^^!] Minecraft data not found.!RST! & echo     !RED!Maybe you're using custom Minecraft Launcher?!RST! & exit /b 1)
+echo.
+
+echo !YLW![*] Testing jq...!RST!
+echo.
+
 if not exist tmp mkdir tmp
 
 (
@@ -101,12 +110,12 @@ for /d %%D in (*) do (
 
 
 for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "tmp\sample-globalpacks.json"') do set "packUuid=%%i"
-for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\"\")" "tmp\sample-globalpacks.json"') do set packVer2=%%a
+for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\"\")" "tmp\sample-globalpacks.json"') do set packVerInt=%%a
 for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "tmp\sample-globalpacks.json"') do set "hasSubpack=%%j"
 for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "tmp\sample-globalpacks.json"') do set "subpackName=%%i"
-set packPath=!%packUuid%_%packVer2%!
+set packPath=!%packUuid%_%packVerInt%!
 
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packpath!\sample-manifest.json"') do set "packName=%%i"
 rmdir /q /s "tmp"
-if "!subpackname!" equ "subpackthree" (echo !GRN![*] jq test OK. Means you can use matjectNEXT.!RST! & echo. & echo jq test passed %date% // %time%>".settings\jqTestOK.txt" && pause)
+if "!subpackname!" equ "subpackthree" (echo !GRN![*] Compatibility test OK. Means you can use matjectNEXT.!RST! & echo. & echo matjectNEXT compatibility test passed. %date% // %time%>".settings\compatibilityTestOK.txt" && pause)
 echo.

@@ -232,6 +232,7 @@ if !errorlevel! neq 0 (
     echo !GRN![*] Dynamic restore: Step 2/2 succeed^^!!RST!
     echo.
     echo.
+    if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
     del /q /s ".settings\.restoreList.log" > NUL
     del /q /s ".settings\.bins.log" > NUL
     if defined goingVanillaSir (

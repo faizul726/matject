@@ -2,12 +2,11 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 set packuuid=
 set packver=
-set packVer2=
+set packVerInt=
 set hasSubpack=
 set subpackName=
 set packPath=
 set currentPack=
-set currentPack2=
 set lastPack=
 
 echo !YLW![*] Syncing with current global resource packs...!RST!
@@ -15,7 +14,7 @@ echo.
 
 for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "packuuid=%%i"
 
-echo !WHT!Top pack UUID:!RST! "!packuuid!"
+echo !WHT!Top pack UUID:!RST!        !packuuid!
 echo.
 
 if "!packuuid!" equ "null" (
@@ -27,7 +26,11 @@ if "!packuuid!" equ "null" (
 goto version
 
 :nopacks
-if exist ".settings\.restoreList.log" (goto restorevanilla) else (
+if exist ".settings\.restoreList.log" (
+    echo !YLW![*] Restoring to default...!RST!
+    echo.
+    goto restorevanilla
+) else (
     echo !GRN![*] Already using vanilla materials, no need to restore.!RST!
     timeout 2 >nul
     goto:end
@@ -38,52 +41,49 @@ goto:end
 set "RESTORETYPE=partial"
 set "isGoingVanilla=true"
 call "modules\restoreMaterials"
-if exist ".settings\lastPack.txt" (del /q /s ".settings\lastPack.txt" > NUL)
 goto:end
 
 :version
 for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\".\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set packVer=%%a
-set packVer2=!packVer:.=!
+set packVerInt=!packVer:.=!
 for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
 if "!hasSubpack!" equ "true" (for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i") else (set "subpackName=")
-set "packPath=!%packuuid%_%packVer2%!"
-echo !WHT!* Pack Version:!RST!       "!packVer!"
-echo !WHT!* hasSubpack:!RST!         "!hasSubpack!"
-if "!hasSubpack!" equ "true" echo !WHT!* Subpack name:!RST!       "!subpackName!"
-echo !WHT!* Assigned unique ID:!RST! "%packuuid%_%packVer2%"
-echo !WHT!* Pack path:!GRY!          "!packPath!"!RST!
+set "packPath=!%packuuid%_%packVerInt%!"
+echo !WHT!* Pack Version:!RST!       !GRN!v!packVer!!RST!
+echo !WHT!* hasSubpack:!RST!         !hasSubpack!
+if "!hasSubpack!" equ "true" echo !WHT!* Subpack name:!RST!       !BLU!!subpackName!!RST!
+echo !WHT!* Assigned unique ID:!RST! %packuuid%_%packVerInt%
+echo !WHT!* Pack path:!GRY!          !packPath!!RST!
 echo.
-if not exist "!packPath!\renderer\" (
-    echo !YLW![^^!] Not a shader, skipping...!RST!
-    if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
+if not exist "!packPath!\renderer\materials\*.material.bin" (
+    echo !YLW![^^!] Not a shader, restoring to default...!RST!
     echo.
     goto nopacks
 )
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packPath!\manifest.json"') do set "packName=%%i"
 if "!hasSubpack!" equ "true" (
-    echo !WHT!Pack details:         "!RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!"
-    set "currentPack2=!packuuid!_!packVer2!_!subpackName!"
+    echo !WHT!Pack details:         !RED!!packName!!RST! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!
+    set "currentPack=!packuuid!_!packVerInt!_!subpackName!"
 ) else (
-    echo !WHT!Pack details:         "!RED!!packName!!RST! !GRN!v!packVer!!RST!"
-    set "currentPack2=!packuuid!_!packVer2!"
+    echo !WHT!Pack details:         !RED!!packName!!RST! !GRN!v!packVer!!RST!
+    set "currentPack=!packuuid!_!packVerInt!"
 )
-set "currentPack2=%currentPack2: =%"
-::echo Current pack ID ^(trimmed^): "!currentPack2!"
+set "currentPack=%currentPack: =%"
+::echo Current pack ID ^(trimmed^): "!currentPack!"
 echo.
 
 if exist ".settings\lastPack.txt" goto compare
+echo !YLW![*] New shader detected.!RST!
+echo.
 goto newject
 
 :compare
 set /p lastPack=<".settings\lastPack.txt"
 set "lastpack=!lastPack: =!"
-echo !WHT!Current pack:!RST!     "!lastPack: =!"
-echo !WHT!New pack:!RST!         "!currentPack2!"
+echo !WHT!Current pack:!RST!         !lastPack: =!
+echo !WHT!New pack:!RST!             !currentPack!
 echo.
-if "!currentPack2!" neq "!lastPack!" (
-    echo !WHT!Current pack:!RST!     "!lastPack: =!"
-    echo !WHT!New pack:!RST!         "!currentPack2!"
-    echo.
+if "!currentPack!" neq "!lastPack!" (
     echo !YLW![^^!] Different shader detected.!RST!
     echo.
     echo !YLW![*] Preparing new shader for injection...!RST!
@@ -97,7 +97,18 @@ goto:end
 
 :newject
 call "modules\matjectNEXT\listMaterials"
+if !errorlevel! neq 0 (
+    echo !RED![^^!] Shader is not for Windows. Skipping...!RST!
+    echo.
+    del /q /s MATERIALS\* >nul
+    if exist tmp (rmdir /q /s tmp)
+    if exist ".settings\.restoreList.log" (
+        goto restorevanilla
+    )
+    goto newject_failed
+)
 call "modules\matjectNEXT\injectMaterials"
+:newject_failed
 timeout 2 >nul
 
 :end

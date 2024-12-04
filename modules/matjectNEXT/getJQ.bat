@@ -7,7 +7,6 @@ echo.
 echo !RED!IT WILL NOT WORK AT ALL WITHOUT JQ.!RST!
 echo.
 echo.
-echo %PROCESSOR_ARCHITECTURE%
 
 echo !YLW![?] How would you like to get it?!RST!
 echo.
@@ -33,10 +32,10 @@ echo !YLW![*] Downloading...!RST!
 echo.
 
 if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
-    powershell -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
+    powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
 ) else (
     if "%PROCESSOR_ARCHITECTURE%" equ "x86" (
-        powershell -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe -OutFile modules\jq.exe"
+        powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe -OutFile modules\jq.exe"
     )
 )
 

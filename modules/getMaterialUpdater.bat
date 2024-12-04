@@ -46,7 +46,7 @@ echo.
 
 if not exist "tmp\" mkdir tmp
 echo !YLW![*] Downloading...!RST!
-powershell -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
+powershell -NoProfile -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
 rmdir tmp /q /s
 echo.
 if exist "modules\material-updater.exe" (echo !GRN![*] Downloaded to "modules\material-updater.exe"!RST!) else (echo !RED![*] Download FAILED.!RST! && echo Press any key to go back... && pause > NUL && goto:EOF)

@@ -8,18 +8,27 @@ set REPLACELIST=
 set BINS=
 set MTBIN=
 
-echo !WHT!Current directory:!GRY! "%cd%"!RST!
+::echo !WHT!Current directory:!GRY! "%cd%"!RST!
 
 echo.
 echo.
 if not exist "MATERIALS" mkdir MATERIALS
 
-copy /d "!packPath!\renderer\materials\*.bin" "%cd%\MATERIALS\" >nul
-echo !YLW![*] Copied main materials...!RST!
+copy /d "!packPath!\renderer\materials\*.material.bin" "%cd%\MATERIALS\" >nul
+echo !YLW![*] Copied !RED!main!YLW! materials.!RST!
+if "!hasSubpack!" equ "true" (copy /d "!packPath!\subpacks\!subpackName!\renderer\materials\*.material.bin" "%cd%\MATERIALS" >nul)
+echo !YLW![*] Copied !BLU!!subpackName!!YLW! ^(subpack^) materials.!RST!
 echo.
-if "!hasSubpack!" equ "true" copy /d "!packPath!\subpacks\!subpackName!\renderer\materials\*.bin" "%cd%\MATERIALS" >nul
-echo !YLW![*] Copied "!subpackName!" ^(subpack^) materials...!RST!
-echo.
+
+if exist "%disableMatCompatCheck%" goto skip_matcheck
+call "modules\checkMaterialCompatibility"
+if !errorlevel! neq 0 (
+    set "lastPack=!currentPack!"
+    exit /b 1
+)
+:skip_matcheck
+
+
 for %%f in (MATERIALS\*.material.bin) do (
     set "SRCLIST=!SRCLIST!,"%cd%\%%f""
     set "MTBIN=%%~nf"
@@ -40,4 +49,4 @@ echo !WHT!Replace list:!GRY! !REPLACELIST!!RST!
 set "REPLACELIST=!REPLACELIST:_=%MCLOCATION%\data\renderer\materials\!"
 set "REPLACELIST=!REPLACELIST:-=.material.bin!"
 echo.
-goto:EOF
+exit /b 0

@@ -64,12 +64,12 @@ echo.
 
 echo !REPLACELISTEXPORT!>".settings\.restoreList.log" && echo !BINS!>".settings\.bins.log"
 
-if "!hasSubpack!" equ "true" (echo !packuuid: =!_!packVer2: =!_!subpackName: =! > ".settings\lastPack.txt") else (echo !packuuid: =!_!packVer2: =! > ".settings\lastPack.txt")
+if "!hasSubpack!" equ "true" (echo !packuuid: =!_!packVerInt: =!_!subpackName: =! > ".settings\lastPack.txt") else (echo !packuuid: =!_!packVerInt: =! > ".settings\lastPack.txt")
 
 
 ::del /q /s ".settings\taskOngoing.txt" > NUL
 
 
-set "lastPack=!currentPack2!"
+set "lastPack=!currentPack!"
 
 goto:EOF
