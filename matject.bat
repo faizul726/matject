@@ -481,6 +481,16 @@ powershell -NoProfile -command "Expand-Archive -LiteralPath 'tmp\mcpack.zip' -De
 
 set "manifestFound="
 set "MCPACKDIR="
+if exist "tmp\manifest.json" (
+    if exist "tmp\renderer\materials\*material.bin" (
+        set "MCPACKDIR=tmp"
+        goto packokay
+    ) else (
+        echo !ERR![^^!] Not a RenderDragon shader.!RST!
+        goto invalidpack
+    )
+)
+
 for /d /r "tmp" %%f in (*) do (
     if exist "%%f\manifest.json" (
         set "manifestFound=true"
