@@ -15,7 +15,7 @@ echo [1] Download for me
 echo [2] Nah, I will download it myself
 echo.
 
-choice /c 12b /n
+choice /c 12b /n >nul
 
 goto option-!errorlevel!
 
@@ -25,7 +25,7 @@ echo [*] You can take a look from line 22 of getJQ.bat if you want to know how i
 echo.
 echo !YLW![*] If you're fine with that you can press [Y] to download or [B] to exit.!RST!
 echo.
-choice /c yb /n
+choice /c yb /n >nul
 if !errorlevel! neq 1 exit
 echo.
 echo !YLW![*] Downloading...!RST!

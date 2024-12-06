@@ -7,7 +7,14 @@ echo.
 
 echo !YLW![*] Checking if Minecraft data exists...!RST!
 echo.
-if exist "%gamedata%\minecraftpe\options.txt" (echo !GRN![*] Minecraft data folder found.!RST!) else (echo !RED![^^!] Minecraft data not found.!RST! & echo     !RED!Maybe you're using custom Minecraft Launcher?!RST! & exit /b 1)
+if exist "%gamedata%\minecraftpe\options.txt" (echo !GRN![*] Minecraft data folder found.!RST!) else (
+    echo !ERR![^^!] Minecraft data not found.!RST!
+    echo.
+
+    echo !YLW![^^!]Please open Minecraft at least once if it's from Microsoft Store/Xbox!RST!
+    echo     Or, set custom Minecraft data path if you're using something like Bedrock Launcher!RST!
+    %exitmsg%
+)
 echo.
 
 echo !YLW![*] Testing jq...!RST!
@@ -117,5 +124,5 @@ set packPath=!%packUuid%_%packVerInt%!
 
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packpath!\sample-manifest.json"') do set "packName=%%i"
 rmdir /q /s "tmp"
-if "!subpackname!" equ "subpackthree" (echo !GRN![*] Compatibility test OK. Means you can use matjectNEXT.!RST! & echo. & echo matjectNEXT compatibility test passed. %date% // %time%>".settings\compatibilityTestOK.txt" && pause)
+if "!subpackname!" equ "subpackthree" (echo !GRN![*] Compatibility test OK. Means you can use matjectNEXT.!RST! & echo. & echo matjectNEXT compatibility test passed. [%date% // %time%]>".settings\compatibilityTestOK.txt" && pause)
 echo.

@@ -9,19 +9,21 @@ if not exist "logs\" mkdir logs
 if exist %matjectNEXTenabled% goto lessgo
 
 echo !RED![^^!] matjectNEXT works very differently from Matject.!RST!
-echo It directly syncs with Minecraft "Global Resource Packs" with help of a 3rd party JSON processor ^(jq^).
+echo     It directly syncs with Minecraft "Global Resource Packs" with help of a 3rd party JSON processor ^(jq^).
 echo.
-echo !YLW!Keep in mind,!RST!
-echo - matjectNEXT is not extensively tested. It may or may not work for you.
-echo - It only works if Minecraft is installed from Microsoft Store.
-echo - It only works if Minecraft is not moved from C: Drive to somewhere else. ^(not sure^)
+echo !YLW![*] Keep in mind...!RST!
+echo - In rare cases, it may not work for you.
 echo - Resource pack from world is not supported.
 echo - Some packs might be incompatible.
 echo - May not work with caps UUIDs.
 echo - Manifests with // or /**/ comments are not supported.
 echo.
-echo !YLW!- DO NOT mix Matject and matjectNEXT. Use only one as preferred option.
-echo - You MUST start with original materials. For a fresh start, you can perform Others -^> Full restore.!RST!
+echo !YLW![*] You MUST start with original materials. 
+echo     You can perform Full Restore for a fresh start, !GRY!if you haven't modified materials manually without Matject^^!!YLW!
+echo.
+echo [^^!] IF YOU'RE USING SOMETHING LIKE CUSTOM DATA PATH IN BEDROCK LAUNCHER,
+echo     MAKE SURE TO SET CUSTOM DATA PATH FOR THAT VERSION IN MATJECT SETTINGS.
+echo     !GRY!And you also have to update it when needed.!RST!
 echo.
 
 set "mjnInput="
@@ -29,7 +31,7 @@ set /p "mjnInput=Enter !RED!matjectNEXT!RST! to continue (case sensitive): !RED!
 echo !RST!
 
 if "!mjnInput!" equ "matjectNEXT" (
-    echo Thank you for testing matjectNEXT. [%date%] [%time%]>"%matjectNEXTenabled%"
+    echo Thank you for testing matjectNEXT. [%date% // %time%]>"%matjectNEXTenabled%"
 ) else (
     echo !ERR![^^!] Wrong input.!RST!
     %backmsg%
@@ -65,7 +67,7 @@ cls
 if "!errorlevel!" equ "0" echo !GRN![*] Sync OK. Materials from top pack are applied. You can exit now.!RST!
 echo.
 if exist "%syncThenExit%" (
-    echo !CYN!Thanks for using Matject, have a good day.!RST!
+    echo !GRN!Thanks for using Matject, have a good day.!RST!
     echo.
     echo Exiting in 5 seconds...
     timeout 5 >nul
@@ -73,7 +75,7 @@ if exist "%syncThenExit%" (
 )
 echo !YLW![?] Or... Do you want to start monitoring for further changes?!RST! [Y/N]
 echo.
-choice /c yn /n
+choice /c yn /n >nul
 
 if "!errorlevel!" neq "1" (goto:EOF)
 cls
@@ -209,7 +211,7 @@ if defined modtime (
         )
     )
     title matjectNEXT %version%%dev% [monitoring]
-    choice /c b0 /t 5 /d 0 /n > NUL
+    choice /c b0 /t 5 /d 0 /n >nul
     if !errorlevel! equ 1 goto:EOF
     goto monitor
 ) else (

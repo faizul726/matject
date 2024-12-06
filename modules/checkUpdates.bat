@@ -54,6 +54,12 @@ if %minus% geq 10 (
         echo.
         echo !WHT!Make sure to restore backup before using new version!RST!
         echo.
+        echo !WHT![*] What's new in %latesturl:~50%?!RST!
+        echo.
+        call :fetchChangelog
+        echo.
+        if !errorlevel! neq 0 (echo !RED!Failed to fetch changelog.!RST!)
+        echo.
         echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
         echo.
         echo or press any key to use Matject...
@@ -81,6 +87,12 @@ if %minus% geq 10 (
         echo.
         echo !WHT!Make sure to restore backup before using new version!RST!
         echo.
+        echo !WHT![*] What's new in %latesturl:~50%?!RST!
+        echo.
+        call :fetchChangelog
+        echo.
+        if !errorlevel! neq 0 (echo !RED!Failed to fetch changelog.!RST!)
+        echo.
         echo !WHT![^^!] Please download latest version from !CYN!faizul726.github.io/matject!RST!
         echo.
         echo or press any key to use Matject...
@@ -89,3 +101,8 @@ if %minus% geq 10 (
     )
 )
 cls
+goto:EOF
+
+:fetchChangelog
+curl https://raw.githubusercontent.com/faizul726/faizul726.github.io/main/matject/changelog.txt
+goto:EOF

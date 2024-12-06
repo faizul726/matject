@@ -46,7 +46,7 @@ echo.
 echo !WHT!Source list:!GRY! !SRCLIST!!RST!
 echo.
 echo !WHT!Replace list:!GRY! !REPLACELIST!!RST!
-set "REPLACELIST=!REPLACELIST:_=%MCLOCATION%\data\renderer\materials\!"
 set "REPLACELIST=!REPLACELIST:-=.material.bin!"
+set "REPLACELIST=!REPLACELIST:_=%MCLOCATION%\data\renderer\materials\!"
 echo.
 exit /b 0

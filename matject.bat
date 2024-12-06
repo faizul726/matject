@@ -8,11 +8,12 @@ pushd "%~dp0"
 :: https://faizul726.github.io/matject
 
 ::set "dev=-dev ^(20241204^)"
-set "version=v3.2.1"
+set "version=v3.2.2"
 set "title=Matject %version%%dev%"
 set "murgi=KhayDhan"
 
 :: Load other variables
+call "modules\colors"
 call "modules\variables"
 if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
 
@@ -25,6 +26,7 @@ REM - ADD FOUND DETAILS IN GETMCDETAILS [DONE]
 REM - STORE SHADER NAME FOR LATER USE
 REM - MERGE UNLOCK...BAT WITH MATJECT
 REM - RENAME MATBAK to Materials (backup) [DONE]
+REM - Use subroutines
 
 
 :: WORK DIRECTORY SETUP
@@ -37,53 +39,46 @@ if exist "tmp" (rmdir /q /s tmp > NUL)
 
 title %title%
 
-:: Load modules
-call "modules\colors"
-
 if exist %ranOnce% goto firstRunDone
 echo !WHT!Welcome to %title%^^!!RST! ^(for the very first time^)
 echo.
 echo.
 echo !ERR!=== Hol' up soldier^^! ===!RST!!YLW!
 echo.
-echo * Matject is not perfect, bugs may show up. Please report them in the GitHub repo.
-echo * It assumes you HAVE NOT made any changes to materials, because it needs a copy of original materials to work properly.
+echo - Matject is not perfect, bugs may show up. Please report them to me.
+echo - It assumes you HAVE NOT made any changes to materials, because it needs a copy of original materials to work properly.
 echo !RED!* DO NOT MODIFY .settings and Backups folder.!YLW!
-echo * Make sure the shader you are using SUPPORTS Windows ^(or says merged^).
-echo * It may not work properly with ransomware protection and encryption.
-echo * The worst thing that can happen with is material corruption.
-echo   In that case you can restore materials or reinstall Minecraft.
-echo * Minecraft Preview is not supported ^(yet^)
-echo * Custom Minecraft Launcher is not fully supported.
-echo * Some packs may need extra steps for Matject auto/manual method.
-echo * English is not my primary language. So, grammatical errors are expected.!RST!
+echo - It may not work properly with antivirus read/write protection.
+echo - The worst thing that can happen with is material corruption.
+echo   !GRY!In that case you can restore materials or reinstall Minecraft.!YLW!
+echo - Minecraft Preview is not supported ^(yet^)
+echo - Some packs may need extra steps for Matject auto/manual method.
+echo - English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
 echo.
 set /p "firstRun= Type !GRN!yes!RST! to confirm:!GRN! "
 echo.
 if "!firstRun!" neq "yes" (
     echo !ERR![^^!] WRONG INPUT!RST!
-    echo.
-
-    echo Press any key to exit... && pause > NUL && exit
+    %exitmsg%
 ) else (
     echo !GRN![*] Confirmed.!RST!
-    echo First ran on: %date% - %time%>"!ranOnce!"
+    echo First ran by %USERNAME% on: %date% - %time%>"!ranOnce!"
     timeout 2 > NUL
     cls
     echo Matject is somewhat experimental.
     echo So, I ^(creator^) want people to use the latest version whenever possible.
     echo.
-    echo !YLW![?] Do you want to check for updates at Matject startup?!RST! !RED!^(requires internet^)!RST!
+    echo !YLW![?] Do you want to check for updates at Matject startup?!RST! !YLW!^(requires internet^)!RST!
     echo.
     echo [Y] Yes, check for updates at Matject startup. ^(only informs about update^)
     echo [N] No, do not check for updates.
     echo.
     echo !GRN![TIP] You can enable/disable update checking from settings later.!RST!
     echo.
-    choice /c yn /n
-    if !errorlevel! equ 1 echo.>%doCheckUpdates%
-    echo.
+    choice /c yn /n >nul
+    if !errorlevel! equ 1 echo Thank you for being a regular user of Matject [%date% // %time%]>%doCheckUpdates%
+    cls
 )
 
 :firstRunDone
@@ -92,7 +87,26 @@ if exist %doCheckUpdates% (
 )
 
 
+if exist "%customIObitUnlockerPath%" (
+    set /p IObitUnlockerPathTemp=<%customIObitUnlockerPath%
+    if exist "!IObitUnlockerPathTemp!\IObitUnlocker.exe" (
+        if exist "!IObitUnlockerPathTemp!\IObitUnlocker.dll" (
+            set "IObitUnlockerPath=!IObitUnlockerPathTemp!\IObitUnlocker"
+            goto iobitUnlockerFound
+        )
+    )
+) else (
+    goto checkIObitUnlocker
+)
+echo !ERR![^^!] Provided custom path is invalid^^!!RST!
+echo !RED!Please set IObit Unlocker path again.!RST!
+echo.
+echo Press any key to set...
+echo.
+pause >nul
+call "modules\settings" toggleP2_3
 
+:checkIObitUnlocker
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     echo !RED![^^!] You don't have IObit Unlocker installed.!RST!
     echo     It's required to use Matject.
@@ -102,29 +116,34 @@ if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     echo.
 
     echo [Y] Yes, open the site for me !CYN!^(www.iobit.com/en/iobit-unlocker.php^)!RST!
-    echo [N] No, I will download later ^(exit^)
+    echo !RED![B] No, I will download later ^(exit^)!RST!
+    echo.
+    echo [P] I already have it installed, let me set custom path.
     echo.
 
-    choice /c yn /n
+    choice /c ybp /n >nul
+    cls
 
     if !errorlevel! equ 1 (
         start https://www.iobit.com/en/iobit-unlocker.php
         exit
-    ) else (
-        exit
     )
+    if !errorlevel! equ 2 (exit)
+    if !errorlevel! equ 3 (call "modules\settings" toggleP2_3)
+    ) else (
+        set "IObitUnlockerPath=%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker"
 )
 
-
+:iobitUnlockerFound
 if exist "%customMinecraftAppPath%" (
     set /p MCLOCATION=<%customMinecraftAppPath%
     if not exist "!MCLOCATION!\AppxManifest.xml" (
-        echo !ERR![^^!] Custom Minecraft path DOES NOT exist.!RST!
+        echo !ERR![^^!] Custom Minecraft app path DOES NOT exist.!RST!
         echo.
         call "modules\getMinecraftDetails"
         if exist %materialUpdaterArg% del /q /s %materialUpdaterArg% > NUL
         echo.
-        echo !GRN!TIP: You may disable custom Minecraft path in settings to remove this error.!RST!
+        echo !GRN!TIP: You may disable custom Minecraft app path in settings to remove this error.!RST!
         echo.
         pause
     ) else (
@@ -140,8 +159,24 @@ if exist "%customMinecraftAppPath%" (
     cls
 )
 
+if not exist "%customMinecraftDataPath%" (goto nocustomgamedata)
+set /p gamedataTMP=<%customMinecraftDataPath%
+if not exist "!gamedataTMP!\minecraftpe\options.txt" (
+    echo !ERR![^^!] Custom Minecraft data path invalid.
+    echo.
+    echo !YLW![*] Turned off custom Minecraft data path and using default data path.!RST!
+    del /q /s "%customMinecraftDataPath%" >nul
+    set "gamedata=%defaultgamedata%"
+) else (
+    set "gamedata=!gamedataTMP!"
+)
+
+
+:nocustomgamedata
+if exist "%unlocked%" goto DELETEOLDBACKUP
+
 if /i "%MCLOCATION:~0,28%" neq "C:\Program Files\WindowsApps" (
-    echo [%date% %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>"%unlocked%"
+    echo [%date% // %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>"%unlocked%"
 )
 
 if not exist "%unlocked%" (
@@ -155,20 +190,31 @@ if not exist "%unlocked%" (
     echo [Y] Yes, ^(requires admin privilege^)
     echo [N] No ^(exit^)
     echo.
-    choice /c yn /n
+    choice /c yn /n >nul
     echo.
     if "!errorlevel!" equ "1" (
         cls
         title %title% ^(unlocking WindowsApps^)
-        echo [*] Unlocking...
+        echo !YLW![*] Unlocking...!RST!
         powershell -NoProfile -command start-process -file "modules\unlockWindowsApps.bat" -verb runas -Wait
         echo.
         if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED. Saved log as in .settings\unlockLog.txt. You might need it for finding the issue later.!RST! && %exitmsg%) else (echo !GRN![*] Unlocked.!RST!)
         echo.
-        ) else (if "!errorlevel!" equ "2" exit)
+        ) else (
+            if "!errorlevel!" equ "2" exit
+        )
 )
 
 :DELETEOLDBACKUP
+if exist ".settings\backupRunning.txt" (
+    cls
+    echo !RED![^^!] Last backup was incomplete.!RST!
+    echo.
+    echo !YLW![*] Making new backup...!RST!
+    echo.
+    if exist "%matbak%" rmdir /q /s "%matbak%"
+    call "modules\backupMaterials"
+)
 if exist "%matbak%\" (
     if "!CURRENTVERSION!" neq "!OLDVERSION!" (
     cls
@@ -186,6 +232,7 @@ if exist "%matbak%\" (
         rename "%matbak%" "Old Materials Backup (v!OLDVERSION!)"
     )
     if exist %materialUpdaterArg% del /q /s %materialUpdaterArg% > NUL
+    if exist ".settings\taskOngoing.txt" del /q /s ".settings\taskOngoing.txt" >nul
     if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" >nul
     if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" >nul
     if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
@@ -202,13 +249,39 @@ for /f "tokens=2 delims==" %%a in ('"wmic os get localdatetime /value"') do (
     set "deiteu=!deiteu:~4,4!"
 )
 
+if exist %disableInterruptionCheck% (
+    if exist ".settings\taskOngoing.txt" del /q /s ".settings\taskOngoing.txt" >nul
+    goto skipInterruptionCheck
+)
+if exist ".settings\taskOngoing.txt" (
+    cls
+    echo !YLW![*] Seems like last injection didn't go well...
+    echo.
+    echo [?] Do you want to perform a Full Restore?!RST!
+    echo.
+    echo !GRN![Y] Yes    !RED![N] No!RST!
+    choice /c yn /n >nul
+    echo.
 
+    if !errorlevel! equ 1 (
+        cls
+        set "RESTORETYPE=full"
+        call "modules\restoreMaterials"
+    ) else if !errorlevel! equ 2 (
+        cls
+        echo !RED![^^!] Matject may not work as expected if you don't perform a Full Restore...!RST!
+        del /q /s ".settings\taskOngoing.txt" >nul
+        timeout 3 >nul
+    )
+)
+
+:skipInterruptionCheck
 if exist %defaultMethod% (
     set /p selectedMethod=<%defaultMethod%
     echo !YLW![*] Opening !selectedMethod! method in 2 seconds...!RST!
     echo.
     echo !YLW!    Press [S] to open settings directly...!RST!
-    choice /c s0 /t 2 /d 0 /n > NUL
+    choice /c s0 /t 2 /d 0 /n >nul
     if !errorlevel! equ 1 goto option6
     cls
     goto !selectedMethod!
@@ -216,11 +289,17 @@ if exist %defaultMethod% (
 
 
 :INTRODUCTION
+set "usingCustomPath="
 cls
-if exist "%customMinecraftAppPath%" (
-    echo !GRY![*] Using custom Minecraft path: "!MCLOCATION!"!RST!
+if exist "%customMinecraftAppPath%" (set usingCustomPath=true)
+if exist "%customMinecraftDataPath%" (set usingCustomPath=true)
+if exist "%customIObitUnlockerPath%" (set usingCustomPath=true)
+if defined usingCustomPath (
+    echo !GRY![*] Custom path^(s^) enabled.!RST!
     echo.
 )
+
+
 if "%deiteu%" equ "0726" echo !BLU!Happy birthday rwxrw-r-- U+1F337 ^(%imy%^)!RST!
 set RESTORETYPE=
 if %time:~0,2% geq 00 if %time:~0,2% lss 05 echo !WHT!You should sleep now.
@@ -252,12 +331,11 @@ echo.
 echo.
 echo !WHT![H] Help    [A] About    [S] Settings    [R] Restore ^& Others!RST!
 echo.
-echo.
 echo !RED![B] Exit!RST!
 echo.
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 123hasrb /n
+choice /c 123hasrb /n >nul
 
 goto option!errorlevel!
 
@@ -278,12 +356,12 @@ echo !GRN![4] View Matject on GitHub :^)
 echo !WHT![5] Visit jq website
 echo [6] View material-updater on mcbegamerxx954's GitHub
 echo.
-echo [7] Replace current materials backup with ZIP ^(use this if you don't have original materials to start with^)
+echo [7] Replace backup with ZIP file ^(use this if you don't have original materials to start with^)
 echo !GRY![8] Reset Global Resource Packs ^(use this if you want to deactivate all active packs^)
 echo !RST!
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 12345678b /n
+choice /c 12345678b /n >nul
 goto others!errorlevel!
 
 :others9
@@ -296,7 +374,7 @@ echo.
 echo [Y] Yes
 echo [N] No, go back
 echo.
-choice /c yn /n
+choice /c yn /n >nul
 if !errorlevel! neq 1 (goto option7)
 if exist "%gamedata%\minecraftpe\global_resource_packs.json" (del /q /s "%gamedata%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gamedata%\minecraftpe\global_resource_packs.json") else (echo []>"%gamedata%\minecraftpe\global_resource_packs.json")
 goto option7
@@ -457,7 +535,7 @@ if exist %disableConfirmation% goto AUTOEXTRACT
 echo !YLW![?] Would you like to use it for injecting? [Y/N]!RST!
 echo.
 
-choice /c yn /n
+choice /c yn /n >nul
 
 if !errorlevel! neq 1 (
     cls
@@ -610,7 +688,7 @@ if exist %disableConfirmation% goto INJECTIONCONFIRMED
 echo !YLW![?] Do you want to proceed with injecting? [Y/R/N]!RST!
 echo.
 
-choice /c yrn /n
+choice /c yrn /n >nul
 
 if !errorlevel! equ 1 goto INJECTIONCONFIRMED
 if !errorlevel! equ 2 goto SEARCH
@@ -641,15 +719,11 @@ if exist ".settings\.bins.log" (
 :STEP1
 echo !YLW![*] Deleting vanilla materials... ^(Step 1/2^)!RST!
 echo.
-
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete !REPLACELIST!
+echo Injection running... [%date% // %time%] > ".settings\taskOngoing.txt"
+"%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
 
 if !errorlevel! neq 0 (
-    cls
-    echo !ERR![^^!] Please accept UAC.!RST!
-    echo.
-    echo Press any key to try again...
-    pause > NUL
+    %uacfailed%
     goto STEP1
 )
 
@@ -665,19 +739,16 @@ echo.
 echo !YLW![*] Replacing with provided materials... ^(Step 2/2^)!RST!
 echo.
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials"
+"%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials" >nul
 
 if !errorlevel! neq 0 (
-    cls
-    echo !ERR![^^!] Please accept UAC.!RST!
-    echo.
-    echo Press any key to try again...
-    pause > NUL
+    %uacfailed%
     goto STEP2
 )
 
 echo !GRN![*] Step 2/2 succeed.!RST!
 if exist "%matbak%\" echo !REPLACELISTEXPORT!>".settings\.restoreList.log" && echo !BINS!>".settings\.bins.log"
+del /q /s ".settings\taskOngoing.txt" >nul
 
 if exist "tmp" (rmdir /q /s tmp)
 
@@ -696,10 +767,10 @@ if not exist %autoOpenMCPACK% (
     echo.
     echo [Y] Yes    [N] No
     echo.
-    choice /c yn /n
+    choice /c yn /n >nul
     if "!errorlevel!" equ "2" goto skip
 
-    echo [TIP] You can enable Auto open MCPACK from settings.
+    echo !GRN![TIP] You can enable Auto open MCPACK from settings.!RST!
     echo.
     "MCPACK\!MCPACKNAME!"
 )
@@ -714,5 +785,5 @@ if exist %disableSuccessMsg% (
 echo.
 echo.
 
-echo !CYN!Thanks for using Matject, have a good day.!RST!
+echo !GRN!Thanks for using Matject, have a good day.!RST!
 %exitmsg%

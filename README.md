@@ -1,5 +1,5 @@
-# Matject v3.2.1
-*Last updated: Dec 04, 2024*
+# Matject v3.2.2
+*Last updated: Dec 06, 2024*
 
 </br>
 
@@ -7,18 +7,19 @@
 
 </br>
 
-![screenshot](https://github.com/user-attachments/assets/7c128df1-4189-4def-b72b-5ad32ed0b9a4)
+![image](https://github.com/user-attachments/assets/c7b11840-a5b0-40b7-9957-a2a1debcebe2)
+![image](https://github.com/user-attachments/assets/b8fdc436-ab01-4ef0-bf69-fa2d9194d195)
 
 </br>
 
 ### What?
-Matject is a material replacer that allows users to use Minecraft shaders. It automates the process of replacing and restoring game files.
+Matject is an **advanced material replacer** that allows users to use Minecraft shaders. It dynamically automates the process of replacing and restoring game files.
 
 ### How?
 It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
 
 ### Why?
-**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Dec 04).**  
+**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Dec 06).**  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 I made this script so that users don't have to go through the hassle of replacing game files by themselves.
 
@@ -27,15 +28,14 @@ I made this script so that users don't have to go through the hassle of replacin
 >[!IMPORTANT]  
 > Before you complain about game crashing/invisible blocks, make sure the shader you're using supports **Windows** and the **game version**.  
 > 
-> *You can also enable material-updater in settings to fix invisible blocks.*
+> ***You can also enable material-updater in settings to fix invisible blocks.***
 >
 > **Non RenderDragon shaders (aka HAL) are not supported.**
 
 </br>
 
-## What's new in v3.2.1?
-* Fixed matjectNEXT (thanks to [@jcau8](https://github.com/jcau8))
-* Added material compatibility check (thanks to thanks to [@Veka0](https://github.com/Veka0))
+## What's new in v3.2.2?
+* Added custom Minecraft launcher support (thanks to [@TrngN0786](https://x.com/TrngN0786)) 
 * [See full changelog](#changelog)
 
 </br>
@@ -43,11 +43,12 @@ I made this script so that users don't have to go through the hassle of replacin
 ## Features
 * Easy to use.
 * Automatically inject shaders based on Global Resource Packs (matjectNEXT).
-* Takes less than 2 minutes to apply a shader.
+* Takes less than **60 seconds** to apply a shader.
 * Uses [material-updater](https://github.com/mcbegamerxx954/material-updater) to update outdated materials. (not enabled by default)
-* Dynamically replace game files.
+* Dynamically replace game files. *saving you a lot of time*
 * Automatically process provided MCPACK/ZIP file.
 * Backup/restore game files.
+* Many useful options in settings.
 * Detect Minecraft version changes and adjust according to that.
 
 </br>
@@ -56,14 +57,14 @@ I made this script so that users don't have to go through the hassle of replacin
 * **[IObit Unlocker](https://www.iobit.com/en/iobit-unlocker.php)** (backbone of Matject)
 * **[jq](https://jqlang.github.io/jq)** (used to process JSON files for matjectNEXT)
 * **[material-updater by @mcbegamerxx954](https://github.com/mcbegamerxx954/material-updater)** (used to update materials)  
-* **[@Veka0](https://github.com/Veka0)** (material compatibility checker)
 * **[@jcau8](https://github.com/jcau8)** (critical bug fixes)
+* **[@Veka0](https://github.com/Veka0)** (material compatibility checker)
 
 
 **Honorable Mentions**  
 People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409) and [Newb Community](https://discord.gg/newb-community-844591537430069279) for their humble support.  
 
-[@Theffyxz](https://github.com/Theffyxz) for helping me to fix bugs.  
+[@TrngN0786](https://x.com/TrngN0786) and [@Theffyxz](https://github.com/Theffyxz) for helping me to fix bugs.  
 [@Sharkitty](https://github.com/Sharkitty), [@FlaredRoverCodes](https://github.com/FlaredRoverCodes) and all other people who tested and gave feedback.
 
 </br>
@@ -95,7 +96,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 1. Open Matject.
 2. Go to **[R] Restore & Others**.
 3. Go to **[1] Restore default materials**
-4. Select **Dynamic Restore** or **Full Restore** (full restore takes bit more time).
+4. Select **Dynamic Restore** or **Full Restore** (full restore takes a bit more time).
 
 </br>
 
@@ -103,7 +104,6 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 * Some terms may be a bit too technical. Suggestions are appreciated.
 * Doesn't support manifests with // or /**/ comments (matjectNEXT).
 * Doesn't support long folder path and too many shader files.
-* Custom Minecraft Launcher compatibility is not guaranteed.
 
 </br>
 
@@ -115,14 +115,14 @@ A. matjectNEXT is an advanced version of Matject that replaces materials based o
 **Q. How is this different from [BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/)?**  
 A. BetterRenderDragon uses *memory injection*, all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders.  
 *It's not universal, so BRD devs have to update it for newer Minecraft versions to make it work.*  
-Changes made by Matject persists until next update. It's mostly universal, so it should work with any Minecraft version.
+**Changes made by Matject persists until next game update.** It's mostly universal, so it should work with any Minecraft version.
 
 **Q. Virus?**  
 A. Well, depends on you. (2)
 
 **Q. Does it require internet?**  
 A. Yes, optionally...
-* To check for updates (not to download).
+* To check for updates and show the changelog. (it can't update itself yet)
 * To get [jq](https://jqlang.github.io/jq) by itself (for matjectNEXT).  
 * To get [material-updater](https://github.com/mcbegamerxx954/material-updater) by itself.  
 
@@ -137,12 +137,14 @@ A. It accesses the following folders:
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (for matjectNEXT)
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\*` (for matjectNEXT)
 > - `.settings` `Backups\*` `logs` `MATERIALS` `MCPACK` `modules\*` `tmp`
+> - `Custom Minecraft app, data, IObit Unlocker folder`
 >
 > ###### READ and WRITE:
 > - `%ProgramFiles%\WindowsApps` (to unlock WindowsApps)
 > - `%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*_*__8wekyb3d8bbwe\data\renderer\materials`
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (to reset global packs)
 > - `.settings` `Backups\*` `logs` `MATERIALS` `tmp`
+> - `Custom Minecraft app, data`
 
 </br>
 
@@ -166,8 +168,14 @@ USDT BEP20: <address>
 
 ## Changelog
 <!--TEMPLATE
+
 <details open><summary><b>v3.minor.patch - month day, 2024</b></summary>
 <ul>
+  <li>placeholder</li>
+  <li>placeholder</li>
+  <li>placeholder</li>
+  <li>placeholder</li>
+  <li>placeholder</li>
   <li>placeholder</li>
   <li>placeholder</li>
   <li>placeholder</li>
@@ -176,9 +184,27 @@ USDT BEP20: <address>
 </ul>
 </br>
 </details>
+
 -->
 
-<details open><summary><b>v3.2.1 - Dec 04, 2024</b></summary>
+<details open><summary><b>v3.2.2 - Dec 06, 2024</b></summary>
+<ul>
+  <li>Added custom Minecraft launcher support (thanks to <a href=https://x.com/TrngN0786>@TrngN0786</a>)</li>
+  <li>Added custom Minecraft data path support</li>
+  <li>Added custom IObit Unlocker path support</li>
+  <li>Added interruption check</li>
+  <li>Added restore confirmation</li>
+  <li>Added an easter egg</li>
+  <li>Update checker now shows the changelog</li>
+  <li>Fixed colors in some texts</li>
+  <li>Fixed RESTORELIST variable (thanks to <a href=https://x.com/TrngN0786>@TrngN0786</a>)</li>
+  <li>Fixed Minecraft app path and Just sync and exit toggle</li>
+  <li>Other minor bug fixes</li>
+</ul>
+</br>
+</details>
+
+<details><summary><b>v3.2.1 - Dec 04, 2024</b></summary>
 <ul>
   <li>Fixed matjectNEXT unable to find pack path (once again thanks to <a href=https://github.com/jcau8>@jcau8</a>)</li>
   <li>Added compatibility check for materials (thanks to <a href=https://github.com/Veka0>@Veka0</a>)</li>

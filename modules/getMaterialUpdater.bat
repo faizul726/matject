@@ -29,7 +29,7 @@ echo [1] Download for me
 echo [2] Nah, I will download it myself
 echo.
 
-choice /c 12b /n
+choice /c 12b /n >nul
 
 goto option-!errorlevel!
 
@@ -40,7 +40,7 @@ echo.
 
 echo !YLW![*] If you're fine with that you can press [Y] to download or [B] to go back.!RST!
 echo.
-choice /c yb /n
+choice /c yb /n >nul
 if !errorlevel! neq 1 goto:EOF
 echo.
 

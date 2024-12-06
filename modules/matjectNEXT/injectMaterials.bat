@@ -8,8 +8,11 @@ if exist %disableConfirmation% (goto inject)
 msg * Resource packs changed, injecting new materials...
 echo !YLW![*] Press [Y] to confirm injection or [B] to cancel.!RST!
 echo.
-choice /c yb /N
-if !errorlevel! neq 1 goto:EOF
+choice /c yb /n >nul
+if !errorlevel! neq 1 (
+    del /q /s "MATERIALS\*" >nul
+    goto:EOF
+)
 
 :inject
 echo !YLW![*] Injecting !RED!!packName! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST!
@@ -18,25 +21,22 @@ echo.
 
 if exist %thanksMcbegamerxx954% call "modules\updateMaterials"
 
-::echo Yes, task ongoing -,- > ".settings\taskOngoing.txt"
+
 if exist ".settings\.restoreList.log" (
     set "RESTORETYPE=partial"
     call "modules\restoreMaterials"
 )
 
+echo matjectNEXT injection running... [%date% // %time%] > ".settings\taskOngoing.txt"
 :st1
 echo !YLW![*] Deleting materials to replace...!RST!
 echo.
 echo !GRY!Executing...
-echo "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete !REPLACELIST!!RST!
+echo "%IObitUnlockerPath%" /advanced /delete !REPLACELIST!!RST!
 echo.
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete !REPLACELIST!
+"%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
 if !errorlevel! neq 0 (
-    echo !ERR![^^!] Please accept UAC.!RST!
-    echo.
-    echo Press any key to try again...
-    pause > NUL
-    cls
+    %uacfailed%
     goto st1
 ) else (
     echo !GRN![*] Step 1/2 OK.!RST!
@@ -47,15 +47,11 @@ echo.
 echo !YLW![*] Replacing materials...!RST!
 echo.
 echo !GRY!Executing...
-echo "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials"
+echo "%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials"
 echo.
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials"
+"%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials" >nul
 if !errorlevel! neq 0 (
-    echo !ERR![^^!] Please accept UAC.!RST!
-    echo.
-    echo Press any key to try again...
-    pause > NUL
-    cls
+    %uacfailed%
     goto st2
 ) else (
     echo !GRN![*] Step 2/2 OK.!RST!
@@ -64,12 +60,10 @@ echo.
 
 echo !REPLACELISTEXPORT!>".settings\.restoreList.log" && echo !BINS!>".settings\.bins.log"
 
-if "!hasSubpack!" equ "true" (echo !packuuid: =!_!packVerInt: =!_!subpackName: =! > ".settings\lastPack.txt") else (echo !packuuid: =!_!packVerInt: =! > ".settings\lastPack.txt")
-
-
-::del /q /s ".settings\taskOngoing.txt" > NUL
-
+if "!hasSubpack!" equ "true" (echo !packuuid: =!_!packVerInt: =!_!subpackName: =!>".settings\lastPack.txt") else (echo !packuuid: =!_!packVerInt: =!> ".settings\lastPack.txt")
 
 set "lastPack=!currentPack!"
+
+del /q /s ".settings\taskOngoing.txt" >nul
 
 goto:EOF

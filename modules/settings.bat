@@ -6,6 +6,8 @@ set "toggleOn=!GRN![x]!RST!"
 
 title %title% settings
 
+if not "%1" equ "" goto %1
+
 :settingsP1
 cls
 
@@ -47,16 +49,16 @@ echo.
 echo !toggleP1_1! 1. Default method: %toggleone%
 echo !toggleP1_2! 2. Use material-updater to update materials ^(fixes invisible blocks^)
 echo !toggleP1_3! 3. Disable confirmations
-echo !toggleP1_4! 4. Disable interruption check ^(doesn't work for now^)
+echo !toggleP1_4! 4. Disable interruption check !RED!^(enable at your own risk^)!RST!
 echo !toggleP1_5! 5. Don't keep old backups
 echo !toggleP1_6! 6. Disable success message
 echo !toggleP1_7! 7. Auto import MCPACK after injection ^(only works for .mcpack files^)
-echo !toggleP1_8! 8. Disable material compatibility check ^(this applies both to Matject ^& matjectNEXT^)
+echo !toggleP1_8! 8. Disable material compatibility check ^(applies both to Matject ^& matjectNEXT^)
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option... !RST!
 echo.
-choice /c 12345678bad /n
+choice /c 12345678bad /n >nul
 
 goto toggleP1_!errorlevel!
 
@@ -80,27 +82,27 @@ if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") 
 goto settingsP1
 
 :toggleP1_3
-if not exist %disableConfirmation% (echo.>%disableConfirmation%) else (del /q /s %disableConfirmation% > NUL)
+if not exist %disableConfirmation% (echo You are c21hcnQ= [%date% // %time%]>%disableConfirmation%) else (del /q /s %disableConfirmation% > NUL)
 goto settingsP1
 
 :toggleP1_4
-if not exist %disableInterruptionCheck% (echo.>%disableInterruptionCheck%) else (del /q /s %disableInterruptionCheck% > NUL)
+if not exist %disableInterruptionCheck% (echo You are QlJBVkU= [%date% // %time%]>%disableInterruptionCheck%) else (del /q /s %disableInterruptionCheck% > NUL)
 goto settingsP1
 
 :toggleP1_5
-if not exist %disableRetainOldBackups% (echo.>%disableRetainOldBackups%) else (del /q /s %disableRetainOldBackups% > NUL)
+if not exist %disableRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time%]>%disableRetainOldBackups%) else (del /q /s %disableRetainOldBackups% > NUL)
 goto settingsP1
 
 :toggleP1_6
-if not exist %disableSuccessMsg% (echo.>%disableSuccessMsg%) else (del /q /s %disableSuccessMsg% > NUL)
+if not exist %disableSuccessMsg% (echo Thanks for using Matject, have a good day. [%date% // %time%]>%disableSuccessMsg%) else (del /q /s %disableSuccessMsg% > NUL)
 goto settingsP1
 
 :toggleP1_7
-if not exist %autoOpenMCPACK% (echo.>%autoOpenMCPACK%) else (del /q /s %autoOpenMCPACK% > NUL)
+if not exist %autoOpenMCPACK% (echo You are lazy [%date% // %time%]>%autoOpenMCPACK%) else (del /q /s %autoOpenMCPACK% > NUL)
 goto settingsP1
 
 :toggleP1_8
-if not exist "%disableMatCompatCheck%" (echo.>%disableMatCompatCheck%) else (del /q /s %disableMatCompatCheck% >nul)
+if not exist "%disableMatCompatCheck%" (echo Don't blame Matject if game crashes for you. [%date% // %time%]>%disableMatCompatCheck%) else (del /q /s %disableMatCompatCheck% >nul)
 goto settingsP1
 
 :toggleP1_9
@@ -127,30 +129,32 @@ echo.
 
 if exist %customMinecraftAppPath% (set toggleP2_1=!toggleOn!) else (set toggleP2_1=!toggleOff!)
 if exist %customMinecraftDataPath% (set toggleP2_2=!toggleOn!) else (set toggleP2_2=!toggleOff!)
-if exist %customUnlockerPath% (set toggleP2_3=!toggleOn!) else (set toggleP2_3=!toggleOff!)
+if exist %customIObitUnlockerPath% (set toggleP2_3=!toggleOn!) else (set toggleP2_3=!toggleOff!)
 
 echo !toggleP2_1! 1. Use custom Minecraft app path ^(makes Matject start faster^)
-echo !toggleP2_2! 2. Use custom Minecraft data path ^(doesn't work for now^)
-echo !toggleP2_3! 3. Use custom IObit Unlocker path ^(WIP^)
+echo !toggleP2_2! 2. Use custom Minecraft data path ^(for Bedrock Launcher or similar^) !RED!^(USE WITH CARE^)!RST!
+echo !toggleP2_3! 3. Use custom IObit Unlocker path
 echo. 
-echo.
-echo.
-echo.
-echo.
+echo !WHT!Current paths:!GRY!
+echo Minecraft app:!GRY!  "!MCLOCATION:%ProgramFiles%=%WHT%%%ProgramFiles%%%GRY%!"
+echo Minecraft data:!GRY! "!gamedata:%LOCALAPPDATA%=%WHT%%%LOCALAPPDATA%%%GRY%!"
+echo IObit Unlocker:!GRY! "!IObitUnlockerPath:%ProgramFiles(x86)%=%WHT%%%ProgramFiles(x86)%%%GRY%!"!RST!
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
 echo.
-choice /c 123bad /n
+choice /c 123bad /n >nul
 goto toggleP2_!errorlevel!
 
 :toggleP2_1
 if exist "%customMinecraftAppPath%" (
     del /q /s %customMinecraftAppPath% > NUL
+    cls
+    call "modules\getMinecraftDetails"
     goto settingsP2
 )
 cls
-set setcustomMinecraftAppPath=
+set "setcustomMinecraftAppPath="
 echo !RED!^< [B] Back!RST!
 echo.
 echo.
@@ -162,7 +166,7 @@ echo.
 echo [1] Use retrieved Minecraft path ^(!GRN!!MCLOCATION!!RST!!^)
 echo [2] Use user provided Minecraft path
 echo.
-choice /c b12 /n
+choice /c b12 /n >nul
 
 if !errorlevel! equ 1 goto settingsP2
 
@@ -172,11 +176,16 @@ if !errorlevel! equ 2 (
 )
 if !errorlevel! equ 3 (
     cls
-    set /p "setcustomMinecraftAppPath=!YLW![*] Type your custom Minecraft path ^(make sure not to include unnecessary space. Leave blank to cancel^):!RST! "
+    echo.
+    echo !YLW![*] Enter your custom Minecraft app path ^(make sure not to include unnecessary space. Leave blank to cancel^)!RST!
+    echo.
+    set /p "setcustomMinecraftAppPath=Custom Minecraft app path: "
     echo.
     if not defined setcustomMinecraftAppPath (
         goto settingsP2
     ) else (
+        set "setcustomMinecraftAppPath=!setcustomMinecraftAppPath:"=!"
+        set "setcustomMinecraftAppPath=!setcustomMinecraftAppPath:8wekyb3d8bbwe\=8wekyb3d8bbwe!"
         if exist "!setcustomMinecraftAppPath!\AppxManifest.xml" (
             if exist "!setcustomMinecraftAppPath!\Minecraft.Windows.exe" (
                 echo !setcustomMinecraftAppPath!>%customMinecraftAppPath%
@@ -185,13 +194,71 @@ if !errorlevel! equ 3 (
         )
     )
 )
-echo !ERR![^^!] Invalid Minecraft path.!RST!
+echo !ERR![^^!] Invalid Minecraft app path.!RST!
 %backmsg:~0,56%
 goto settingsP2
 
 :toggleP2_2
-:toggleP2_3
+if exist "%customMinecraftDataPath%" (
+    del /q /s %customMinecraftDataPath% > NUL
+    set "gamedata=!defaultgamedata!"
+    goto settingsP2
+)
+cls
+set "setCustomMinecraftDataPath="
+echo.
+echo !YLW![*] Enter your custom Minecraft data ^(com.mojang folder^) path 
+echo     ^(make sure not to include unnecessary space. Leave blank to cancel^)!RST!
+echo.
+set /p "setCustomMinecraftDataPath=Custom Minecraft data (com.mojang folder) path: "
+echo.
+if not defined setCustomMinecraftDataPath (goto settingsP2)
+set "setCustomMinecraftDataPath=!setCustomMinecraftDataPath:"=!"
+set "setCustomMinecraftDataPath=!setCustomMinecraftDataPath:com.mojang\=com.mojang!"
+if exist "!setCustomMinecraftDataPath!\minecraftpe\options.txt" (
+    echo !setCustomMinecraftDataPath!>%customMinecraftDataPath%
+    goto settingsP2
+)
+echo !ERR![^^!] Invalid Minecraft data path.!RST!
+%backmsg:~0,56%
 goto settingsP2
+
+
+:toggleP2_3
+if exist "%customIObitUnlockerPath%" (
+    cls
+    echo !YLW![^^!] Custom IObit Unlocker path removed.!RST!
+    echo     Reopen to take effect...
+    del /q /s %customIObitUnlockerPath% > NUL
+    %exitmsg%
+)
+cls
+set "setCustomIObitUnlockerPath="
+echo.
+echo !YLW![*] Enter your custom IObit Unlocker folder path ^(make sure not to include unnecessary space. Leave blank to cancel^)!RST!
+echo.
+set /p "setCustomIObitUnlockerPath=IObit Unlocker path: "
+echo.
+
+if not defined setCustomIObitUnlockerPath (
+    cls
+    echo !YLW![^^!] Custom IObit Unlocker path not set.!RST!
+    %exitmsg%
+) else (
+    set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:"=!"    
+    set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:IObit Unlocker\=IObit Unlocker!"
+    if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.exe" (
+        if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.dll" (
+            echo !setCustomIObitUnlockerPath!>%customIObitUnlockerPath%
+            echo !GRN![*] Custom IObit Unlocker path set.!RST!
+            echo     Reopen to take effect...
+            %exitmsg%
+        )
+    )
+)
+cls
+echo !ERR![^^!] Invalid IObit Unlocker path.!RST!
+%exitmsg%
 
 :toggleP2_4
 exit /b 0
@@ -222,7 +289,7 @@ echo.
 if not defined debugMode (
     echo !YLW![^^!] Enable DEBUG MODE first.!RST!
     echo.
-    choice /c ad /n
+    choice /c ad /n >nul
     
     if !errorlevel! equ 1 goto settingsP2
     if !errorlevel! equ 2 goto settingsP4
@@ -234,7 +301,7 @@ echo.
 
 
 
-if not exist "%syncThenExit%" (set "toggleP3_1=!toggleOn!") else (set "toggleP3_1=!toggleOff!")
+if exist "%syncThenExit%" (set "toggleP3_1=!toggleOn!") else (set "toggleP3_1=!toggleOff!")
 
 echo !toggleP3_1! 1. Just sync and exit
 echo.
@@ -248,12 +315,12 @@ echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option... !RST!
 echo.
-choice /c 1bad /n
+choice /c 1bad /n >nul
 
 goto toggleP3_!errorlevel!
 
 :toggleP3_1
-if not exist "%syncThenExit%" (echo.>"%syncThenExit%" ) else (del /q /s "%syncThenExit%" >nul)
+if not exist "%syncThenExit%" (echo I hope matjectNEXT is doing its job properly. - Creator [%date% // %time%]>"%syncThenExit%" ) else (del /q /s "%syncThenExit%" >nul)
 goto settingsP3
 
 :toggleP3_2
@@ -281,10 +348,10 @@ if "%debugMode%" equ "true" (set toggleP4_2=!RED![ON]!RST!) else (set toggleP4_2
 echo !WHT!Here you can check for updates or enable in-development features.!RST!
 echo.
 echo.
-echo !toggleP4_1! 1. Check for updates at Matject startup !RED!^(requires internet^)!RST!
+echo !toggleP4_1! 1. Check for updates at Matject startup !YLW!^(requires internet^)!RST!
 echo.
 echo.
-echo [M] Check for updates manually !RED!^(requires internet^)!RST!
+echo [M] Check for updates manually !YLW!^(requires internet^)!RST!
 echo.
 echo !GRY![0] DEBUG MODE ^(for testing matjectNEXT^)!RST! !toggleP4_2!
 echo.
@@ -293,12 +360,12 @@ echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option... !RST!
 echo.
-choice /c 1m0bad /n
+choice /c 1m0bad /n >nul
 
 goto toggleP4_!errorlevel!
 
 :toggleP4_1
-if not exist %doCheckUpdates% (echo.>%doCheckUpdates%) else (del /q /s %doCheckUpdates% > NUL)
+if not exist %doCheckUpdates% (echo Thank you for being a regular user of Matject ^^^^ [%date% // %time%]>%doCheckUpdates%) else (del /q /s %doCheckUpdates% > NUL)
 goto settingsP4
 
 :toggleP4_2
@@ -306,7 +373,7 @@ call "modules\checkUpdates"
 goto settingsP4
 
 :toggleP4_3
-if "%debugMode%" neq "true" (echo You are now a developer^^! [%date% - %time%]>".settings\debugMode.txt" && set "debugMode=true") else (del /q /s ".settings\debugMode.txt" > NUL && set "debugMode=")
+if "%debugMode%" neq "true" (echo You are now a developer^^! [%date% // %time%]>".settings\debugMode.txt" && set "debugMode=true") else (del /q /s ".settings\debugMode.txt" > NUL && set "debugMode=")
 goto settingsP4
 
 :toggleP4_4

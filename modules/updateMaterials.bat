@@ -12,7 +12,7 @@ if not exist %materialUpdaterArg% (
     echo [3] v1.19.60 - v1.20.73
     echo [4] v1.18.30 - v1.19.51
     echo !RST!
-    choice /c 1234 /n
+    choice /c 1234 /n >nul
     if "!errorlevel!" equ "1" echo v1-21-20>%materialUpdaterArg%
     if "!errorlevel!" equ "2" echo v1-20-80>%materialUpdaterArg%
     if "!errorlevel!" equ "3" echo v1-19-60>%materialUpdaterArg%

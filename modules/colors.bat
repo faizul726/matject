@@ -1,5 +1,4 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 set "GRY=[90m"
 set "RED=[91m"
@@ -12,3 +11,36 @@ set "RST=[0m"
 set "ERR=[41;97m"
 
 set "p1=[46m  [0m"
+
+if defined murgi goto:EOF
+
+title too late :doggysmurk:
+
+echo Oh yes, %RED%C%GRN%O%BLU%L%YLW%O%CYN%R%RED%S%RST%...
+echo.
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=0m%%p1:46m=0m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=0m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo %p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%%p1:46m=42m%
+timeout 1 >nul
+echo.
+echo Realm of gathering woes?
+echo.
+endlocal
+cmd /k

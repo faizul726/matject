@@ -1,6 +1,6 @@
 @echo off
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
-
+:restoreMaterials
 if "!RESTORETYPE!" equ "full" (
     echo !YLW![*] Restore type: Full!RST!
     echo.
@@ -27,17 +27,38 @@ echo !WHT![*] Backup made on: !backupTimestamp!!RST!
 echo.
 echo !YLW![?] How would you like to restore?!RST!
 echo.
-echo [1] Full restore ^(slow, restore all materials^)
-echo [2] Dynamic restore ^(only restore the ones modified in previous injection^)
+echo [1] Full Restore ^(slow, restore all materials^)
+echo [2] Dynamic Restore ^(only restore the ones modified in previous injection^)
 echo.
-choice /c 12b /n 
+choice /c 12b /n >nul
 if !errorlevel! equ 1 (
+    cls
+    echo !RED!^< [B] Back!RST!
+    echo.
+    echo.
+    echo !YLW![?] Are you sure about performing a Full Restore?!RST!
+    echo.
+    echo !YLW![Y] Yes!RST!
+    echo !GRN![N] No, go back!RST!
+    echo.
+    choice /c ynb /n >nul
+    if !errorlevel! neq 1 goto restoreMaterials
     cls
     echo !YLW![*] Restore type: Full!RST!
     echo.
     goto fullRestore
 )
 if !errorlevel! equ 2 (
+    cls
+    echo !RED!^< [B] Back!RST!
+    echo.
+    echo.
+    echo !YLW![?] Are you sure about performing a Dynamic Restore?!RST!
+    echo.
+    echo !YLW![Y] Yes!RST!
+    echo !GRN![N] No, go back!RST!
+    choice /c ynb /n >nul
+    if !errorlevel! neq 1 goto restoreMaterials
     cls
     set "goingVanillaSir=true"
     echo !YLW![*] Restore type: Dynamic!RST!
@@ -66,65 +87,52 @@ if not defined rstrCount (
 
 :fullRestore2
 echo !GRN!Found !rstrCount! materials(s).!RST!
-
+echo.
 echo !RED![^^!] Please accept all UAC prompts or it will fail.!RST!
 echo.
 echo.
 
-timeout 5 > NUL
+timeout 3 > NUL
+echo Full Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
+:fr-delete
 cls
 
-echo !YLW![*] Running step 1/3: Deleting game materials...!RST!
+echo !YLW![*] Running step 1/3: Deleting game materials... ^(may take multiple tries^)!RST!
 echo.
 
-:fr-delete
 if exist "!MCLOCATION!\data\renderer\materials\" (
-    "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete "!MCLOCATION!\data\renderer\materials"
+    "%IObitUnlockerPath%" /advanced /delete "!MCLOCATION!\data\renderer\materials" >nul
+    if !errorlevel! neq 0 (
+        %uacfailed%
+    )
     goto fr-delete
 )
-echo !GRN![*] Done!RST!
+echo !GRN![*] Done.!RST!
 echo.
 echo.
-echo !YLW![*] Running step 2/3: Creating materials folder...!RST!
 echo.
-if not exist "tmp\materials" mkdir "tmp\materials"
+timeout 3 > NUL
 goto fr-mkdir
 
-cls
-if !errorlevel! neq 0 (
-    echo !YLW![*] Running step 1/%stepCount%: Deleting game materials...!RST!
-    echo.
-    echo !ERR!Please accept UAC.!RST!
-    echo.
-    echo !YLW!Trying again...!RST!
-    echo.
-    goto fr-delete
-)
-
-
 :fr-mkdir
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move "%cd%\tmp\materials\" "!MCLOCATION!\data\renderer\"
-
+if not exist "tmp\materials\" mkdir "tmp\materials"
+cls
+echo !YLW![*] Running step 2/3: Creating materials folder...!RST!
+echo.
+"%IObitUnlockerPath%" /advanced /move "%cd%\tmp\materials\" "!MCLOCATION!\data\renderer\" >nul
 if !errorlevel! neq 0 (
-    cls
-    echo !YLW![*] Running step 2/3: Creating materials folder...!RST!
-    echo.
-    echo !ERR!Please accept UAC.!RST!
-    echo.
-    echo !YLW!Trying again...!RST!
-    echo.
+    %uacfailed%
     goto fr-mkdir
-) 
+)
+if not exist "!MCLOCATION!\data\renderer\materials\" goto fr-mkdir
 
-echo !GRN![*] Done!RST!
+echo !GRN![*] Done.!RST!
+echo.
 echo.
 echo. 
 timeout 3 > NUL
 
 :fr-split
-cls
-echo !YLW![*] Running step 3/3: Moving materials... ^(!rstrCount! left^)!RST!
-echo.
 set splitCount=
 for %%f in ("%matbak%\*") do (
     set /a splitCount+=1
@@ -137,31 +145,30 @@ if not defined splitCount (
         rmdir /s /q "%matbak%"
     )
     if exist "tmp\" (
-        rmdir /s /q "tmp"
+        rmdir /q /s "tmp"
     )
+    del /q /s ".settings\taskOngoing.txt" >nul
     goto completed
 )
 
 :fr-move
 set SRCLIST2=
+cls
+echo !YLW![*] Running step 3/3: Moving materials... ^(!rstrCount! left^)!RST!
+echo.
 for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
     echo !YLW![Moving]!RST! %%~nxf
 )
+echo.
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials"
+"%IObitUnlockerPath%" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials" >nul
 if !errorlevel! equ 0 (
     cls
     set /a rstrCount-=20
     goto fr-split
 ) else (
-    cls
-    echo !YLW![*] Running step 3/3: Moving materials... ^(!rstrCount! left^)!RST!
-    echo.
-    echo !ERR!Please accept UAC.!RST!
-    echo.
-    echo !YLW!Trying again...!RST!
-    echo.
+    %uacfailed%
     goto fr-move
 )
 
@@ -187,8 +194,8 @@ if exist ".settings\.restoreList.log" (
     set "COPYBINS=!COPYBINS:_=%matbak%\!"
     set "COPYBINS=!COPYBINS:-=.material.bin!"
     set /p restoreList=< ".settings\.restoreList.log"
-    set "restoreList=!restoreList:-=.material.bin!"
     set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"
+    set "restoreList=!restoreList:-=.material.bin!"
     for %%f in (!COPYBINS!) do (
         copy /d %%f "tmp" >nul
     )
@@ -198,38 +205,33 @@ if exist ".settings\.restoreList.log" (
     %backmsg%
 )
 
-
+echo Dynamic Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
 :restore1
+echo !YLW![*] Dynamic Restore: Step 1/2!RST!
 set "SRCLIST2="
 for %%f in (tmp\*) do (
     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
 )
 
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /delete %restoreList%
+"%IObitUnlockerPath%" /advanced /delete %restoreList% >nul
 if !errorlevel! neq 0 (
-    echo !ERR![^^!] Please accept UAC.!RST!
-    echo.
-    echo Press any key to try again...
-    pause > NUL
-    cls
+    %uacfailed%
     goto restore1
 ) else (
-    echo !GRN![*] Dynamic restore: Step 1/2 succeed^^!!RST!
+    echo !GRN![*] Dynamic Restore: Step 1/2 succeed^^!!RST!
 )
 
 echo.
 
 :restore2
-"%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials"
+echo !YLW![*] Dynamic Restore: Step 2/2!RST!
+"%IObitUnlockerPath%" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials" >nul
 if !errorlevel! neq 0 (
-    echo !ERR![^^!] Please accept UAC.!RST!
-    echo.
-    echo Press any key to try again...
-    pause > NUL
-    cls
+    %uacfailed%
     goto restore2
 ) else (
-    echo !GRN![*] Dynamic restore: Step 2/2 succeed^^!!RST!
+    del /q /s ".settings\taskOngoing.txt" >nul
+    echo !GRN![*] Dynamic Restore: Step 2/2 succeed^^!!RST!
     echo.
     echo.
     if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
@@ -249,6 +251,7 @@ cls
 if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" > NUL
 if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" > NUL
 if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
+if exist ".settings\taskOngoing.txt" del /q /s ".settings\taskOngoing.txt" >nul
 if exist "%backupDate%" del /q /s "%backupDate%" > NUL
 echo !GRN![*] BACKUP RESTORE OK.!RST!
 %exitmsg%

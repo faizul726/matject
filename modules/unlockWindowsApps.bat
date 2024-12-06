@@ -29,6 +29,6 @@ if not exist ".settings\" (mkdir .settings)
 
 takeown /f "%ProgramFiles%\WindowsApps"
 echo [93mResult: %errorlevel%[0m [Memorize this number, it might be required if this fails.]
-if %errorlevel% equ 0 ( echo [%date% %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>".settings\unlockedWindowsApps.txt" && timeout 2 > NUL )
+if %errorlevel% equ 0 ( echo [%date% // %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>".settings\unlockedWindowsApps.txt" && timeout 3 > NUL )
 
 echo Output: "%errorlevel%" //  Current directory: "%cd%" > ".settings\unlockLog.txt"
