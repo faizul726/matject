@@ -9,7 +9,7 @@ if !errorlevel! neq 0 echo !RED![^^!] curl executable is not present. It is requ
 
 echo !YLW![*] Checking for updates...!RST!
 echo.
-echo Current version: %version%%dev%
+echo Current version: %version%
 ::set "version=v3.0.2"
 
 set "version2=%version:~1%"
@@ -42,7 +42,7 @@ if %minus% geq 10 (
         timeout 2 >nul
     )
     if !version2! gtr !latestversion! (
-        echo !WHT!o_O You must be a time traveler because !YLW!%version%%dev%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
+        echo !WHT!o_O You must be a time traveler because !YLW!%version%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
         echo.
         echo Have we achieved global peace yet?
         echo.
@@ -50,7 +50,7 @@ if %minus% geq 10 (
         pause >nul
     ) 
     if !version2! lss !latestversion! (
-        echo !YLW![*] New update is available. !RST!^(%version%%dev% -^> %latesturl:~50%^)
+        echo !YLW![*] New update is available. !RST!^(%version% -^> %latesturl:~50%^)
         echo.
         echo !WHT!Make sure to restore backup before using new version!RST!
         echo.
@@ -75,7 +75,7 @@ if %minus% geq 10 (
         timeout 2 >nul
     )
     if !version2! gtr !latestversion! (
-        echo !WHT!o_O You must be a time traveler because !YLW!%version%%dev%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
+        echo !WHT!o_O You must be a time traveler because !YLW!%version%!WHT! is NEWER than !YLW!%latesturl:~50%!RST!
         echo.
         echo Have we achieved global peace yet?
         echo.
@@ -83,7 +83,7 @@ if %minus% geq 10 (
         pause >nul
     ) 
     if !version2! lss !latestversion! (
-        echo !YLW![*] New update is available. !RST!^(%version%%dev% -^> %latesturl:~50%^)
+        echo !YLW![*] New update is available. !RST!^(%version% -^> %latesturl:~50%^)
         echo.
         echo !WHT!Make sure to restore backup before using new version!RST!
         echo.

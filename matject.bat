@@ -2,25 +2,26 @@
 setlocal enabledelayedexpansion
 cls
 pushd "%~dp0"
+set "murgi=KhayDhan"
 
 :: A material replacer for Minecraft.
 :: Made by @faizul726
 :: https://faizul726.github.io/matject
 
-::set "dev=-dev ^(20241204^)"
-set "version=v3.2.2"
-set "title=Matject %version%%dev%"
-set "murgi=KhayDhan"
-
 :: Load other variables
 call "modules\colors"
+if exist ".settings\useForMinecraftPreview.txt" (set "isPreview= ^(Preview Mode^)") else (set "isPreview=")
 call "modules\variables"
 if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
+
+::set "dev=-dev ^(20241209^)"
+set "version=v3.3.0"
+set "title=Matject %version%%dev%%isPreview%"
 
 REM TODO
 REM - Move variables to modules [DONE]
 REM - ADD DATETIME IN RESTORE CONSENT [DONE]
-REM - DELETE MATERIALS.BAK IF EMPTY
+REM - DELETE MATERIALS.BAK IF EMPTY [DONE]
 REM - MIGRATE TO CHECK RENDERER FOLDER INSTEAD OF MANIFEST [DONE]
 REM - ADD FOUND DETAILS IN GETMCDETAILS [DONE]
 REM - STORE SHADER NAME FOR LATER USE
@@ -35,7 +36,16 @@ if not exist "MCPACK\" (mkdir MCPACK)
 if exist "MCPACK\putMcpackHere" (del /q /s "MCPACK\putMcpackHere" > NUL)
 if not exist "MATERIALS\" (mkdir MATERIALS)
 if exist "MATERIALS\putMaterialsHere" (del /q /s "MATERIALS\putMaterialsHere" > NUL)
-if exist "tmp" (rmdir /q /s tmp > NUL)
+if exist "tmp\" (rmdir /q /s tmp > NUL)
+if exist "%matbak%\" (
+    for %%g in ("%matbak%\*.material.bin") do (
+        set "backupHasFiles=true"
+        goto exitloop-1
+    )
+    :exitloop-1
+    if not defined backupHasFiles rmdir /q /s "%matbak%\"
+    set "backupHasFiles="
+)
 
 title %title%
 
@@ -45,14 +55,15 @@ echo.
 echo.
 echo !ERR!=== Hol' up soldier^^! ===!RST!!YLW!
 echo.
-echo - Matject is not perfect, bugs may show up. Please report them to me.
+echo - Matject is not perfect, bugs may show up. Please report them in the GitHub repo.
 echo - It assumes you HAVE NOT made any changes to materials, because it needs a copy of original materials to work properly.
 echo !RED!* DO NOT MODIFY .settings and Backups folder.!YLW!
 echo - It may not work properly with antivirus read/write protection.
-echo - The worst thing that can happen with is material corruption.
-echo   !GRY!In that case you can restore materials or reinstall Minecraft.!YLW!
-echo - Minecraft Preview is not supported ^(yet^)
+echo !RED!* 3RD PARTY ANTIVIRUS MAY PREVENT IOBIT UNLOCKER FROM WORKING.!YLW!
+echo - The worst thing that can happen is material corruption.
+echo   !GRY!In that case you can restore materials or reinstall Minecraft without losing data.!YLW!
 echo - Some packs may need extra steps for Matject auto/manual method.
+echo - Deferred/PBR/RTX packs are not supported.
 echo - English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
 echo.
@@ -151,24 +162,30 @@ if exist "%customMinecraftAppPath%" (
             set /p CURRENTVERSION=<%oldMinecraftVersion%
             set /p OLDVERSION=<%oldMinecraftVersion%
         ) else (
-            for /f "tokens=*" %%i in ('powershell -NoProfile -command "Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i" && set "OLDVERSION=%%i" 
+            for /f "tokens=*" %%i in ('powershell -NoProfile -command "Get-AppxPackage -Name Microsoft.%productID% | Select-Object -ExpandProperty Version"') do (set "CURRENTVERSION=%%i" & set "OLDVERSION=%%i")
         )
     )
 ) else (
     call "modules\getMinecraftDetails"
+    if exist %oldMinecraftVersion% (
+        set /p OLDVERSION=<%oldMinecraftVersion%
+    )
     cls
 )
 
 if not exist "%customMinecraftDataPath%" (goto nocustomgamedata)
-set /p gamedataTMP=<%customMinecraftDataPath%
-if not exist "!gamedataTMP!\minecraftpe\options.txt" (
-    echo !ERR![^^!] Custom Minecraft data path invalid.
+set /p gameDataTMP=<%customMinecraftDataPath%
+if not exist "!gameDataTMP!\minecraftpe\options.txt" (
+    set "gameDataTMP="
+    echo !ERR![^^!] Custom Minecraft data path invalid.!RST!
+    echo !RED!If it's correct open the game at least once.
     echo.
-    echo !YLW![*] Turned off custom Minecraft data path and using default data path.!RST!
     del /q /s "%customMinecraftDataPath%" >nul
-    set "gamedata=%defaultgamedata%"
+    echo !YLW![*] Turned off custom Minecraft data path and using default data path.!RST!
+    set "gameData=%defaultGameData%"
 ) else (
-    set "gamedata=!gamedataTMP!"
+    set "gameData=!gameDataTMP!"
+    set "gameDataTMP="
 )
 
 
@@ -222,7 +239,7 @@ if exist "%matbak%\" (
     echo.
     echo !YLW![*] Current version: v!CURRENTVERSION!, old version: v!OLDVERSION!.!RST!
     echo.
-    if exist %disableRetainOldBackups% (
+    if exist %dontRetainOldBackups% (
         echo !YLW![*] Deleting old backup...!RST!
         echo.
         rmdir /q /s "%matbak%"
@@ -233,9 +250,8 @@ if exist "%matbak%\" (
     )
     if exist %materialUpdaterArg% del /q /s %materialUpdaterArg% > NUL
     if exist ".settings\taskOngoing.txt" del /q /s ".settings\taskOngoing.txt" >nul
-    if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" >nul
-    if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" >nul
-    if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
+    if exist "%rstrList%" del /q /s "%rstrList%" >nul
+    if exist "%lastRP%" del /q /s "%lastRP%" >nul
     if exist "%backupDate%" del /q /s "%backupDate%" >nul
     echo !CURRENTVERSION!>%oldMinecraftVersion%
     call "modules\backupMaterials"
@@ -291,12 +307,22 @@ if exist %defaultMethod% (
 :INTRODUCTION
 set "usingCustomPath="
 cls
-if exist "%customMinecraftAppPath%" (set usingCustomPath=true)
+if exist "%customMinecraftAppPath%"  (set usingCustomPath=true)
 if exist "%customMinecraftDataPath%" (set usingCustomPath=true)
 if exist "%customIObitUnlockerPath%" (set usingCustomPath=true)
-if defined usingCustomPath (
-    echo !GRY![*] Custom path^(s^) enabled.!RST!
+
+if exist "%useForMinecraftPreview%" (
+    if defined usingCustomPath (
+        echo !GRY![*] Using for Minecraft Preview ^& custom path^(s^) enabled.!RST!
+    ) else (
+        echo !GRY![*] Using for Minecraft Preview.!RST!.
+    )
     echo.
+) else (
+    if defined usingCustomPath (
+        echo !GRY![*] Custom path^(s^) enabled.!RST!
+        echo.
+    )
 )
 
 
@@ -307,7 +333,7 @@ if %time:~0,2% geq 05 if %time:~0,2% lss 12 echo !WHT!Good morning
 if %time:~0,2% geq 12 if %time:~0,2% lss 18 echo !WHT!Good afternoon
 if %time:~0,2% geq 18 if %time:~0,2% lss 22 echo !WHT!Good evening
 if %time:~0,2% geq 22 if %time:~0,2% lss 24 echo !WHT!Good night
-echo Welcome to %title%^^!!RST!
+echo Welcome to %title: ^(Preview Mode^)=%^^!!RST!
 echo.
 echo !CYN!faizul726.github.io/matject!RST!
 echo.
@@ -371,53 +397,63 @@ goto INTRODUCTION
 cls
 echo !YLW![?] Are you sure? This will deactivate all active global resource packs.!RST!
 echo.
-echo [Y] Yes
-echo [N] No, go back
+echo !RED![Y] Yes!RST!
+echo !GRN![N] No, go back!RST!
 echo.
 choice /c yn /n >nul
 if !errorlevel! neq 1 (goto option7)
-if exist "%gamedata%\minecraftpe\global_resource_packs.json" (del /q /s "%gamedata%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gamedata%\minecraftpe\global_resource_packs.json") else (echo []>"%gamedata%\minecraftpe\global_resource_packs.json")
+if exist "%gameData%\minecraftpe\global_resource_packs.json" (del /q /s "%gameData%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gameData%\minecraftpe\global_resource_packs.json") else (echo []>"%gameData%\minecraftpe\global_resource_packs.json")
 goto option7
 
 :others7
 cls
-echo !WHT![*] Add materials backup ZIP file in !YLW!"%cd%\Backups"!WHT!.!RED!DO NOT ADD MULTIPLE ZIP FILES.!RST!
+echo !WHT![*] Add materials backup ZIP file in !YLW!"%cd%\%matbak:~0,-19%"!WHT!. !RED!DO NOT ADD MULTIPLE ZIP FILES.!RST!
 echo.
 echo !RED![^^!] Current backup will be deleted.!RST!
 echo.
-echo [*]Don't have any backup file? Send a message in !CYN!discord.gg/yss!RST!. !GRY!It will go back if no backup file is found.!RST!
+echo [*] Don't have any backup file? Get from !CYN!mcpebd.github.io/mats!RST!. !GRY!It will go back if no backup file is found.!RST!
 echo.
-explorer "%cd%\Backups"
+explorer "%cd%\%matbak:~0,-19%"
 echo When done,
 pause
 echo.
-if not exist "Backups\*.zip" (
+if not exist "%matbak:~0,-19%\*.zip" (
     echo !RED![^^!] No backup file found^^!!RST!
-    %backmsg:~0,56%
+    %backmsg:EOF=option7%
 ) else (
-    for %%F in (Backups\*.zip) do (
+    set "backupFileCount="
+    for %%F in ("%matbak:~0,-19%\*.zip") do (
+        set /a backupFileCount+=1
         set "backupFile=%%~nxF"
-        goto bkpFound
     )
 )
-goto option7
 :bkpFound
+if !backupFileCount! neq 1 (
+    echo !ERR![^^!] Multiple ZIP files found^^!!RST!
+    echo !RED!Put only 1 ZIP file in "%cd%\%matbak:~0,-19%".!RST!
+    %backmsg:EOF=option7%
+)
 echo !GRN![*] Found backup file:!RST! !backupFile!
 echo.
 echo !YLW![*] Extracting the backup...!RST!
 echo.
-if exist "Backups\Materials (backup)" del /q /s "Backups\Materials (backup)\*" >nul
+if exist "%matbak%" (del /q /s "%matbak%\*" >nul) else (mkdir "%matbak%")
 if exist "%backupDate%" del /q /s "%backupDate%" >nul
-powershell -NoProfile -Command "Expand-Archive -Force 'Backups\!backupFile!' 'Backups\Materials (backup)\'"
-if exist "Backups\Materials (backup)\*.material.bin" (
+if exist "%SYSTEMROOT%\system32\tar.exe" (
+    tar -xf "%matbak:~0,-19%\!backupFile!" -C "%matbak%"
+) else (
+    powershell -NoProfile -Command "Expand-Archive -Force '%matbak:~0,-19%\!backupFile!' '%matbak%\'"
+)
+if exist "%matbak%\*.material.bin" (
     echo !GRN![*] Succesfully added materials from !backupFile!.!RST!
     echo %date% // %time%>%backupDate%
     echo.
     pause
 ) else (
     echo !RED![^^!] Failed to get materials from backup.
-    echo    Maybe not an actual backup file or multiple ZIPs?!RST!
+    echo     Maybe not an actual materials ZIP?!RST!
     %backmsg:~0,56%
+    del /q /s "%matbak%\*" >nul
 )
 set "backupFile="
 goto option7
@@ -435,7 +471,7 @@ start https://faizul726.github.io/matject
 goto option7
 
 :others3
-explorer "%localAppData%\packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang"
+explorer "%localAppData%\packages\Microsoft.%productID%_8wekyb3d8bbwe\LocalState\games\com.mojang"
 goto option7 
 
 :others2
@@ -465,16 +501,8 @@ goto INTRODUCTION
 
 :option3
 :matjectNEXT
-if "%debugMode%" neq "true" (
-    cls
-    echo !YLW![^^!] matjectNEXT is experimental. You can't use it without enabling DEBUG MODE.!RST!
-    echo.
-    %backmsg:~0,56%
-    goto INTRODUCTION
-) else (
-    call "modules\matjectNEXT\main"
-    title Matject %version%%dev%
-)
+call "modules\matjectNEXT\main"
+title Matject %version%%dev%%isPreview%
 
 goto INTRODUCTION
 
@@ -511,9 +539,7 @@ if not defined MCPACKCOUNT (
     echo.
 
     echo !YLW![*] Please add mcpack/zip in the MCPACK folder and try again.!RST!
-    %backmsg:~0,56%
-    cls
-    goto INTRODUCTION
+    %backmsg:EOF=INTRODUCTION%
 )
 
 if %MCPACKCOUNT% gtr 1 (
@@ -522,9 +548,7 @@ if %MCPACKCOUNT% gtr 1 (
     echo.
 
     echo !YLW![*] Please keep only one mcpack/zip in MCPACK and try again.!RST!
-    %backmsg:~0,56%
-    cls
-    goto INTRODUCTION
+    %backmsg:EOF=INTRODUCTION%
 )
 
 cls
@@ -555,25 +579,30 @@ echo.
 echo !YLW![*] Extracting MCPACK/ZIP to temporary folder...!RST!
 echo.
 
-powershell -NoProfile -command "Expand-Archive -LiteralPath 'tmp\mcpack.zip' -DestinationPath 'tmp'"
+if exist "%SYSTEMROOT%\system32\tar.exe" (
+    tar -xf "tmp\mcpack.zip" -C "tmp"
+) else (
+    powershell -NoProfile -command "Expand-Archive -LiteralPath 'tmp\mcpack.zip' -DestinationPath 'tmp'"
+)
+
+del /q /s tmp\mcpack.zip >nul
 
 set "manifestFound="
 set "MCPACKDIR="
 if exist "tmp\manifest.json" (
-    if exist "tmp\renderer\materials\*material.bin" (
+    if exist "tmp\renderer\materials\*.material.bin" (
         set "MCPACKDIR=tmp"
         goto packokay
     ) else (
         echo !ERR![^^!] Not a RenderDragon shader.!RST!
         goto invalidpack
     )
-)
-
-for /d /r "tmp" %%f in (*) do (
+) else for /d /r "tmp" %%f in (*) do (
     if exist "%%f\manifest.json" (
         set "manifestFound=true"
         if exist "%%f\renderer\materials\*.material.bin" (
             set "MCPACKDIR=%%f"
+            goto packokay
         ) else (
             echo !ERR![^^!] Not a RenderDragon shader.!RST!
             goto invalidpack
@@ -583,10 +612,12 @@ for /d /r "tmp" %%f in (*) do (
 
 if not defined manifestFound (
     echo !ERR![^^!] Not a valid MCPACK^^!!RST!
+    set "manifestFound="
     goto invalidpack
+) else (
+    set "manifestFound="
 )
 
-goto packokay
 :invalidpack
 echo.
 echo !YLW![*] Please add a valid mcpack/zip file in the MCPACK folder and try again.!RST!
@@ -654,9 +685,7 @@ if not defined SRCLIST (
     echo.
 
     echo !YLW![*] Please add .bin files the MATERIALS folder and try again.!RST!
-    %backmsg:~0,56%
-    cls
-    goto INTRODUCTION
+    %backmsg:EOF=INTRODUCTION%
 )
 
 set "SRCLIST=%SRCLIST:~1%"
@@ -701,6 +730,7 @@ if !errorlevel! equ 3 (
 
 
 :INJECTIONCONFIRMED
+if exist "%lastRP%" del /q /s "%lastRP%" >nul
 cls
 echo !YLW![INJECTION CONFIRMED]!RST!
 echo.
@@ -709,7 +739,7 @@ if exist %thanksMcbegamerxx954% call "modules\updateMaterials"
 if exist "tmp\" (rmdir /q /s tmp)
 echo.
 echo.
-if exist ".settings\.bins.log" (
+if exist "%rstrList%" (
     set "RESTORETYPE=partial"
     call "modules\restoreMaterials"
 )
@@ -747,7 +777,7 @@ if !errorlevel! neq 0 (
 )
 
 echo !GRN![*] Step 2/2 succeed.!RST!
-if exist "%matbak%\" echo !REPLACELISTEXPORT!>".settings\.restoreList.log" && echo !BINS!>".settings\.bins.log"
+if exist "%matbak%\" echo !REPLACELISTEXPORT! >"%rstrList%"
 del /q /s ".settings\taskOngoing.txt" >nul
 
 if exist "tmp" (rmdir /q /s tmp)
@@ -768,6 +798,7 @@ if not exist %autoOpenMCPACK% (
     echo [Y] Yes    [N] No
     echo.
     choice /c yn /n >nul
+    echo.
     if "!errorlevel!" equ "2" goto skip
 
     echo !GRN![TIP] You can enable Auto open MCPACK from settings.!RST!

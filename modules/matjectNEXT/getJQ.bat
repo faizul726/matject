@@ -32,12 +32,24 @@ echo !YLW![*] Downloading...!RST!
 echo.
 
 if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
-    powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
-) else (
-    if "%PROCESSOR_ARCHITECTURE%" equ "x86" (
+    where curl >nul 2>&1
+    if !errorlevel! equ 0 (
+        curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe >nul
+    ) else (
+        powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
+    )
+) else if "%PROCESSOR_ARCHITECTURE%" equ "x86" (
+    where curl >nul 2>&1
+    if !errorlevel! equ 0 (
+        curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe >nul
+    ) else (
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe -OutFile modules\jq.exe"
     )
+) else (
+    echo !RED![^^!] Unknown PROCESSOR_ARCHITECTURE: %PROCESSOR_ARCHITECTURE%. Maybe ARM based PC?!RST!
+    %exitmsg%
 )
+
 
 if exist "modules\jq.exe" (echo !GRN![*] Downloaded to "modules\jq.exe"!RST!) else (echo !RED![*] Download FAILED.!RST! && echo Press any key to close... && pause > NUL && exit)
 echo.
@@ -46,7 +58,9 @@ pause && goto:EOF
 
 :option-2
 cls
-echo !RED![^^!] Make sure to download matching your architecture. ^(AMD64 = 64 bit, i386 = 32 bit^)!RST!
+echo Processor architecture: %PROCESSOR_ARCHITECTURE%
+echo.
+echo !RED![^^!] Make sure to download matching your architecture. ^(AMD64 = amd64, x86 = i386^)!RST!
 echo     !RED!Place it in "!WHT!%cd%\modules!RED!" named as !YLW!jq.exe!RST!
 echo.
 

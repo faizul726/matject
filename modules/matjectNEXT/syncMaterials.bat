@@ -12,7 +12,7 @@ set lastPack=
 echo !YLW![*] Syncing with current global resource packs...!RST!
 echo.
 
-for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "packuuid=%%i"
+for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gameData%\minecraftpe\global_resource_packs.json"') do set "packuuid=%%i"
 
 echo !WHT!Top pack UUID:!RST!        !packuuid!
 echo.
@@ -26,7 +26,7 @@ if "!packuuid!" equ "null" (
 goto version
 
 :nopacks
-if exist ".settings\.restoreList.log" (
+if exist "%rstrList%" (
     echo !YLW![*] Restoring to default...!RST!
     echo.
     goto restorevanilla
@@ -44,16 +44,19 @@ call "modules\restoreMaterials"
 goto:end
 
 :version
-for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\".\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set packVer=%%a
+for /f "delims=" %%a in ('modules\jq -cr ".[0].version | join(\".\")" "%gameData%\minecraftpe\global_resource_packs.json"') do set packVer=%%a
 set packVerInt=!packVer:.=!
-for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
-if "!hasSubpack!" equ "true" (for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gamedata%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i") else (set "subpackName=")
+for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gameData%\minecraftpe\global_resource_packs.json"') do set "hasSubpack=%%j"
+if "!hasSubpack!" equ "true" (for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "%gameData%\minecraftpe\global_resource_packs.json"') do set "subpackName=%%i") else (set "subpackName=")
+if not defined %packUuid%_%packVerInt% (
+    call "modules\matjectNEXT\cachePacks"
+)
 set "packPath=!%packuuid%_%packVerInt%!"
 echo !WHT!* Pack Version:!RST!       !GRN!v!packVer!!RST!
 echo !WHT!* hasSubpack:!RST!         !hasSubpack!
 if "!hasSubpack!" equ "true" echo !WHT!* Subpack name:!RST!       !BLU!!subpackName!!RST!
 echo !WHT!* Assigned unique ID:!RST! %packuuid%_%packVerInt%
-echo !WHT!* Pack path:!GRY!          !packPath!!RST!
+echo !WHT!* Pack path:!GRY!          "!packPath:%LOCALAPPDATA%=%WHT%%%LOCALAPPDATA%%%RST%!!RST!"
 echo.
 if not exist "!packPath!\renderer\materials\*.material.bin" (
     echo !YLW![^^!] Not a shader, restoring to default...!RST!
@@ -69,21 +72,23 @@ if "!hasSubpack!" equ "true" (
     set "currentPack=!packuuid!_!packVerInt!"
 )
 set "currentPack=%currentPack: =%"
-::echo Current pack ID ^(trimmed^): "!currentPack!"
 echo.
 
-if exist ".settings\lastPack.txt" goto compare
+if exist "%lastRP%" (goto compare) else (set "lastPack=none")
+echo !WHT!Old pack:!RST!             !lastPack!
+echo !WHT!New pack:!RST!             !currentPack! 
+echo.
 echo !YLW![*] New shader detected.!RST!
 echo.
 goto newject
 
 :compare
-set /p lastPack=<".settings\lastPack.txt"
+set /p lastPack=<"%lastRP%"
 set "lastpack=!lastPack: =!"
-echo !WHT!Current pack:!RST!         !lastPack: =!
+echo !WHT!Old pack:!RST!             !lastPack!
 echo !WHT!New pack:!RST!             !currentPack!
 echo.
-if "!currentPack!" neq "!lastPack!" (
+if /i "!currentPack!" neq "!lastPack!" (
     echo !YLW![^^!] Different shader detected.!RST!
     echo.
     echo !YLW![*] Preparing new shader for injection...!RST!
@@ -102,7 +107,7 @@ if !errorlevel! neq 0 (
     echo.
     del /q /s MATERIALS\* >nul
     if exist tmp (rmdir /q /s tmp)
-    if exist ".settings\.restoreList.log" (
+    if exist "%rstrList%" (
         goto restorevanilla
     )
     goto newject_failed

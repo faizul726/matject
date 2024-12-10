@@ -8,10 +8,6 @@ set REPLACELIST=
 set BINS=
 set MTBIN=
 
-::echo !WHT!Current directory:!GRY! "%cd%"!RST!
-
-echo.
-echo.
 if not exist "MATERIALS" mkdir MATERIALS
 
 copy /d "!packPath!\renderer\materials\*.material.bin" "%cd%\MATERIALS\" >nul
@@ -41,11 +37,9 @@ set "SRCLIST=%SRCLIST:~1%"
 set "REPLACELIST=%REPLACELIST:~1%"
 set "REPLACELISTEXPORT=%REPLACELIST%"
 
-echo !WHT!Materials count:!RST! !SRCCOUNT!
-echo.
-echo !WHT!Source list:!GRY! !SRCLIST!!RST!
-echo.
-echo !WHT!Replace list:!GRY! !REPLACELIST!!RST!
+echo !WHT!Materials count: !GRY!!SRCCOUNT!!RST!
+echo !WHT!Source list:     !GRY!!SRCLIST:%cd%\MATERIALS\=!!RST!
+echo !WHT!Replace list:    !GRY!!REPLACELIST!!RST!
 set "REPLACELIST=!REPLACELIST:-=.material.bin!"
 set "REPLACELIST=!REPLACELIST:_=%MCLOCATION%\data\renderer\materials\!"
 echo.

@@ -27,10 +27,10 @@ echo !WHT![*] Backup made on: !backupTimestamp!!RST!
 echo.
 echo !YLW![?] How would you like to restore?!RST!
 echo.
-echo [1] Full Restore ^(slow, restore all materials^)
-echo [2] Dynamic Restore ^(only restore the ones modified in previous injection^)
+echo [1] Dynamic Restore ^(only restore the ones modified in previous injection^)
+echo [2] Full Restore ^(slow, restore all materials^)
 echo.
-choice /c 12b /n >nul
+choice /c 21b /n >nul
 if !errorlevel! equ 1 (
     cls
     echo !RED!^< [B] Back!RST!
@@ -60,7 +60,6 @@ if !errorlevel! equ 2 (
     choice /c ynb /n >nul
     if !errorlevel! neq 1 goto restoreMaterials
     cls
-    set "goingVanillaSir=true"
     echo !YLW![*] Restore type: Dynamic!RST!
     echo.
     goto partialRestore
@@ -86,15 +85,15 @@ if not defined rstrCount (
 )
 
 :fullRestore2
-echo !GRN!Found !rstrCount! materials(s).!RST!
+echo !GRN!Restoring !rstrCount! materials(s).!RST!
 echo.
 echo !RED![^^!] Please accept all UAC prompts or it will fail.!RST!
 echo.
 echo.
 
 timeout 3 > NUL
-echo Full Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
 :fr-delete
+echo Full Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
 cls
 
 echo !YLW![*] Running step 1/3: Deleting game materials... ^(may take multiple tries^)!RST!
@@ -111,7 +110,7 @@ echo !GRN![*] Done.!RST!
 echo.
 echo.
 echo.
-timeout 3 > NUL
+timeout 2 > NUL
 goto fr-mkdir
 
 :fr-mkdir
@@ -130,7 +129,7 @@ echo !GRN![*] Done.!RST!
 echo.
 echo.
 echo. 
-timeout 3 > NUL
+timeout 2 > NUL
 
 :fr-split
 set splitCount=
@@ -147,7 +146,6 @@ if not defined splitCount (
     if exist "tmp\" (
         rmdir /q /s "tmp"
     )
-    del /q /s ".settings\taskOngoing.txt" >nul
     goto completed
 )
 
@@ -177,23 +175,24 @@ if !errorlevel! equ 0 (
 :partialRestore
 echo [*] Restoring modified materials from last injection...
 echo.
-if exist ".settings\.restoreList.log" (
+if exist "%rstrList%" (
     if exist "tmp\" (
         rmdir /q /s tmp
         mkdir "tmp"
     ) else mkdir "tmp"
-    set /p COPYBINS=<".settings\.bins.log"
+    set /p COPYBINS=<"%rstrList%"
     if "!RESTORETYPE!" equ "partial" (
         set "RESTORETYPE="
         if not defined isGoingVanilla (
-            if "!COPYBINS!" equ "!BINS!" goto:EOF
+            if "!COPYBINS:,= !" equ "!BINS!" goto:EOF
         ) else (
             set "isGoingVanilla="
         )
     )
+    set /p restoreList=<"%rstrList%"
+    set "COPYBINS=!restoreList:,= !"
     set "COPYBINS=!COPYBINS:_=%matbak%\!"
     set "COPYBINS=!COPYBINS:-=.material.bin!"
-    set /p restoreList=< ".settings\.restoreList.log"
     set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"
     set "restoreList=!restoreList:-=.material.bin!"
     for %%f in (!COPYBINS!) do (
@@ -205,8 +204,8 @@ if exist ".settings\.restoreList.log" (
     %backmsg%
 )
 
-echo Dynamic Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
 :restore1
+echo Dynamic Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
 echo !YLW![*] Dynamic Restore: Step 1/2!RST!
 set "SRCLIST2="
 for %%f in (tmp\*) do (
@@ -234,13 +233,8 @@ if !errorlevel! neq 0 (
     echo !GRN![*] Dynamic Restore: Step 2/2 succeed^^!!RST!
     echo.
     echo.
-    if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
-    del /q /s ".settings\.restoreList.log" > NUL
-    del /q /s ".settings\.bins.log" > NUL
-    if defined goingVanillaSir (
-        if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
-        set "goingVanillaSir="
-    )
+    if exist "%lastRP%" del /q /s "%lastRP%" >nul
+    del /q /s "%rstrList%" > NUL
     if exist "tmp\" rmdir /q /s tmp
     timeout 2 > NUL
     goto:EOF
@@ -248,9 +242,8 @@ if !errorlevel! neq 0 (
 
 :completed
 cls
-if exist ".settings\.restoreList.log" del /q /s ".settings\.restoreList.log" > NUL
-if exist ".settings\.bins.log" del /q /s ".settings\.bins.log" > NUL
-if exist ".settings\lastPack.txt" del /q /s ".settings\lastPack.txt" >nul
+if exist "%rstrList%" del /q /s "%rstrList%" > NUL
+if exist "%lastRP%" del /q /s "%lastRP%" >nul
 if exist ".settings\taskOngoing.txt" del /q /s ".settings\taskOngoing.txt" >nul
 if exist "%backupDate%" del /q /s "%backupDate%" > NUL
 echo !GRN![*] BACKUP RESTORE OK.!RST!

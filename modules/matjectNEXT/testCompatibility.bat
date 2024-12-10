@@ -7,7 +7,7 @@ echo.
 
 echo !YLW![*] Checking if Minecraft data exists...!RST!
 echo.
-if exist "%gamedata%\minecraftpe\options.txt" (echo !GRN![*] Minecraft data folder found.!RST!) else (
+if exist "%gameData%\minecraftpe\options.txt" (echo !GRN![*] Minecraft data folder found.!RST!) else (
     echo !ERR![^^!] Minecraft data not found.!RST!
     echo.
 

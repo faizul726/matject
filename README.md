@@ -1,5 +1,5 @@
-# Matject v3.2.2
-*Last updated: Dec 06, 2024*
+# Matject v3.3.0
+*Last updated: Dec 10, 2024*
 
 </br>
 
@@ -7,8 +7,11 @@
 
 </br>
 
-![image](https://github.com/user-attachments/assets/c7b11840-a5b0-40b7-9957-a2a1debcebe2)
-![image](https://github.com/user-attachments/assets/b8fdc436-ab01-4ef0-bf69-fa2d9194d195)
+![image](https://github.com/user-attachments/assets/ec70b513-6750-401f-8f59-415f2e368e1a)
+
+| <img src="https://github.com/user-attachments/assets/31bfbe37-9602-428c-803a-716b27161365" width="100%"><br><b>Settings</b> | <img src="https://github.com/user-attachments/assets/6285a082-c78a-4ba9-a83d-6a4c9722b390" width="100%"><br><b>Custom paths</b> |
+| :---: | :---: |
+| <img src="https://github.com/user-attachments/assets/bcfddbb1-c0a7-4760-bc07-c354d8e06e37" width="100%"><br><b>matjectNEXT</b> | <img src="https://github.com/user-attachments/assets/39ebe689-e7dd-4687-a6f9-b6f25347df7a" width="100%"><br><b>Restore materials</b> |
 
 </br>
 
@@ -34,8 +37,8 @@ I made this script so that users don't have to go through the hassle of replacin
 
 </br>
 
-## What's new in v3.2.2?
-* Added custom Minecraft launcher support (thanks to [@TrngN0786](https://x.com/TrngN0786)) 
+## What's new in v3.3.0?
+* Added Minecraft Preview support.
 * [See full changelog](#changelog)
 
 </br>
@@ -104,6 +107,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 * Some terms may be a bit too technical. Suggestions are appreciated.
 * Doesn't support manifests with // or /**/ comments (matjectNEXT).
 * Doesn't support long folder path and too many shader files.
+* Antivirus may prevent IObit Unlocker from working. Matject can't detect that.
 
 </br>
 
@@ -115,7 +119,7 @@ A. matjectNEXT is an advanced version of Matject that replaces materials based o
 **Q. How is this different from [BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/)?**  
 A. BetterRenderDragon uses *memory injection*, all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders.  
 *It's not universal, so BRD devs have to update it for newer Minecraft versions to make it work.*  
-**Changes made by Matject persists until next game update.** It's mostly universal, so it should work with any Minecraft version.
+Changes made by Matject persists until next game update. It's mostly universal, so it should work with any Minecraft version.
 
 **Q. Virus?**  
 A. Well, depends on you. (2)
@@ -127,24 +131,26 @@ A. Yes, optionally...
 * To get [material-updater](https://github.com/mcbegamerxx954/material-updater) by itself.  
 
 **Q. What folders does it access?**  
-A. It accesses the following folders:  
+A. It accesses the following folders: 
 > ###### READ only:
 > - `%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker` (backbone of Matject)
 > - Minecraft app location. *Which is obtained using this PowerShell command:*
 > ```powershell
-> Get-AppxPackage -Name Microsoft.MinecraftUWP | Select-Object -ExpandProperty InstallLocation
+> Get-AppxPackage -Name Microsoft.Minecraft* | Select-Object -ExpandProperty InstallLocation
 > ```
-> - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (for matjectNEXT)
+> - `%LOCALAPPDATA%\Packages\Microsoft.Minecraft*_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (for matjectNEXT)
 > - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\*` (for matjectNEXT)
 > - `.settings` `Backups\*` `logs` `MATERIALS` `MCPACK` `modules\*` `tmp`
 > - `Custom Minecraft app, data, IObit Unlocker folder`
 >
 > ###### READ and WRITE:
 > - `%ProgramFiles%\WindowsApps` (to unlock WindowsApps)
-> - `%ProgramFiles%\WindowsApps\Microsoft.MinecraftUWP_*_*__8wekyb3d8bbwe\data\renderer\materials`
-> - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (to reset global packs)
+> - `%ProgramFiles%\WindowsApps\Microsoft.Minecraft*_*_*__8wekyb3d8bbwe\data\renderer\materials`
+> - `%LOCALAPPDATA%\Packages\Microsoft.Minecraft*_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (to reset global packs)
 > - `.settings` `Backups\*` `logs` `MATERIALS` `tmp`
 > - `Custom Minecraft app, data`
+>
+> ***Custom paths excluded***
 
 </br>
 
@@ -187,7 +193,23 @@ USDT BEP20: <address>
 
 -->
 
-<details open><summary><b>v3.2.2 - Dec 06, 2024</b></summary>
+<details open><summary><b>v3.3.0 - Dec 10, 2024</b></summary>
+<ul>
+  <li>Added Minecraft Preview support.</li>
+  <li>matjectNEXT now can be used without DEBUG MODE.</li>
+  <li>Improved matjectNEXT functionality.</li>
+  <li>Improved extract speed by using <code>tar</code>.</li>
+  <li>Improved settings functionality.</li>
+  <li>Improved backup ZIP check.</li>
+  <li>Fixed Dynamic Restore comparison.</li>
+  <li>Fixed OLDVERSION variable.</li>
+  <li>Delete Backups folder if empty.</li>
+  <li>Other minor changes.</li>
+</ul>
+</br>
+</details>
+
+<details><summary><b>v3.2.2 - Dec 06, 2024</b></summary>
 <ul>
   <li>Added custom Minecraft launcher support (thanks to <a href=https://x.com/TrngN0786>@TrngN0786</a>)</li>
   <li>Added custom Minecraft data path support</li>

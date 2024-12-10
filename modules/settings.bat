@@ -33,10 +33,12 @@ if exist %thanksMcbegamerxx954% (
 
 if exist %disableConfirmation% (set toggleP1_3=!toggleOn!) else (set toggleP1_3=!toggleOff!)
 if exist %disableInterruptionCheck% (set toggleP1_4=!toggleOn!) else (set toggleP1_4=!toggleOff!)
-if exist %disableRetainOldBackups% (set toggleP1_5=!toggleOn!) else (set toggleP1_5=!toggleOff!)
+if exist %dontRetainOldBackups% (set toggleP1_5=!toggleOn!) else (set toggleP1_5=!toggleOff!)
 if exist %disableSuccessMsg% (set toggleP1_6=!toggleOn!) else (set "toggleP1_6=!toggleOff!")
 if exist %autoOpenMCPACK% (set toggleP1_7=!toggleOn!) else (set "toggleP1_7=!toggleOFF!")
 if exist %disableMatCompatCheck% (set toggleP1_8=!toggleOn!) else (set toggleP1_8=!toggleOff!)
+if exist %useForMinecraftPreview% (set toggleP1_9=!toggleOn:GRN=RED!) else (set toggleP1_9=!toggleOff!)
+
 
 echo !RED!^< [B] Back!RST! ^| !GRY!^< [A]!RST! !WHT![General]!GRY! /  Custom paths  /  matjectNEXT settings  /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
 echo.
@@ -49,16 +51,16 @@ echo.
 echo !toggleP1_1! 1. Default method: %toggleone%
 echo !toggleP1_2! 2. Use material-updater to update materials ^(fixes invisible blocks^)
 echo !toggleP1_3! 3. Disable confirmations
-echo !toggleP1_4! 4. Disable interruption check !RED!^(enable at your own risk^)!RST!
-echo !toggleP1_5! 5. Don't keep old backups
-echo !toggleP1_6! 6. Disable success message
-echo !toggleP1_7! 7. Auto import MCPACK after injection ^(only works for .mcpack files^)
-echo !toggleP1_8! 8. Disable material compatibility check ^(applies both to Matject ^& matjectNEXT^)
+echo !toggleP1_4! 4. Disable interruption check !RED!^(disables recovery from incomplete injection^)!RST!
+echo !toggleP1_5! 5. Don't retain/keep old backups
+echo !toggleP1_6! 6. Disable success message ^(auto/manual^)
+echo !toggleP1_7! 7. Auto import MCPACK after injection ^(auto only^)
+echo !toggleP1_8! 8. Disable material compatibility check
+echo !toggleP1_9! 9. Use for Minecraft Preview !RED![BETA]!RST!
 echo.
+echo !YLW!Press corresponding key to toggle desired option...!RST!
 echo.
-echo !YLW!Press corresponding key to toggle desired option... !RST!
-echo.
-choice /c 12345678bad /n >nul
+choice /c 123456789bad /n >nul
 
 goto toggleP1_!errorlevel!
 
@@ -90,7 +92,7 @@ if not exist %disableInterruptionCheck% (echo You are QlJBVkU= [%date% // %time%
 goto settingsP1
 
 :toggleP1_5
-if not exist %disableRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time%]>%disableRetainOldBackups%) else (del /q /s %disableRetainOldBackups% > NUL)
+if not exist %dontRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time%]>%dontRetainOldBackups%) else (del /q /s %dontRetainOldBackups% > NUL)
 goto settingsP1
 
 :toggleP1_6
@@ -106,12 +108,20 @@ if not exist "%disableMatCompatCheck%" (echo Don't blame Matject if game crashes
 goto settingsP1
 
 :toggleP1_9
-exit /b 0
-
-:toggleP1_10
+if not exist %useForMinecraftPreview% (echo Deferred rendering is cool. [%date% // %time%]>%useForMinecraftPreview%) else (del /q /s %useForMinecraftPreview% >nul)
+cls
+echo !YLW![^^!] Target app changed.
+echo     Relaunch to take effect...!RST!
+%relaunchmsg%
 goto settingsP1
 
+:toggleP1_10
+exit /b 0
+
 :toggleP1_11
+goto settingsP1
+
+:toggleP1_12
 goto settingsP2
 
 
@@ -137,7 +147,7 @@ echo !toggleP2_3! 3. Use custom IObit Unlocker path
 echo. 
 echo !WHT!Current paths:!GRY!
 echo Minecraft app:!GRY!  "!MCLOCATION:%ProgramFiles%=%WHT%%%ProgramFiles%%%GRY%!"
-echo Minecraft data:!GRY! "!gamedata:%LOCALAPPDATA%=%WHT%%%LOCALAPPDATA%%%GRY%!"
+echo Minecraft data:!GRY! "!gameData:%LOCALAPPDATA%=%WHT%%%LOCALAPPDATA%%%GRY%!"
 echo IObit Unlocker:!GRY! "!IObitUnlockerPath:%ProgramFiles(x86)%=%WHT%%%ProgramFiles(x86)%%%GRY%!"!RST!
 echo.
 echo.
@@ -163,15 +173,16 @@ echo !YLW![?] How would you like to set custom Minecraft path?!RST!
 echo.
 echo.
 
-echo [1] Use retrieved Minecraft path ^(!GRN!!MCLOCATION!!RST!!^)
-echo [2] Use user provided Minecraft path
+echo [1] Set automatically !GRY!^(Get-AppxPackage^)!RST!
+echo [2] Set manually
 echo.
 choice /c b12 /n >nul
 
 if !errorlevel! equ 1 goto settingsP2
 
 if !errorlevel! equ 2 (
-    echo !MCLOCATION!>%customMinecraftAppPath%
+    cls
+    call "modules\getMinecraftDetails" savepath
     goto settingsP2
 )
 if !errorlevel! equ 3 (
@@ -195,20 +206,19 @@ if !errorlevel! equ 3 (
     )
 )
 echo !ERR![^^!] Invalid Minecraft app path.!RST!
-%backmsg:~0,56%
-goto settingsP2
+%backmsg:EOF=settingsP2%
 
 :toggleP2_2
 if exist "%customMinecraftDataPath%" (
     del /q /s %customMinecraftDataPath% > NUL
-    set "gamedata=!defaultgamedata!"
+    set "gameData=!defaultGameData!"
     goto settingsP2
 )
 cls
 set "setCustomMinecraftDataPath="
 echo.
 echo !YLW![*] Enter your custom Minecraft data ^(com.mojang folder^) path 
-echo     ^(make sure not to include unnecessary space. Leave blank to cancel^)!RST!
+echo     ^(Make sure not to include unnecessary space. Leave blank to cancel.^)!RST!
 echo.
 set /p "setCustomMinecraftDataPath=Custom Minecraft data (com.mojang folder) path: "
 echo.
@@ -220,17 +230,16 @@ if exist "!setCustomMinecraftDataPath!\minecraftpe\options.txt" (
     goto settingsP2
 )
 echo !ERR![^^!] Invalid Minecraft data path.!RST!
-%backmsg:~0,56%
-goto settingsP2
+%backmsg:EOF=settingsP2%
 
 
 :toggleP2_3
 if exist "%customIObitUnlockerPath%" (
     cls
-    echo !YLW![^^!] Custom IObit Unlocker path removed.!RST!
-    echo     Reopen to take effect...
+    echo !YLW![^^!] Custom IObit Unlocker path removed.
+    echo     Relaunch to take effect...!RST!
     del /q /s %customIObitUnlockerPath% > NUL
-    %exitmsg%
+    %relaunchmsg%
 )
 cls
 set "setCustomIObitUnlockerPath="
@@ -250,9 +259,9 @@ if not defined setCustomIObitUnlockerPath (
     if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.exe" (
         if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.dll" (
             echo !setCustomIObitUnlockerPath!>%customIObitUnlockerPath%
-            echo !GRN![*] Custom IObit Unlocker path set.!RST!
-            echo     Reopen to take effect...
-            %exitmsg%
+            echo !GRN![*] Custom IObit Unlocker path set.
+            echo     Relaunch to take effect...!RST!
+            %relaunchmsg%
         )
     )
 )
@@ -269,31 +278,13 @@ goto settingsP1
 :toggleP2_6
 goto settingsP3
 
-:: WIP START
-cls
-set /p "unlockerpath=!YLW!Enter custom IObit Unlocker path ^(leave empty to cancel^): "
-if not exist "!unlockerpath!\IObitUnlocker.exe" (echo !ERR!Wrong folder.!RST! && %backmsg:~0,56%) else (!unlockerpath!)
-goto settingsP1
-:: WIP END
-
 
 
 :settingsP3
 cls
-title matjectNEXT %version%%dev% settings
-
 echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !GRY! General  /  Custom paths  / !WHT![matjectNEXT settings]!GRY! /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
 echo.
 echo.
-
-if not defined debugMode (
-    echo !YLW![^^!] Enable DEBUG MODE first.!RST!
-    echo.
-    choice /c ad /n >nul
-    
-    if !errorlevel! equ 1 goto settingsP2
-    if !errorlevel! equ 2 goto settingsP4
-)
 
 echo !WHT!Here you can change how matjectNEXT works.!RST!
 echo.
@@ -313,7 +304,7 @@ echo.
 echo.
 echo.
 echo.
-echo !YLW!Press corresponding key to toggle desired option... !RST!
+echo !YLW!Press corresponding key to toggle desired option...!RST!
 echo.
 choice /c 1bad /n >nul
 
@@ -327,11 +318,9 @@ goto settingsP3
 exit /b 0
 
 :toggleP3_3
-title %title% settings
 goto settingsP2
 
 :toggleP3_4
-title %title% settings
 goto settingsP4
 
 
@@ -353,12 +342,12 @@ echo.
 echo.
 echo [M] Check for updates manually !YLW!^(requires internet^)!RST!
 echo.
-echo !GRY![0] DEBUG MODE ^(for testing matjectNEXT^)!RST! !toggleP4_2!
+echo !GRY![0] DEBUG MODE ^(does nothing for now^)!RST! !toggleP4_2!
 echo.
 echo.
 echo.
 echo.
-echo !YLW!Press corresponding key to toggle desired option... !RST!
+echo !YLW!Press corresponding key to toggle desired option...!RST!
 echo.
 choice /c 1m0bad /n >nul
 
