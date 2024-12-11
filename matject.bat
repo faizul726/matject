@@ -10,7 +10,10 @@ set "murgi=KhayDhan"
 
 :: Load other variables
 call "modules\colors"
-if exist ".settings\useForMinecraftPreview.txt" (set "isPreview= ^(Preview Mode^)") else (set "isPreview=")
+if exist ".settings\useForMinecraftPreview.txt" (
+    set "isPreview= ^(Preview Mode^)"
+    set "mcPreview= ^(Preview^)"
+) else (set "isPreview=")
 call "modules\variables"
 if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
 
