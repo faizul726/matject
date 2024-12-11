@@ -12,7 +12,7 @@ set "murgi=KhayDhan"
 call "modules\colors"
 if exist ".settings\useForMinecraftPreview.txt" (
     set "isPreview= ^(Preview Mode^)"
-    set "mcPreview= ^(Preview^)"
+    set "preview= Preview"
 ) else (set "isPreview=")
 call "modules\variables"
 if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
@@ -318,7 +318,7 @@ if exist "%useForMinecraftPreview%" (
     if defined usingCustomPath (
         echo !GRY![*] Using for Minecraft Preview ^& custom path^(s^) enabled.!RST!
     ) else (
-        echo !GRY![*] Using for Minecraft Preview.!RST!.
+        echo !GRY![*] Using for Minecraft Preview.!RST!
     )
     echo.
 ) else (
