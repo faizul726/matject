@@ -32,12 +32,11 @@ if exist %thanksMcbegamerxx954% (
 ) else set "toggleP1_2=!toggleOff!"
 
 if exist %disableConfirmation% (set toggleP1_3=!toggleOn!) else (set toggleP1_3=!toggleOff!)
-if exist %disableInterruptionCheck% (set toggleP1_4=!toggleOn!) else (set toggleP1_4=!toggleOff!)
-if exist %dontRetainOldBackups% (set toggleP1_5=!toggleOn!) else (set toggleP1_5=!toggleOff!)
-if exist %disableSuccessMsg% (set toggleP1_6=!toggleOn!) else (set "toggleP1_6=!toggleOff!")
-if exist %autoOpenMCPACK% (set toggleP1_7=!toggleOn!) else (set "toggleP1_7=!toggleOFF!")
-if exist %disableMatCompatCheck% (set toggleP1_8=!toggleOn!) else (set toggleP1_8=!toggleOff!)
-if exist %useForMinecraftPreview% (set toggleP1_9=!toggleOn:GRN=RED!) else (set toggleP1_9=!toggleOff!)
+if exist %dontRetainOldBackups% (set toggleP1_4=!toggleOn!) else (set toggleP1_4=!toggleOff!)
+if exist %disableSuccessMsg% (set toggleP1_5=!toggleOn!) else (set toggleP1_5=!toggleOff!)
+if exist %autoOpenMCPACK% (set toggleP1_6=!toggleOn!) else (set toggleP1_6=!toggleOFF!)
+if exist %dontOpenFolder% (set toggleP1_7=!toggleOn!) else (set toggleP1_7=!toggleOFF!)
+if exist %useForMinecraftPreview% (set toggleP1_8=!toggleOn:GRN=RED!) else (set toggleP1_8=!toggleOff!)
 
 
 echo !RED!^< [B] Back!RST! ^| !GRY!^< [A]!RST! !WHT![General]!GRY! /  Custom paths  /  matjectNEXT settings  /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
@@ -51,16 +50,16 @@ echo.
 echo !toggleP1_1! 1. Default method: %toggleone%
 echo !toggleP1_2! 2. Use material-updater to update materials ^(fixes invisible blocks^)
 echo !toggleP1_3! 3. Disable confirmations
-echo !toggleP1_4! 4. Disable interruption check !RED!^(disables recovery from incomplete injection^)!RST!
-echo !toggleP1_5! 5. Don't retain/keep old backups
-echo !toggleP1_6! 6. Disable success message ^(auto/manual^)
-echo !toggleP1_7! 7. Auto import MCPACK after injection ^(auto only^)
-echo !toggleP1_8! 8. Disable material compatibility check
-echo !toggleP1_9! 9. Use for Minecraft Preview !RED![BETA]!RST!
+echo !toggleP1_4! 4. Don't retain old backups
+echo !toggleP1_5! 5. Disable success message ^(auto/manual^)
+echo !toggleP1_6! 6. Auto import MCPACK after injection ^(auto only^)
+echo !toggleP1_7! 7. Don't open folder automatically ^(auto/manual^)
+echo !toggleP1_8! 8. Use for Minecraft Preview !RED![BETA]!RST!
+echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
 echo.
-choice /c 123456789bad /n >nul
+choice /c 12345678bad /n >nul
 
 goto toggleP1_!errorlevel!
 
@@ -77,51 +76,47 @@ goto settingsP1
 :toggleP1_2
 if exist %thanksMcbegamerxx954% (
     del /q /s %thanksMcbegamerxx954% > NUL
-    if exist ".settings\materialUpdaterArg.txt" del /q /s ".settings\materialUpdaterArg.txt" >nul
+    if exist "%materialUpdaterArg%" del /q /s "%materialUpdaterArg%" >nul
     goto settingsP1
 ) 
 if not exist "modules\material-updater.exe" (call "modules\getMaterialUpdater") else (if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%))
 goto settingsP1
 
 :toggleP1_3
-if not exist %disableConfirmation% (echo You are c21hcnQ= [%date% // %time%]>%disableConfirmation%) else (del /q /s %disableConfirmation% > NUL)
+if not exist %disableConfirmation% (echo You are c21hcnQ= [%date% // %time:~0,-6%]>%disableConfirmation%) else (del /q /s %disableConfirmation% > NUL)
 goto settingsP1
 
 :toggleP1_4
-if not exist %disableInterruptionCheck% (echo You are QlJBVkU= [%date% // %time%]>%disableInterruptionCheck%) else (del /q /s %disableInterruptionCheck% > NUL)
+if not exist %dontRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time:~0,-6%]>%dontRetainOldBackups%) else (del /q /s %dontRetainOldBackups% > NUL)
 goto settingsP1
 
 :toggleP1_5
-if not exist %dontRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time%]>%dontRetainOldBackups%) else (del /q /s %dontRetainOldBackups% > NUL)
+if not exist %disableSuccessMsg% (echo Thanks for using Matject, have a good day. [%date% // %time:~0,-6%]>%disableSuccessMsg%) else (del /q /s %disableSuccessMsg% > NUL)
 goto settingsP1
 
 :toggleP1_6
-if not exist %disableSuccessMsg% (echo Thanks for using Matject, have a good day. [%date% // %time%]>%disableSuccessMsg%) else (del /q /s %disableSuccessMsg% > NUL)
+if not exist %autoOpenMCPACK% (echo You are lazy [%date% // %time:~0,-6%]>%autoOpenMCPACK%) else (del /q /s %autoOpenMCPACK% > NUL)
 goto settingsP1
 
 :toggleP1_7
-if not exist %autoOpenMCPACK% (echo You are lazy [%date% // %time%]>%autoOpenMCPACK%) else (del /q /s %autoOpenMCPACK% > NUL)
+if not exist %dontOpenFolder% (echo Opening folder seems slow innit? [%date% // %time:~0,-6%]>%dontOpenFolder%) else (del /q /s %dontOpenFolder% > NUL)
 goto settingsP1
 
 :toggleP1_8
-if not exist "%disableMatCompatCheck%" (echo Don't blame Matject if game crashes for you. [%date% // %time%]>%disableMatCompatCheck%) else (del /q /s %disableMatCompatCheck% >nul)
-goto settingsP1
-
-:toggleP1_9
-if not exist %useForMinecraftPreview% (echo Deferred rendering is cool. [%date% // %time%]>%useForMinecraftPreview%) else (del /q /s %useForMinecraftPreview% >nul)
+if not exist %useForMinecraftPreview% (echo Deferred rendering is cool. [%date% // %time:~0,-6%]>%useForMinecraftPreview%) else (del /q /s %useForMinecraftPreview% >nul)
 cls
 echo !YLW![^^!] Target app changed.
 echo     Relaunch to take effect...!RST!
 %relaunchmsg%
 goto settingsP1
 
-:toggleP1_10
+:toggleP1_9
 exit /b 0
 
-:toggleP1_11
+:toggleP1_10
 goto settingsP1
 
-:toggleP1_12
+:toggleP1_11
 goto settingsP2
 
 
@@ -254,10 +249,11 @@ if not defined setCustomIObitUnlockerPath (
     echo !YLW![^^!] Custom IObit Unlocker path not set.!RST!
     %exitmsg%
 ) else (
-    set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:"=!"    
+    set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:"=!"
     set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:IObit Unlocker\=IObit Unlocker!"
     if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.exe" (
         if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.dll" (
+            cls
             echo !setCustomIObitUnlockerPath!>%customIObitUnlockerPath%
             echo !GRN![*] Custom IObit Unlocker path set.
             echo     Relaunch to take effect...!RST!
@@ -311,7 +307,7 @@ choice /c 1bad /n >nul
 goto toggleP3_!errorlevel!
 
 :toggleP3_1
-if not exist "%syncThenExit%" (echo I hope matjectNEXT is doing its job properly. - Creator [%date% // %time%]>"%syncThenExit%" ) else (del /q /s "%syncThenExit%" >nul)
+if not exist "%syncThenExit%" (echo I hope matjectNEXT is doing its job properly. - Creator [%date% // %time:~0,-6%]>"%syncThenExit%" ) else (del /q /s "%syncThenExit%" >nul)
 goto settingsP3
 
 :toggleP3_2
@@ -332,29 +328,31 @@ echo.
 echo.
 
 if exist %doCheckUpdates% (set toggleP4_1=!toggleOn!) else (set toggleP4_1=!toggleOff!)
-if "%debugMode%" equ "true" (set toggleP4_2=!RED![ON]!RST!) else (set toggleP4_2=!GRY![OFF]!RST!)
+if exist %disableInterruptionCheck% (set toggleP4_2=!toggleOn!) else (set toggleP4_2=!toggleOff!)
+if exist %disableMatCompatCheck% (set toggleP4_3=!toggleOn!) else (set toggleP4_3=!toggleOff!)
+if "%debugMode%" equ "true" (set toggleP4_4=!RED![ON]!RST!) else (set toggleP4_4=!GRY![OFF]!RST!)
 
 echo !WHT!Here you can check for updates or enable in-development features.!RST!
 echo.
 echo.
 echo !toggleP4_1! 1. Check for updates at Matject startup !YLW!^(requires internet^)!RST!
-echo.
+echo !toggleP4_2! 2. Disable interruption check !RED!^(prevents recovery from incomplete injection^)!RST!
+echo !toggleP4_3! 3. Disable material compatibility check
 echo.
 echo [M] Check for updates manually !YLW!^(requires internet^)!RST!
 echo.
-echo !GRY![0] DEBUG MODE ^(does nothing for now^)!RST! !toggleP4_2!
+echo !GRY![0] DEBUG MODE!RST! !toggleP4_4!
 echo.
-echo.
-echo.
+echo !GRY![Z] Reset .settings!RST!
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
 echo.
-choice /c 1m0bad /n >nul
+choice /c 1m0bad23z /n >nul
 
 goto toggleP4_!errorlevel!
 
 :toggleP4_1
-if not exist %doCheckUpdates% (echo Thank you for being a regular user of Matject ^^^^ [%date% // %time%]>%doCheckUpdates%) else (del /q /s %doCheckUpdates% > NUL)
+if not exist %doCheckUpdates% (echo Thank you for being a regular user of Matject ^^^^ [%date% // %time:~0,-6%]>%doCheckUpdates%) else (del /q /s %doCheckUpdates% > NUL)
 goto settingsP4
 
 :toggleP4_2
@@ -362,7 +360,7 @@ call "modules\checkUpdates"
 goto settingsP4
 
 :toggleP4_3
-if "%debugMode%" neq "true" (echo You are now a developer^^! [%date% // %time%]>".settings\debugMode.txt" && set "debugMode=true") else (del /q /s ".settings\debugMode.txt" > NUL && set "debugMode=")
+if "%debugMode%" neq "true" (echo You are now a developer^^! [%date% // %time:~0,-6%]>".settings\debugMode.txt" && set "debugMode=true") else (del /q /s ".settings\debugMode.txt" > NUL && set "debugMode=")
 goto settingsP4
 
 :toggleP4_4
@@ -373,3 +371,28 @@ goto settingsP3
 
 :toggleP4_6
 goto settingsP4
+
+:toggleP4_7
+if not exist %disableInterruptionCheck% (echo You are QlJBVkU= [%date% // %time:~0,-6%]>%disableInterruptionCheck%) else (del /q /s %disableInterruptionCheck% > NUL)
+goto settingsP4
+
+:toggleP4_8
+if not exist "%disableMatCompatCheck%" (echo Don't blame Matject if game crashes for you. [%date% // %time:~0,-6%]>%disableMatCompatCheck%) else (del /q /s %disableMatCompatCheck% >nul)
+goto settingsP4
+
+:toggleP4_9
+cls
+echo !RED![?] ARE YOU SURE ABOUT RESETTING .settings?!RST!
+echo.
+echo !GRY!Enter yEs to confirm. ^(case sensitive^) !RST!Giving wrong/blank input will cancel.
+echo.
+set /p "tmpinput=Input: "
+
+if "%tmpinput%" neq "yEs" (goto settingsP4)
+del /q /s .settings\*.txt >nul
+if exist "modules\*.exe" (del /q /s "modules\*.exe" >nul)
+call "modules\createShortcut" deleteallshortcuts
+cls
+echo !YLW![^^!] Settings reset.
+echo     Relaunch to take effect...!RST!
+%relaunchmsg%

@@ -33,7 +33,7 @@ if exist "%rstrList%" (
 )
 
 :st1
-echo matjectNEXT injection running... [%date% // %time%] > ".settings\taskOngoing.txt"
+echo matjectNEXT injection running... [%date% // %time:~0,-6%] > ".settings\taskOngoing.txt"
 echo !YLW![*] Step 1/2: Deleting materials to replace...!RST!
 echo.
 echo !GRY!Executing...

@@ -32,7 +32,7 @@ set /p "mjnInput=Enter !RED!matjectNEXT!RST! to continue (case sensitive): !RED!
 echo !RST!
 
 if "!mjnInput!" equ "matjectNEXT" (
-    echo Thank you for testing matjectNEXT. [%date% // %time%]>"%matjectNEXTenabled%"
+    echo Thank you for testing matjectNEXT. [%date% // %time:~0,-6%]>"%matjectNEXTenabled%"
 ) else (
     echo !ERR![^^!] Wrong input.!RST!
     %backmsg%
@@ -62,7 +62,7 @@ if exist "%rstrList%" (
     )
 )
 
-del /q /s MATERIALS\* >nul
+del /q /s "MATERIALS\*" >nul
 if not defined cachedPacks (
     call modules\matjectNEXT\cachePacks
 )
@@ -192,7 +192,7 @@ if defined modtime (
                     echo !RED![^^!] Shader is not for Windows. Skipping...!RST!
                     echo.
                     if exist "tmp" (rmdir /q /s "tmp")
-                    del /q /s MATERIALS\* >nul
+                    del /q /s "MATERIALS\*" >nul
                     echo.
                     if exist "%lastRP%" (
                         set "RESTORETYPE=partial"

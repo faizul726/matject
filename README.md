@@ -1,5 +1,5 @@
-# Matject v3.3.0
-*Last updated: Dec 10, 2024*
+# Matject v3.4.0
+*Last updated: Dec 23, 2024*
 
 </br>
 
@@ -7,11 +7,11 @@
 
 </br>
 
-![image](https://github.com/user-attachments/assets/ec70b513-6750-401f-8f59-415f2e368e1a)
+![matject_1](https://raw.githubusercontent.com/faizul726/faizul726.github.io/main/matject/screenshots/matject_1.png)
 
-| <img src="https://github.com/user-attachments/assets/31bfbe37-9602-428c-803a-716b27161365" width="100%"><br><b>Settings</b> | <img src="https://github.com/user-attachments/assets/6285a082-c78a-4ba9-a83d-6a4c9722b390" width="100%"><br><b>Custom paths</b> |
+| <img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/main/matject/screenshots/matject_2.png" width="100%"><br><b>Settings</b> | <img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/main/matject/screenshots/matject_3.png" width="100%"><br><b>Custom paths</b> |
 | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/bcfddbb1-c0a7-4760-bc07-c354d8e06e37" width="100%"><br><b>matjectNEXT</b> | <img src="https://github.com/user-attachments/assets/39ebe689-e7dd-4687-a6f9-b6f25347df7a" width="100%"><br><b>Restore materials</b> |
+| <img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/main/matject/screenshots/matject_4.png" width="100%"><br><b>matjectNEXT</b> | <img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/main/matject/screenshots/matject_5.png" width="100%"><br><b>Restore materials</b> |
 
 </br>
 
@@ -22,7 +22,7 @@ Matject is an **advanced material replacer** that allows users to use Minecraft 
 It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
 
 ### Why?
-**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Dec 06).**  
+**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Dec 23).**  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 I made this script so that users don't have to go through the hassle of replacing game files by themselves.
 
@@ -37,8 +37,9 @@ I made this script so that users don't have to go through the hassle of replacin
 
 </br>
 
-## What's new in v3.3.0?
-* Added Minecraft Preview support.
+## What's new in v3.4.0?
+* Happy New Year!
+* Many bug fixes and optimization.
 * [See full changelog](#changelog)
 
 </br>
@@ -52,7 +53,7 @@ I made this script so that users don't have to go through the hassle of replacin
 * Automatically process provided MCPACK/ZIP file.
 * Backup/restore game files.
 * Many useful options in settings.
-* Detect Minecraft version changes and adjust according to that.
+* Auto detect Minecraft version changes and adjust according to that.
 
 </br>
 
@@ -65,7 +66,7 @@ I made this script so that users don't have to go through the hassle of replacin
 
 
 **Honorable Mentions**  
-People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409) and [Newb Community](https://discord.gg/newb-community-844591537430069279) for their humble support.  
+People of [YSS](https://discord.gg/UJdvR6WBAe) and [Newb Community](https://faizul726.github.io/newb-discord) for their humble support.  
 
 [@TrngN0786](https://x.com/TrngN0786) and [@Theffyxz](https://github.com/Theffyxz) for helping me to fix bugs.  
 [@Sharkitty](https://github.com/Sharkitty), [@FlaredRoverCodes](https://github.com/FlaredRoverCodes) and all other people who tested and gave feedback.
@@ -74,7 +75,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 
 > [!TIP]  
 > Need help?  
-> Join [YSS Discord server](https://discord.gg/years-static-shader-group-738688684223889409) and send message in `#windows`. I will be happy to assist you.
+> Join [Newb Discord server](https://faizul726.github.io/newb-discord) and send message in `#newb-support`. I will be happy to assist you.
 
 </br>
 
@@ -84,7 +85,8 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 
 ![screenshot](https://github.com/user-attachments/assets/4422464e-26a3-4068-993e-adc76817ca9c)
 
-2. Download code as ZIP.
+2. Download code as ZIP.  
+For the pros: `git clone https://github.com/faizul726/matject.git`
 
 3. Extract the ZIP file.
 4. Open `matject.bat`.
@@ -99,7 +101,7 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 1. Open Matject.
 2. Go to **[R] Restore & Others**.
 3. Go to **[1] Restore default materials**
-4. Select **Dynamic Restore** or **Full Restore** (full restore takes a bit more time).
+4. Select **[1] Dynamic Restore** or **[2] Full Restore** (full restore takes a bit more time).
 
 </br>
 
@@ -107,7 +109,8 @@ People of [YSS](https://discord.gg/years-static-shader-group-738688684223889409)
 * Some terms may be a bit too technical. Suggestions are appreciated.
 * Doesn't support manifests with // or /**/ comments (matjectNEXT).
 * Doesn't support long folder path and too many shader files.
-* Antivirus may prevent IObit Unlocker from working. Matject can't detect that.
+* May not work properly if working paths contain space.
+* Antivirus may prevent IObit Unlocker from working. (e.g. AVG)
 
 </br>
 
@@ -139,18 +142,16 @@ A. It accesses the following folders:
 > Get-AppxPackage -Name Microsoft.Minecraft* | Select-Object -ExpandProperty InstallLocation
 > ```
 > - `%LOCALAPPDATA%\Packages\Microsoft.Minecraft*_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (for matjectNEXT)
-> - `%LOCALAPPDATA%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\*` (for matjectNEXT)
-> - `.settings` `Backups\*` `logs` `MATERIALS` `MCPACK` `modules\*` `tmp`
-> - `Custom Minecraft app, data, IObit Unlocker folder`
+> - `%LOCALAPPDATA%\Packages\Microsoft.Minecraft*_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\*` (for matjectNEXT)
+> - `.settings` `Backups\*` `Backups (Preview)\*` `logs` `MATERIALS` `MCPACK` `modules\*` `tmp`
+> - `Custom path: Minecraft app, data, IObit Unlocker`
 >
 > ###### READ and WRITE:
 > - `%ProgramFiles%\WindowsApps` (to unlock WindowsApps)
 > - `%ProgramFiles%\WindowsApps\Microsoft.Minecraft*_*_*__8wekyb3d8bbwe\data\renderer\materials`
 > - `%LOCALAPPDATA%\Packages\Microsoft.Minecraft*_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\global_resource_packs.json` (to reset global packs)
-> - `.settings` `Backups\*` `logs` `MATERIALS` `tmp`
-> - `Custom Minecraft app, data`
->
-> ***Custom paths excluded***
+> - `.settings` `Backups\*` `Backups (Preview)\*` `logs` `MATERIALS` `tmp`
+> - `Custom path: Minecraft app, data`
 
 </br>
 
@@ -161,7 +162,7 @@ A. হ, খায়।
 </br>
 
 
-#### *Should I start taking donations?*
+*Should I start taking donations?*
 
 <!-- maybe add later? ¯\_(ツ)_/¯
 ## Support me / Donate / Donations
@@ -175,7 +176,7 @@ USDT BEP20: <address>
 ## Changelog
 <!--TEMPLATE
 
-<details open><summary><b>v3.minor.patch - month day, 2024</b></summary>
+<details open><summary><b>v3.4.patch - month day, 2024</b></summary>
 <ul>
   <li>placeholder</li>
   <li>placeholder</li>
@@ -193,7 +194,28 @@ USDT BEP20: <address>
 
 -->
 
-<details open><summary><b>v3.3.0 - Dec 10, 2024</b></summary>
+<details open><summary><b>v3.4.0 - Dec 23, 2024</b></summary>
+<ul>
+  <li>Added subpack support for auto method.</li>
+  <li>Added zipped materials support for auto method.</li>
+  <li>Added new settings: Don't open folder automatically.</li>
+  <li>Added loading text (not everywhere)</li>
+  <li>Added reset settings option.</li>
+  <li>Added Drop to shell (needs debug mode)</li>
+  <li>Can now make shortcuts.</li>
+  <li>New icon if using shortcut.</li>
+  <li>Optimized folder opening.</li>
+  <li>Optimized update checker.</li>
+  <li>Should no longer cause crashes when folder name contains space.</li>
+  <li>Should no longer fully exit if something goes wrong.</li>
+  <li>Preview mode now is automatically disabled when not installed.</li>
+  <li>Other minor changes.</li>
+</ul>
+</br>
+</details>
+
+
+<details><summary><b>v3.3.0 - Dec 10, 2024</b></summary>
 <ul>
   <li>Added Minecraft Preview support.</li>
   <li>matjectNEXT now can be used without DEBUG MODE.</li>

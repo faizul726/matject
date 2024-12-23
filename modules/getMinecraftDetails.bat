@@ -6,6 +6,7 @@ for /f "tokens=*" %%i in ('powershell -NoProfile -command "Get-AppxPackage -Name
 if not defined MCLOCATION (
     echo.
     echo !ERR![^^!] Minecraft%preview% is not installed.!RST!
+    if defined preview (del /q /s "%useForMinecraftPreview%" >nul)
     %exitmsg%
 )
 echo !GRN![*] Minecraft%preview% location: !MCLOCATION!!RST!

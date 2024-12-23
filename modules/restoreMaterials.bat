@@ -93,7 +93,7 @@ echo.
 
 timeout 3 > NUL
 :fr-delete
-echo Full Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
+echo Full Restore running... [%date% // %time:~0,-6%] > ".settings\taskOngoing.txt"
 cls
 
 echo !YLW![*] Running step 1/3: Deleting game materials... ^(may take multiple tries^)!RST!
@@ -205,7 +205,7 @@ if exist "%rstrList%" (
 )
 
 :restore1
-echo Dynamic Restore running... [%date% // %time%] > ".settings\taskOngoing.txt"
+echo Dynamic Restore running... [%date% // %time:~0,-6%] > ".settings\taskOngoing.txt"
 echo !YLW![*] Dynamic Restore: Step 1/2!RST!
 set "SRCLIST2="
 for %%f in (tmp\*) do (

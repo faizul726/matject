@@ -105,7 +105,7 @@ call "modules\matjectNEXT\listMaterials"
 if !errorlevel! neq 0 (
     echo !RED![^^!] Shader is not for Windows. Skipping...!RST!
     echo.
-    del /q /s MATERIALS\* >nul
+    del /q /s "MATERIALS\*" >nul
     if exist tmp (rmdir /q /s tmp)
     if exist "%rstrList%" (
         goto restorevanilla

@@ -1,6 +1,9 @@
+@title Loading...
+@if [%1] equ [] (start /b "" "%~dpnx0" placebo & exit)
 @echo off
 setlocal enabledelayedexpansion
 cls
+echo Loading...
 pushd "%~dp0"
 set "murgi=KhayDhan"
 
@@ -13,12 +16,15 @@ call "modules\colors"
 if exist ".settings\useForMinecraftPreview.txt" (
     set "isPreview= ^(Preview Mode^)"
     set "preview= Preview"
-) else (set "isPreview=")
+) else (
+    set "isPreview="
+    set "preview="
+)
 call "modules\variables"
 if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
 
 ::set "dev=-dev ^(20241209^)"
-set "version=v3.3.0"
+set "version=v3.4.0"
 set "title=Matject %version%%dev%%isPreview%"
 
 REM TODO
@@ -53,6 +59,7 @@ if exist "%matbak%\" (
 title %title%
 
 if exist %ranOnce% goto firstRunDone
+cls
 echo !WHT!Welcome to %title%^^!!RST! ^(for the very first time^)
 echo.
 echo.
@@ -65,7 +72,6 @@ echo - It may not work properly with antivirus read/write protection.
 echo !RED!* 3RD PARTY ANTIVIRUS MAY PREVENT IOBIT UNLOCKER FROM WORKING.!YLW!
 echo - The worst thing that can happen is material corruption.
 echo   !GRY!In that case you can restore materials or reinstall Minecraft without losing data.!YLW!
-echo - Some packs may need extra steps for Matject auto/manual method.
 echo - Deferred/PBR/RTX packs are not supported.
 echo - English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
@@ -77,7 +83,7 @@ if "!firstRun!" neq "yes" (
     %exitmsg%
 ) else (
     echo !GRN![*] Confirmed.!RST!
-    echo First ran by %USERNAME% on: %date% - %time%>"!ranOnce!"
+    echo First ran by %USERNAME% on: %date% - %time:~0,-6%>"!ranOnce!"
     timeout 2 > NUL
     cls
     echo Matject is somewhat experimental.
@@ -85,14 +91,21 @@ if "!firstRun!" neq "yes" (
     echo.
     echo !YLW![?] Do you want to check for updates at Matject startup?!RST! !YLW!^(requires internet^)!RST!
     echo.
-    echo [Y] Yes, check for updates at Matject startup. ^(only informs about update^)
-    echo [N] No, do not check for updates.
+    echo !GRN![Y] Yes, check for updates at Matject startup. ^(only informs about update^)!RST!
+    echo !RED![N] No, do not check for updates.!RST!
     echo.
-    echo !GRN![TIP] You can enable/disable update checking from settings later.!RST!
+    echo !GRY![TIP] You can enable/disable update checking from settings later.!RST!
     echo.
     choice /c yn /n >nul
-    if !errorlevel! equ 1 echo Thank you for being a regular user of Matject [%date% // %time%]>%doCheckUpdates%
+    if !errorlevel! equ 1 echo Thank you for being a regular user of Matject [%date% // %time:~0,-6%]>%doCheckUpdates%
     cls
+    echo !YLW![?] Do you want to make shortcuts of Matject? !RED![BETA]!RST!
+    echo     !GRY!You can always add/remove those from Restore ^& Others later.!RST!
+    echo.
+    echo !GRN![Y] Yes    !RED![N] No!RST!
+    echo.
+    choice /c yn /n >nul
+    if !errorlevel! equ 1 call "modules\createShortcut" all
 )
 
 :firstRunDone
@@ -112,16 +125,17 @@ if exist "%customIObitUnlockerPath%" (
 ) else (
     goto checkIObitUnlocker
 )
-echo !ERR![^^!] Provided custom path is invalid^^!!RST!
-echo !RED!Please set IObit Unlocker path again.!RST!
+cls
+echo !ERR![^^!] Provided custom IObit Unlocker path is invalid^^!!RST!
 echo.
-echo Press any key to set...
+echo Press any key to remove...
 echo.
 pause >nul
 call "modules\settings" toggleP2_3
 
 :checkIObitUnlocker
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
+    cls
     echo !RED![^^!] You don't have IObit Unlocker installed.!RST!
     echo     It's required to use Matject.
     echo.
@@ -152,6 +166,7 @@ if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
 if exist "%customMinecraftAppPath%" (
     set /p MCLOCATION=<%customMinecraftAppPath%
     if not exist "!MCLOCATION!\AppxManifest.xml" (
+        cls
         echo !ERR![^^!] Custom Minecraft app path DOES NOT exist.!RST!
         echo.
         call "modules\getMinecraftDetails"
@@ -169,6 +184,7 @@ if exist "%customMinecraftAppPath%" (
         )
     )
 ) else (
+    cls
     call "modules\getMinecraftDetails"
     if exist %oldMinecraftVersion% (
         set /p OLDVERSION=<%oldMinecraftVersion%
@@ -179,6 +195,7 @@ if exist "%customMinecraftAppPath%" (
 if not exist "%customMinecraftDataPath%" (goto nocustomgamedata)
 set /p gameDataTMP=<%customMinecraftDataPath%
 if not exist "!gameDataTMP!\minecraftpe\options.txt" (
+    cls
     set "gameDataTMP="
     echo !ERR![^^!] Custom Minecraft data path invalid.!RST!
     echo !RED!If it's correct open the game at least once.
@@ -196,7 +213,7 @@ if not exist "!gameDataTMP!\minecraftpe\options.txt" (
 if exist "%unlocked%" goto DELETEOLDBACKUP
 
 if /i "%MCLOCATION:~0,28%" neq "C:\Program Files\WindowsApps" (
-    echo [%date% // %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>"%unlocked%"
+    echo [%date% // %time:~0,-6%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>"%unlocked%"
 )
 
 if not exist "%unlocked%" (
@@ -238,7 +255,7 @@ if exist ".settings\backupRunning.txt" (
 if exist "%matbak%\" (
     if "!CURRENTVERSION!" neq "!OLDVERSION!" (
     cls
-    echo !RED![^^!] OLD SHADER BACKUP DETECTED!RST!
+    echo !RED![^^!] OLD SHADER BACKUP DETECTED.!RST!
     echo.
     echo !YLW![*] Current version: v!CURRENTVERSION!, old version: v!OLDVERSION!.!RST!
     echo.
@@ -260,7 +277,10 @@ if exist "%matbak%\" (
     call "modules\backupMaterials"
     timeout 2 > NUL
     )
-) else (call "modules\backupMaterials")
+) else (
+    cls
+    call "modules\backupMaterials"
+)
 
 for /f "tokens=2 delims==" %%a in ('"wmic os get localdatetime /value"') do (
     set "deiteu=%%a"
@@ -296,6 +316,7 @@ if exist ".settings\taskOngoing.txt" (
 
 :skipInterruptionCheck
 if exist %defaultMethod% (
+    cls
     set /p selectedMethod=<%defaultMethod%
     echo !YLW![*] Opening !selectedMethod! method in 2 seconds...!RST!
     echo.
@@ -316,7 +337,7 @@ if exist "%customIObitUnlockerPath%" (set usingCustomPath=true)
 
 if exist "%useForMinecraftPreview%" (
     if defined usingCustomPath (
-        echo !GRY![*] Using for Minecraft Preview ^& custom path^(s^) enabled.!RST!
+        echo !GRY![*] Using for Minecraft Preview with custom path^(s^) enabled.!RST!
     ) else (
         echo !GRY![*] Using for Minecraft Preview.!RST!
     )
@@ -332,13 +353,11 @@ if exist "%useForMinecraftPreview%" (
 if "%deiteu%" equ "0726" echo !BLU!Happy birthday rwxrw-r-- U+1F337 ^(%imy%^)!RST!
 set RESTORETYPE=
 if %time:~0,2% geq 00 if %time:~0,2% lss 05 echo !WHT!You should sleep now.
-if %time:~0,2% geq 05 if %time:~0,2% lss 12 echo !WHT!Good morning
-if %time:~0,2% geq 12 if %time:~0,2% lss 18 echo !WHT!Good afternoon
-if %time:~0,2% geq 18 if %time:~0,2% lss 22 echo !WHT!Good evening
-if %time:~0,2% geq 22 if %time:~0,2% lss 24 echo !WHT!Good night
-echo Welcome to %title: ^(Preview Mode^)=%^^!!RST!
-echo.
-echo !CYN!faizul726.github.io/matject!RST!
+if %time:~0,2% geq 05 if %time:~0,2% lss 12 echo !WHT!Good morning,
+if %time:~0,2% geq 12 if %time:~0,2% lss 18 echo !WHT!Good afternoon,
+if %time:~0,2% geq 18 if %time:~0,2% lss 22 echo !WHT!Good evening,
+if %time:~0,2% geq 22 if %time:~0,2% lss 24 echo !WHT!Good night ^& Happy New Year^^!
+echo Welcome to %title: ^(Preview Mode^)=%^^!!RST! ^| !CYN!%githubLink:~8,-1%!RST!
 echo.
 echo.
 
@@ -384,19 +403,24 @@ echo.
 echo !GRN![4] View Matject on GitHub :^)
 echo !WHT![5] Visit jq website
 echo [6] View material-updater on mcbegamerxx954's GitHub
-echo.
-echo [7] Replace backup with ZIP file ^(use this if you don't have original materials to start with^)
-echo !GRY![8] Reset Global Resource Packs ^(use this if you want to deactivate all active packs^)
+echo !RST!
+echo [7] Create shortcuts ^(desktop/start menu^) !RED![BETA]!WHT!
+echo !GRY![8] Replace backup with ZIP file ^(use this if you don't have original materials to start with^)
+echo [9] Reset Global Resource Packs ^(use this if you want to deactivate all active packs^)
+if defined debugMode echo [L] Drop to shell
 echo !RST!
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
-choice /c 12345678b /n >nul
+choice /c 123456789lb /n >nul
 goto others!errorlevel!
 
-:others9
+:others11
 goto INTRODUCTION
 
-:others8
+:others10
+if defined debugMode (cls & echo !YLW![*] Dropped to shell.!RST! & echo. & cmd) else goto :option7
+
+:others9
 cls
 echo !YLW![?] Are you sure? This will deactivate all active global resource packs.!RST!
 echo.
@@ -408,7 +432,7 @@ if !errorlevel! neq 1 (goto option7)
 if exist "%gameData%\minecraftpe\global_resource_packs.json" (del /q /s "%gameData%\minecraftpe\global_resource_packs.json" >nul && echo []>"%gameData%\minecraftpe\global_resource_packs.json") else (echo []>"%gameData%\minecraftpe\global_resource_packs.json")
 goto option7
 
-:others7
+:others8
 cls
 echo !WHT![*] Add materials backup ZIP file in !YLW!"%cd%\%matbak:~0,-19%"!WHT!. !RED!DO NOT ADD MULTIPLE ZIP FILES.!RST!
 echo.
@@ -416,7 +440,7 @@ echo !RED![^^!] Current backup will be deleted.!RST!
 echo.
 echo [*] Don't have any backup file? Get from !CYN!mcpebd.github.io/mats!RST!. !GRY!It will go back if no backup file is found.!RST!
 echo.
-explorer "%cd%\%matbak:~0,-19%"
+start "" /i explorer "%cd%\%matbak:~0,-19%"
 echo When done,
 pause
 echo.
@@ -449,7 +473,7 @@ if exist "%SYSTEMROOT%\system32\tar.exe" (
 )
 if exist "%matbak%\*.material.bin" (
     echo !GRN![*] Succesfully added materials from !backupFile!.!RST!
-    echo %date% // %time%>%backupDate%
+    echo %date% // %time:~0,-6%>%backupDate%
     echo.
     pause
 ) else (
@@ -461,6 +485,12 @@ if exist "%matbak%\*.material.bin" (
 set "backupFile="
 goto option7
 
+:others7
+cls
+echo Loading...
+call "modules\createShortcut"
+goto option7
+
 :others6
 start https://github.com/mcbegamerxx954/material-updater
 goto option7
@@ -470,15 +500,15 @@ start https://jqlang.github.io/jq/
 goto option7
 
 :others4
-start https://faizul726.github.io/matject
+start %githubLink%
 goto option7
 
 :others3
-explorer "%localAppData%\packages\Microsoft.%productID%_8wekyb3d8bbwe\LocalState\games\com.mojang"
+start "" /i explorer "%localAppData%\packages\Microsoft.%productID%_8wekyb3d8bbwe\LocalState\games\com.mojang"
 goto option7 
 
 :others2
-explorer "!MCLOCATION!"
+start "" /i explorer "!MCLOCATION!"
 goto option7
 
 :others1
@@ -522,7 +552,7 @@ echo !YLW![^^!] Please add a mcpack/zip in the MCPACK folder.!RST!
 echo.
 echo.
 
-explorer "%cd%\MCPACK"
+if not exist "%dontOpenFolder%" (start "" /i explorer "%cd%\MCPACK")
 
 echo After adding,
 pause
@@ -592,6 +622,12 @@ del /q /s tmp\mcpack.zip >nul
 
 set "manifestFound="
 set "MCPACKDIR="
+if exist "tmp\*.material.bin" (
+    set "MCPACKDIR=tmp"
+    mkdir "!MCPACKDIR!\renderer\materials"
+    move /Y "tmp\*.material.bin" "!MCPACKDIR!\renderer\materials\" >nul
+    goto packokay
+)
 if exist "tmp\manifest.json" (
     if exist "tmp\renderer\materials\*.material.bin" (
         set "MCPACKDIR=tmp"
@@ -600,7 +636,7 @@ if exist "tmp\manifest.json" (
         echo !ERR![^^!] Not a RenderDragon shader.!RST!
         goto invalidpack
     )
-) else for /d /r "tmp" %%f in (*) do (
+) else for /d %%f in (tmp\*) do (
     if exist "%%f\manifest.json" (
         set "manifestFound=true"
         if exist "%%f\renderer\materials\*.material.bin" (
@@ -624,13 +660,48 @@ if not defined manifestFound (
 :invalidpack
 echo.
 echo !YLW![*] Please add a valid mcpack/zip file in the MCPACK folder and try again.!RST!
-%backmsg:~0,56%
 rmdir /q /s "tmp"
-goto INTRODUCTION
+%backmsg:EOF=INTRODUCTION%
 
 :packokay
-del /q /s MATERIALS\* >nul
+if exist "MATERIALS\*.material.bin" del /q /s "MATERIALS\*.material.bin" >nul
+if exist "tmp\subpackChooser.bat" del /q /s "tmp\subpackChooser.bat" >nul
+if exist "!MCPACKDIR!\subpacks\" (
+    set "tmp_subpack_counter=" & set "tmp_subpacknames=" & set "selected_subpack=" & set "tmp_input="
+    
+    for /d %%F in ("!MCPACKDIR!\subpacks\*") do (goto :autoGetSubpacks)
+    goto :skip_autoGetSubpacks
+    :autoGetSubpacks
+    for /d %%F in ("!MCPACKDIR!\subpacks\*") do (
+        set /a tmp_subpack_counter+=1
+        set "tmp_subpacknames=!tmp_subpacknames! ^& echo !tmp_subpack_counter!. %%~nF"
+        echo if %%1 equ !tmp_subpack_counter! set selected_subpack=%%~nF>>tmp\subpackChooser.bat
+    )
+    cls
+    echo !YLW![*] Subpack^(s^) found.!RST!
+    echo.
+    echo !GRN![TIP] Subpack is what you select from global resource packs settings ^(gear icon^)
+    echo       You can take a look at manifest.json to find what each subpack does.
+    echo       If you are unsure, you can select any one subpack.!RST!
+    echo.
+    %tmp_subpacknames:~2%
+    echo.
+    set /p "tmp_input=Select a subpack !GRY!^(leave blank to go back^)!RST!: "
+    echo.
+    set "tmp_subpack_counter=" & set "tmp_subpacknames=" & set "selected_subpack="
+    if defined tmp_input (call tmp\subpackChooser %tmp_input%) else (timeout 1 >nul & goto INTRODUCTION)
+    if not defined selected_subpack (
+        echo !RED![^^!] Invalid input.!RST!
+        rmdir /q /s "tmp"
+        %backmsg:EOF=INTRODUCTION%
+    )
+)
+:skip_autoGetSubpacks
 move /Y "!MCPACKDIR!\renderer\materials\*.material.bin" "MATERIALS\" > NUL
+if defined selected_subpack (
+    move /Y "!MCPACKDIR!\subpacks\!selected_subpack!\renderer\materials\*.material.bin" "MATERIALS" >nul
+    set "selected_subpack="
+)
 goto SEARCH
 
 
@@ -647,7 +718,7 @@ echo !YLW!Please add ".material.bin" files in the "MATERIALS" folder.!RST!
 echo.
 echo.
 
-explorer "%cd%\MATERIALS"
+if not exist "%dontOpenFolder%" (start "" /i explorer "%cd%\MATERIALS")
 
 echo After adding,
 pause
@@ -657,9 +728,12 @@ pause
 :SEARCH
 cls
 set SRCLIST=
-set REPLACELISTEXPORT=
-set BINS=
 set SRCCOUNT=
+set REPLACELIST=
+set REPLACELISTEXPORT=
+set MTBIN=
+set BINS=
+
 
 echo !YLW![*] Looking for .bin files in the "MATERIALS" folder...!RST!
 echo.
@@ -668,32 +742,31 @@ if exist "%disableMatCompatCheck%" goto skip_matcheck
 call "modules\checkMaterialCompatibility"
 if !errorlevel! neq 0 (
     echo !ERR![^^!] Given shader is not for Windows.!RST!
-    %backmsg:~0,56%
-    del /q /s MATERIALS\* >nul
+    del /q /s "MATERIALS\*.material.bin" >nul
     if exist "tmp" (rmdir /q /s "tmp")
-    goto INTRODUCTION
+    %backmsg:EOF=INTRODUCTION%
 )
 :skip_matcheck
-
-for %%f in (MATERIALS\*.material.bin) do (
+for %%f in ("MATERIALS\*.material.bin") do (
     set "MTBIN=%%~nf"
-    set "SRCLIST=!SRCLIST!,"%cd%\%%f""
+    set SRCLIST=!SRCLIST!,"%cd%\%%f"
     set "BINS=!BINS!"_!MTBIN:~0,-9!-" "
-    set "REPLACELISTEXPORT=!REPLACELISTEXPORT!,"_!MTBIN:~0,-9!-""
+    set REPLACELIST=!REPLACELIST!,"_!MTBIN:~0,-9!-"
     set /a SRCCOUNT+=1
 )
 
 if not defined SRCLIST (
     echo !ERR![^^!] NO MATERIALS FOUND.!RST!
     echo.
-
-    echo !YLW![*] Please add .bin files the MATERIALS folder and try again.!RST!
+    echo !YLW![*] Please add *.material.bin files the MATERIALS folder and try again.!RST!
+    if exist "tmp\" rmdir /q /s "tmp\"
     %backmsg:EOF=INTRODUCTION%
 )
-
 set "SRCLIST=%SRCLIST:~1%"
-set "REPLACELISTEXPORT=%REPLACELISTEXPORT:~1%"
-set "REPLACELIST=%REPLACELISTEXPORT:-=.material.bin%"
+set "REPLACELIST=%REPLACELIST:~1%"
+set "REPLACELISTEXPORT=%REPLACELIST%"
+
+set "REPLACELIST=%REPLACELIST:-=.material.bin%"
 set "REPLACELIST=%REPLACELIST:_=!MCLOCATION!\data\renderer\materials\%"
 
 echo !GRN![*] Found !SRCCOUNT! material(s) in the "MATERIALS" folder.!RST!
@@ -705,9 +778,8 @@ echo.
 
 echo !CYN![TIP] You can add subpack materials from "!MCPACKDIR!\subpacks" and [R]efresh the list to use them.!RST!
 echo.
-
 echo -------- Material list --------
-for %%f in (MATERIALS\*) do (
+for %%f in ("MATERIALS\*") do (
     echo * %%~nxf
 )
 echo -------------------------------
@@ -725,7 +797,7 @@ choice /c yrn /n >nul
 if !errorlevel! equ 1 goto INJECTIONCONFIRMED
 if !errorlevel! equ 2 goto SEARCH
 if !errorlevel! equ 3 (
-    del /q /s MATERIALS\* >nul
+    del /q /s "MATERIALS\*.material.bin" >nul
     if exist "tmp\" rmdir /q /s "tmp\"
     goto INTRODUCTION
 )
@@ -752,7 +824,7 @@ if exist "%rstrList%" (
 :STEP1
 echo !YLW![*] Deleting vanilla materials... ^(Step 1/2^)!RST!
 echo.
-echo Injection running... [%date% // %time%] > ".settings\taskOngoing.txt"
+echo Injection running... [%date% // %time:~0,-6%] > ".settings\taskOngoing.txt"
 "%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
 
 if !errorlevel! neq 0 (

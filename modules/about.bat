@@ -5,17 +5,21 @@ title About %title%
 cls
 
 echo !YLW!What's new in %title: ^(Preview Mode^)=%?!RST!
-echo !YLW!Released on: Dec 10, 2024!RST!
+echo !YLW!Released on: Dec 23, 2024!RST!
 echo.
-echo - Added Minecraft Preview support.
-echo - matjectNEXT now can be used without DEBUG MODE.                             !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
-echo - Improved matjectNEXT functionality.                                         !p1!              !p1!
-echo - Improved extract speed by using tar.                                        !p1!  !p1!  !p1!      !p1!
-echo - Improved settings functionality.                                            !p1!  !p1!        !p1!
-echo - Improved backup ZIP check.                                                  !p1!  !p1!!p1!!p1!    !p1!
-echo - Fixed Dynamic Restore comparison.
-echo - Fixed OLDVERSION variable.
-echo - Delete Backups folder if empty.
+echo - Added subpack support for auto method.
+echo - Added zipped materials support for auto method.                             
+echo - Added new settings: Don't open folder automatically.                         
+echo - Added loading text ^(not everywhere^)                                         !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+echo - Added reset settings option.                                                !p1!              !p1!
+echo - Added Drop to shell ^(needs debug mode^)                                      !p1!  !p1!  !p1!      !p1!
+echo - Can now make shortcuts.                                                     !p1!  !p1!        !p1!
+echo - New icon if using shortcut.                                                 !p1!  !p1!!p1!!p1!    !p1!
+echo - Optimized folder opening.
+echo - Optimized update checker.
+echo - Should no longer cause crashes when folder name contains space.
+echo - Should no longer fully exit if something goes wrong.
+echo - Preview mode now is automatically disabled when not installed.
 echo - Other minor changes.
 echo.
 echo Matject is a material replacer for Minecraft Bedrock Edition.

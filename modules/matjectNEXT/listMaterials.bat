@@ -2,11 +2,12 @@
 if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 :list
-set SRCCOUNT=
 set SRCLIST=
+set SRCCOUNT=
 set REPLACELIST=
-set BINS=
+set REPLACELISTEXPORT=
 set MTBIN=
+set BINS=
 
 if not exist "MATERIALS" mkdir MATERIALS
 
@@ -25,9 +26,9 @@ if !errorlevel! neq 0 (
 :skip_matcheck
 
 
-for %%f in (MATERIALS\*.material.bin) do (
-    set "SRCLIST=!SRCLIST!,"%cd%\%%f""
+for %%f in ("MATERIALS\*.material.bin") do (
     set "MTBIN=%%~nf"
+    set SRCLIST=!SRCLIST!,"%cd%\%%f"
     set "BINS=!BINS!"_!MTBIN:~0,-9!-" "
     set "REPLACELIST=!REPLACELIST!,"_!MTBIN:~0,-9!-""
     set /a SRCCOUNT+=1

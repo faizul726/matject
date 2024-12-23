@@ -33,6 +33,6 @@ if %errorlevel% equ 0 (
     echo [92mCode GREEN[0m
 ) else echo [91mCode RED[0m ^(ERRORLEVEL: %errorlevel%^) & echo Take a screenshot. It might be helpful later. %date% & echo. & pause >nul
 
-echo [%date% // %time%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>".settings\unlockedWindowsApps.txt" && timeout 3 > NUL
+echo [%date% // %time:~0,-6%] - This file was created to indicate that WindowsApps is already unlocked and skip the question in Matject.>".settings\unlockedWindowsApps.txt" && timeout 3 > NUL
 
 echo Output: "%errorlevel%" //  Current directory: "%cd%" > ".settings\unlockLog.txt"

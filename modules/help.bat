@@ -3,9 +3,6 @@ if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
 
 title %title% ^(help^)
 cls
-echo !WHT!How to use %title%?!RST!
-echo.
-echo.
 echo !YLW!Q. How to use it?!RST!
 echo A. This is a text-based user interface.
 echo    Means you have to navigate using keyboard buttons.
@@ -22,7 +19,11 @@ echo.
 echo !YLW!Q. Does it work on all version?!RST!
 echo A. Maybe.
 echo.
-echo !YLW!Q. It's not working, what to do?!RST!
-echo A. Join !CYN!discord.gg/yss!RST! and send message in #windows or #renderdragon.
+echo !YLW!Q. It's not working/crashing, what to do?!RST!
+echo A. Join !CYN!faizul726.github.io/newb-discord!RST! and send message in #newb-support.
 echo    I will help.
+echo. 
+echo !YLW!Q. What is matjectNEXT?!RST!
+echo    An advanced variant of Matject that works somewhat like patched Minecraft.
+echo    ^(Global Resource Packs ONLY^)
 %backmsg%
