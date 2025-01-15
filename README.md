@@ -1,16 +1,12 @@
-<p>
-  <h1 align="center">
-    <img src="https://github.com/user-attachments/assets/b3daa387-9eda-4b87-897a-2b766b9905a2" height="48px" style="vertical-align: -13.5; margin-right: 12.5">Matject v3.5.0
-  </h1>
-</p>
+<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="56px"></img>Matject v3.5.0</h1>
 
 *Last updated: Jan 15, 2025*
 
 </br>
 
-**[📕 How to use?](#how-to-use)**
+**[How to use?](#-how-to-use)**
 
-[Features](#features) | [Credits](#credits) | [Known issues](#known-issues) | [FAQ](#faq) | [Changelog](#changelog)
+[Features](#-features) | [Credits](#-credits) | [Known issues](#-known-issues) | [FAQ](#-faq) | [Changelog](#-changelog)
 
 </br>
 
@@ -59,7 +55,7 @@ I made this script so that users don't have to go through the hassle of replacin
 
 </br>
 
-## What's new in v3.5.0?
+## ✨ What's new in v3.5.0?
 * Added Matject updater
 * Added multiple MCPACK/ZIP support for MCPACKS folder.
 * IObit Unlocker messages are now automatically closed when Matject is run as admin.
@@ -119,7 +115,7 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 
 </br><br>
 
-## Credits
+## 🤝 Credits
 * **[IObit Unlocker](https://www.iobit.com/en/iobit-unlocker.php)** (backbone of Matject)
 * **[@mcbegamerxx954](https://github.com/mcbegamerxx954/)** (for [material-updater](https://github.com/mcbegamerxx954/material-updater) and speed improvements)
 * **[jq](https://jqlang.github.io/jq)** (used to process JSON files for matjectNEXT)
@@ -209,7 +205,7 @@ You can still show your support by giving a star to this project :)
 
 <br><br>
 
-## Changelog
+## 🕓 Changelog
 <!--TEMPLATE
 
 <details open><summary><b>v3.4.patch - month day, 2025</b></summary>
