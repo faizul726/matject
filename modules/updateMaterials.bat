@@ -1,7 +1,5 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
-echo !YLW![*] Updating materials using material-updater...!RST!
-echo.
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 :askVer
 if not exist %materialUpdaterArg% (
@@ -18,15 +16,23 @@ if not exist %materialUpdaterArg% (
     if "!errorlevel!" equ "3" echo v1-19-60>%materialUpdaterArg%
     if "!errorlevel!" equ "4" echo v1-18-30>%materialUpdaterArg%
     goto askVer
-) else set /p targetVer=<%materialUpdaterArg%
+) else (
+    set /p targetVer=<%materialUpdaterArg%
+    echo %hideCursor%>nul
+)
 
-if "%targetVer%" equ "v1-21-20" echo !YLW![*] Updating for v1.21.20+!RST!
-if "%targetVer%" equ "v1-20-80" echo !YLW![*] Updating for v1.20.80 - v1.21.2!RST!
-if "%targetVer%" equ "v1-19-60" echo !YLW![*] Updating for v1.19.60 - v1.20.73!RST!
-if "%targetVer%" equ "v1-18-30" echo !YLW![*] Updating for v1.18.30 - v1.19.51!RST!
+if "%targetVer%" equ "v1-21-20" call :updfor "v1.21.20+"
+if "%targetVer%" equ "v1-20-80" call :updfor "v1.20.80 - v1.21.2"
+if "%targetVer%" equ "v1-19-60" call :updfor "v1.19.60 - v1.20.73"
+if "%targetVer%" equ "v1-18-30" call :updfor "v1.18.30 - v1.19.51"
 echo.
 for %%m in ("MATERIALS\*.material.bin") do ("modules\material-updater" "%%m" -o "%%m" -t !targetVer!)
 echo.
-echo !GRN![*] Materials updated to support current version.!RST!
+echo !GRN![*] material-updater: Materials updated to support current version.!RST!
 echo.
 echo.
+goto :EOF
+
+:updfor
+echo !YLW![*] material-updater: Updating for %~1!RST!
+goto :EOF

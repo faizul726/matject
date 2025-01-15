@@ -1,26 +1,31 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
-echo !YLW![*] Getting Minecraft%preview% location...!RST!
-for /f "tokens=*" %%i in ('powershell -NoProfile -command "Get-AppxPackage -Name Microsoft.%productID% | Select-Object -ExpandProperty InstallLocation"') do set "MCLOCATION=%%i"
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+echo !YLW!!BLINK![*] Getting Minecraft%preview% details...!RST!
+if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+:: PowerShell command by @FlaredRoverCodes
+for /f "tokens=1,2 delims=///" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage -Name Microsoft.%productID%).InstallLocation + '///' + (Get-AppxPackage -Name Microsoft.%productID%).Version"') do (
+    set MCLOCATION=%%i
+    set CURRENTVERSION=%%j
+)
+echo.
+if not defined chcp_failed (chcp 65001 >nul 2>&1)
 
 if not defined MCLOCATION (
-    echo.
     echo !ERR![^^!] Minecraft%preview% is not installed.!RST!
     if defined preview (del /q /s "%useForMinecraftPreview%" >nul)
     %exitmsg%
 )
-echo !GRN![*] Minecraft%preview% location: !MCLOCATION!!RST!
-echo.
-if "%1" equ "savepath" (
+
+echo !WHT!Minecraft%preview% location:!RST! !MCLOCATION!
+echo !WHT!Minecraft%preview% version:!RST!  v!CURRENTVERSION!
+
+if "[%1]" equ "[savepath]" (
     echo !MCLOCATION!>%customMinecraftAppPath%
     timeout 2 >nul
     exit /b 0
 )
-echo !YLW![*] Getting Minecraft%preview% version...!RST!
-for /f "tokens=*" %%i in ('powershell -NoProfile -command "Get-AppxPackage -Name Microsoft.%productID% | Select-Object -ExpandProperty Version"') do set "CURRENTVERSION=%%i"
-echo !GRN![*] Minecraft version%preview%: !CURRENTVERSION!!RST!
-
 
 if not exist "%oldMinecraftVersion%" (echo !CURRENTVERSION!>"%oldMinecraftVersion%") else (set /p OLDVERSION=<"%oldMinecraftVersion%")
+echo %hideCursor%>nul
 
 timeout 2 > NUL

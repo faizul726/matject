@@ -1,12 +1,14 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 title %title% ^(help^)
 cls
+echo !GRN![TIP]!RST! Check !CYN!faizul726.github.io/matject!RST! for better guide.
+echo.
 echo !YLW!Q. How to use it?!RST!
 echo A. This is a text-based user interface.
 echo    Means you have to navigate using keyboard buttons.
-echo    All actions are labeled with what key to press.
+echo    All actions are labelled with the key to press.
 echo    Everything is self explanatory. So, just explore by yourself.
 echo.
 echo !YLW!Q. Do I need IObit Unlocker to be installed?!RST!

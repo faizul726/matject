@@ -1,5 +1,5 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 cls
 if "%PROCESSOR_ARCHITECTURE%" neq "AMD64" (
@@ -11,6 +11,7 @@ if "%PROCESSOR_ARCHITECTURE%" neq "AMD64" (
     pause > NUL
     goto:EOF
 )
+if [%1] equ [skip_intro] (goto skip_intro_material-updater)
 echo !RED!^< [B] Back!RST!
 echo.
 
@@ -21,12 +22,12 @@ echo.
 echo Matject doesn't include it out of box.
 echo You have to download the executable and put it in the !CYN!modules!RST! folder named as !CYN!material-updater!RST! to use it...
 echo.
-
-echo !YLW![?] How would you like to get it?!RST!
+:skip_intro_material-updater
+echo !YLW![?] How would you like to get material-updater?!RST!
 echo.
 
-echo [1] Download for me
-echo [2] Nah, I will download it myself
+echo !RED![1] Download for me!RST!
+echo !GRN![2] Nah, I will download it myself!RST!
 echo.
 
 choice /c 12b /n >nul
@@ -35,7 +36,7 @@ goto option-!errorlevel!
 
 :option-1
 cls
-echo [*] You can take a look from line 36 of getMaterialUpdater.bat if you want to know how it actually downloads...
+echo [*] You can take a look from line 37 of getMaterialUpdater.bat if you want to know how it actually downloads...
 echo.
 
 echo !YLW![*] If you're fine with that you can press [Y] to download or [B] to go back.!RST!
@@ -45,17 +46,21 @@ if !errorlevel! neq 1 goto:EOF
 echo.
 
 if not exist "tmp\" mkdir tmp
-echo !YLW![*] Downloading...!RST!
+echo !YLW!!BLINK![*] Downloading material-updater...!RST!
 where curl >nul 2>&1
 if !errorlevel! equ 0 (
     curl -L -o tmp\material-updater-x86_64-pc-windows-msvc.zip https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip >nul
     if exist "%SYSTEMROOT%\system32\tar.exe" (
-        tar -xf "tmp\material-updater-x86_64-pc-windows-msvc.zip" -C "modules" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
+        tar -xf "tmp\material-updater-x86_64-pc-windows-msvc.zip" -C "modules" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
     ) else (
-        powershell -NoProfile -Command "Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
+        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+        powershell -NoProfile -Command "Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
+        if not defined chcp_failed (chcp 65001 >nul 2>&1)
     )
 ) else (
-    powershell -NoProfile -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
+    if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+    powershell -NoProfile -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
+    if not defined chcp_failed (chcp 65001 >nul 2>&1)
 )
 rmdir tmp /q /s
 echo.

@@ -1,5 +1,5 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 :list
 set SRCLIST=
@@ -11,9 +11,9 @@ set BINS=
 
 if not exist "MATERIALS" mkdir MATERIALS
 
-copy /d "!packPath!\renderer\materials\*.material.bin" "%cd%\MATERIALS\" >nul
+copy /d "!packPath!\renderer\materials\*.material.bin" "%cd%\MATERIALS\" >nul 2>&1
 echo !YLW![*] Copied !RED!main!YLW! materials.!RST!
-if "!hasSubpack!" equ "true" (copy /d "!packPath!\subpacks\!subpackName!\renderer\materials\*.material.bin" "%cd%\MATERIALS" >nul)
+if /i "!hasSubpack!" equ "true" (copy /d "!packPath!\subpacks\!subpackName!\renderer\materials\*.material.bin" "%cd%\MATERIALS" >nul 2>&1)
 echo !YLW![*] Copied !BLU!!subpackName!!YLW! ^(subpack^) materials.!RST!
 echo.
 

@@ -1,9 +1,16 @@
-echo [*] Making icon from base64... ^(From: modules\createIcon.bat^)
+@echo off
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+echo [*] Making icon from base64... ^(modules\createIcon.bat^)
 
 :: b64_n variables are used to reduce file size. (minimizing duplicate lines)
 :: reduced size from 80 KB to 28 KB :D
 :: btw, it's nice of you to be concerned about computer security.
 
+:: why not include the .ico file in source?
+:: it's because i don't want to include any non bat/exe file in the modules folder
+:: if you're still concerned, you can run the base64 part separately.
+
+:: START OF BASE64
 set "b64_1=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 set "b64_2=////////////////////////////////////////////////////////////////"
 set "b64_3=//////////////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
@@ -20,6 +27,7 @@ set "b64_D=//////////////////////9/////AAAAAAAAAAAAAAAAAAAAAAD/////////////"
 set "b64_E=AAAAAAAAAAAAAP//////////////////////////////////////////////////"
 set "b64_F=AAAAAAAAAAAAAP///wD///+A////////////////////////////////////////"
 
+if not exist .settings (mkdir .settings)
 
 (
 echo -----BEGIN CERTIFICATE-----
@@ -1184,8 +1192,9 @@ echo %b64_2%
 echo ////////////////////////////////////////
 echo -----END CERTIFICATE-----
 ) > .settings\matject_icon.ico.b64
-
-certutil -decode .settings\matject_icon.ico.b64 .settings\matject_icon.ico
+:: END OF BASE64
+call modules\clearVariable createIcon_all
+certutil -decode .settings\matject_icon.ico.b64 .settings\matject_icon.ico >nul
 del /q /s .settings\matject_icon.ico.b64 >nul
 echo.
 goto :EOF

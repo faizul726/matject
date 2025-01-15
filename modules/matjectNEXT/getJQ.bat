@@ -1,5 +1,5 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 echo !YLW![*] matjectNEXT needs jq by @jqlang to process Minecraft JSON files.!RST!
 echo.
@@ -8,11 +8,11 @@ echo !RED!IT WILL NOT WORK AT ALL WITHOUT JQ.!RST!
 echo.
 echo.
 
-echo !YLW![?] How would you like to get it?!RST!
+echo !YLW![?] How would you like to get jq?!RST!
 echo.
 
-echo [1] Download for me
-echo [2] Nah, I will download it myself
+echo !RED![1] Download for me!RST!
+echo !GRN![2] Nah, I will download it myself!RST!
 echo.
 
 choice /c 12b /n >nul
@@ -23,27 +23,31 @@ goto option-!errorlevel!
 cls 
 echo [*] You can take a look from line 22 of getJQ.bat if you want to know how it actually downloads...
 echo.
-echo !YLW![*] If you're fine with that you can press [Y] to download or [B] to exit.!RST!
+echo !YLW![*] If you're fine with that you can press [Y] to download or [B] to go back.!RST!
 echo.
 choice /c yb /n >nul
 if !errorlevel! neq 1 exit
 echo.
-echo !YLW![*] Downloading...!RST!
+echo !YLW!!BLINK![*] Downloading jq...!RST!
 echo.
 
-if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
+if /i "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
     where curl >nul 2>&1
     if !errorlevel! equ 0 (
         curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe >nul
     ) else (
+        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
+        if not defined chcp_failed (chcp 65001 >nul 2>&1)
     )
-) else if "%PROCESSOR_ARCHITECTURE%" equ "x86" (
+) else if /i "%PROCESSOR_ARCHITECTURE%" equ "x86" (
     where curl >nul 2>&1
     if !errorlevel! equ 0 (
         curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe >nul
     ) else (
+        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe -OutFile modules\jq.exe"
+        if not defined chcp_failed (chcp 65001 >nul 2>&1)
     )
 ) else (
     echo !RED![^^!] Unknown PROCESSOR_ARCHITECTURE: %PROCESSOR_ARCHITECTURE%. Maybe ARM based PC?!RST!

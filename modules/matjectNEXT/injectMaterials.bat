@@ -1,21 +1,20 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 echo.
 
 if exist %disableConfirmation% (goto inject)
-where msg >nul 2>&1
-if !errorlevel! equ 0 msg * Resource packs changed, injecting new materials...
 echo !YLW![*] Press [Y] to confirm injection or [B] to cancel.!RST!
+>nul 2>&1 where msg && msg * Resource packs changed, injecting new materials...
 echo.
 choice /c yb /n >nul
 if !errorlevel! neq 1 (
     del /q /s "MATERIALS\*" >nul
-    goto:EOF
+    exit /b 9
 )
 
 :inject
-if "!hasSubpack!" equ "true" (
+if /i "!hasSubpack!" equ "true" (
     echo !YLW![*] Injecting !RED!!packName! !GRN!v!packVer!!RST! + !BLU!!subpackName!!RST! ^(!SRCCOUNT! materials^)
 ) else (
     echo !YLW![*] Injecting !RED!!packName! !GRN!v!packVer!!RST!!RST!
@@ -39,6 +38,7 @@ echo.
 echo !GRY!Executing...
 echo "%IObitUnlockerPath%" /advanced /delete !REPLACELIST:%MCLOCATION%=%WHT%%%MCLOCATION%%%GRY%!!RST!
 echo.
+if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 "%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
 if !errorlevel! neq 0 (
     %uacfailed%
@@ -52,23 +52,32 @@ echo.
 echo !YLW![*] Step 2/2: Replacing materials...!RST!
 echo.
 echo !GRY!Executing...
-echo "%IObitUnlockerPath%" /advanced /move !SRCLIST:%cd%=%WHT%%%CD%%%GRY%! "!WHT!%%MCLOCATION%%!GRY!\data\renderer\materials"
+echo "%IObitUnlockerPath%" /advanced /move !SRCLIST:%cd%=%WHT%%%CD%%%GRY%! "!WHT!%%MCLOCATION%%!GRY!\data\renderer\materials"!RST!
 echo.
+if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 "%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials" >nul
 if !errorlevel! neq 0 (
     %uacfailed%
     goto st2
 ) else (
+    del /q /s ".settings\taskOngoing.txt" >nul
     echo !GRN![*] Step 2/2 OK.!RST!
 )
 echo.
 
 echo !REPLACELISTEXPORT! >"%rstrList%"
 
-if "!hasSubpack!" equ "true" (echo !packuuid: =!_!packVerInt: =!_!subpackName: =!>"%lastRP%") else (echo !packuuid: =!_!packVerInt: =!> "%lastRP%")
+if /i "!hasSubpack!" equ "true" (echo !packuuid: =!_!packVerInt: =!_!subpackName: =!>"%lastRP%") else (echo !packuuid: =!_!packVerInt: =!> "%lastRP%")
 
 set "lastPack=!currentPack!"
 
-del /q /s ".settings\taskOngoing.txt" >nul
+(
+echo matjectNEXT%isPreview% [%date% // %time:~0,-6%]
+echo "CPK: !lastPack!"
+echo "SRC: !SRCLIST:%USERNAME%=CENSORED!"
+echo "RPC: !REPLACELIST!"
+echo "RPE: !REPLACELISTEXPORT!"
+echo.
+)>>"logs\_injectionLog.txt"
 
 goto:EOF
