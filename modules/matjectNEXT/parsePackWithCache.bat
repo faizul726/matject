@@ -1,10 +1,10 @@
 @echo off
-if not defined murgi echo [41;97mYou can't open me directly[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
 set packUuid=
 set hasSubpack=
 for /f "delims=" %%i in ('modules\jq -r ".[0].pack_id" "%gameData%\minecraftpe\global_resource_packs.json"') do set "packUuid=%%i"
-if "!packUuid!" equ "null" (
+if /i "!packUuid!" equ "null" (
     set "lastPack=!currentPack: =!"
     set "currentPack=none"
     goto:EOF
@@ -13,7 +13,7 @@ if "!packUuid!" equ "null" (
 call "modules\matjectNEXT\parsePackVersion"
 
 if not defined %packUuid%_%packVerInt% (
-    call "modules\matjectNEXT\cachePacks"
+    call "modules\matjectNEXT\cachePacks" --findpack
 )
 
 set packPath=!%packUuid%_%packVerInt%!
@@ -22,7 +22,7 @@ for /f "delims=" %%j in ('modules\jq ".[0] | has(\"subpack\")" "%gameData%\minec
 
 echo !WHT!^> First activated pack: !Red!!packName! !GRN!v!packVer!!RST!!RST!
 echo !WHT!^> hasSubpack:!RST! !hasSubpack!
-if "!hasSubpack!" equ "true" (
+if /i "!hasSubpack!" equ "true" (
     call "modules\matjectNEXT\parseSubpack"
     set "currentPack=!packuuid!_!packVerInt!_!subpackName!" && set currentPack=!currentPack: =!
 ) else (
