@@ -57,7 +57,7 @@ goto:EOF
 
 :sameversion
 cls
-echo !GRN![*] Matject is up to date.!RST!
+echo !GRN![*] You're on the latest version of Matject^^! :D!RST!
 timeout 2 >nul
 goto:EOF
 
@@ -101,7 +101,7 @@ if !errorlevel! equ 1 (
     echo.
     echo !YLW![?] Are you sure you want to continue?!RST!
     echo.
-    echo !RED![Y] Yes    !GRN![N] No, go back!RST!
+    echo !RED![Y] Yes    !GRN![N] No, not now!RST!
     choice /c yn /n >nul
     echo.
     if !errorlevel! equ 1 call "modules\matjectUpdater"

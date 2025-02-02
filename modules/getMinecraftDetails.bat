@@ -1,6 +1,14 @@
 @echo off
 if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 echo !YLW!!BLINK![*] Getting Minecraft%preview% details...!RST!
+
+if not exist "%disableTips%" (
+    if not exist "%customMinecraftAppPath%" (
+        echo.
+        echo !GRN![TIP]!RST! You can make getting details faster by enabling "Use custom Minecraft app path"
+    )
+)
+
 if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
 :: PowerShell command by @FlaredRoverCodes
 for /f "tokens=1,2 delims=///" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage -Name Microsoft.%productID%).InstallLocation + '///' + (Get-AppxPackage -Name Microsoft.%productID%).Version"') do (
@@ -12,7 +20,9 @@ if not defined chcp_failed (chcp 65001 >nul 2>&1)
 
 if not defined MCLOCATION (
     echo !ERR![^^!] Minecraft%preview% is not installed.!RST!
-    if defined preview (del /q /s "%useForMinecraftPreview%" >nul)
+    echo.
+    echo !YLW![*] Disabled "Use for Minecraft Preview" to allow normal access to Matject.!RST!
+    if defined preview (del /q /s ".\%useForMinecraftPreview%" >nul)
     %exitmsg%
 )
 

@@ -29,6 +29,7 @@ if exist "%rstrList%" (
 :STEP1
 echo !YLW![*] Injection: Deleting vanilla materials... ^(Step 1/2^)!RST!
 echo Injection running... [%date% // %time:~0,-6%] > ".settings\taskOngoing.txt"
+:: if defined isAdmin start "" /b "modules\taskkillLoop"
 if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 if defined debugMode (
     echo.
@@ -46,7 +47,7 @@ if !errorlevel! neq 0 (
 
 
 echo [1F[0J!GRN![*] Injection: Step 1/2 succeed.!RST!
-if exist "%lastRP%" del /q /s "%lastRP%" >nul
+if exist "%lastRP%" del /q /s ".\%lastRP%" >nul
 echo.
 
 
@@ -70,7 +71,7 @@ if !errorlevel! neq 0 (
 
 echo [1F[0J!GRN![*] Injection: Step 2/2 succeed.!RST!
 
-if exist "%matbak%\" echo !REPLACELISTEXPORT! >"%rstrList%"
+if exist ".\Backups\%matbak:~7%" echo !REPLACELISTEXPORT! >"%rstrList%"
 if defined selected_mcpack (
     if defined selected_subpack (
         echo !MCPACKNAME! + !selected_subpack!>%lastMCPACK%
@@ -81,7 +82,7 @@ if defined selected_mcpack (
     echo.
     )>>"logs\_injectionLog.txt"
 ) else (
-    del /q %lastMCPACK% >nul 2>&1
+    del /q .\%lastMCPACK% >nul 2>&1
     (
     echo Manual%isPreview% [%date% // %time:~0,-6%]
     echo "SRC: !SRCLIST:%USERNAME%=CENSORED!"
@@ -90,5 +91,5 @@ if defined selected_mcpack (
     echo.
     )>>"logs\_injectionLog.txt"
 )
-del /q /s ".settings\taskOngoing.txt" >nul
-if exist "tmp" (rmdir /q /s tmp)
+del /q /s ".\.settings\taskOngoing.txt" >nul
+if exist "tmp" (rmdir /q /s .\tmp)

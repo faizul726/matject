@@ -57,7 +57,7 @@ goto :EOF
 for %%F in ("%USERPROFILE%\Desktop\Matject.lnk" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Matject.lnk") do (
     del /q %%F >nul 2>&1
 )
-if exist ".settings\matject_icon.ico" del /q ".settings\matject_icon.ico" >nul
-if exist ".settings\Matject.lnk" del /q ".settings\Matject.lnk" >nul
+if exist ".settings\matject_icon.ico" del /q ".\.settings\matject_icon.ico" >nul
+if exist ".settings\Matject.lnk" del /q ".\.settings\Matject.lnk" >nul
 set "status_shortcut=!RED![*] All shortcuts removed.!RST!"
 goto :EOF

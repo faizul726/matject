@@ -26,7 +26,7 @@ if %errorlevel% neq 0 (
     goto:EOF
 )
 
-if not exist ".settings\" (mkdir .settings)
+if not exist ".\.settings" (mkdir .settings)
 
 takeown /f "%ProgramFiles%\WindowsApps" || (
     >logs\unlockLog_%date:/=-%_%random%.txt takeown /f "%ProgramFiles%\WindowsApps"
@@ -42,7 +42,7 @@ if %errorlevel% equ 0 (
         echo If you can, report the issue on GitHub repo or join Newb Discord server and report in #newb-support
         echo [96m
         echo https://faizul726.github.io/newb-discord
-        echo [0m
+        echo [0m[?25h
         echo on
         cmd /k
     )

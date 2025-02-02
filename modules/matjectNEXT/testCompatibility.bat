@@ -123,6 +123,6 @@ for /f "delims=" %%i in ('modules\jq -r ".[0].subpack" "tmp\sample-globalpacks.j
 set packPath=!%packUuid%_%packVerInt%!
 
 for /f "delims=" %%i in ('modules\jq -r ".header.name" "!packpath!\sample-manifest.json"') do set "packName=%%i"
-rmdir /q /s "tmp"
+rmdir /q /s ".\tmp"
 if "!subpackname!" equ "subpackthree" (echo !GRN![*] Compatibility test OK. Means you can use matjectNEXT.!RST! & echo. & echo matjectNEXT compatibility test passed. [%date% // %time:~0,-6%]>".settings\compatibilityTestOK.txt" && pause)
 echo.

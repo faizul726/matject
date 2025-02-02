@@ -109,8 +109,8 @@ call "modules\matjectNEXT\listMaterials"
 if !errorlevel! neq 0 (
     echo [1F[0J!RED![^^!] Shader is not for Windows. Skipping...!RST!
     echo.
-    del /q /s "MATERIALS\*" >nul
-    if exist tmp (rmdir /q /s tmp)
+    del /q /s ".\MATERIALS\*" >nul
+    if exist tmp (rmdir /q /s .\tmp)
     if exist "%rstrList%" (
         goto restorevanilla
     )
@@ -119,7 +119,7 @@ if !errorlevel! neq 0 (
 )
 call "modules\matjectNEXT\injectMaterials"
 if !errorlevel! equ 9 (
-    del /q MATERIALS\*.material.bin >nul 2>&1
+    del /q ".\MATERIALS\*.material.bin" >nul
     exit /b 9
 )
 :end

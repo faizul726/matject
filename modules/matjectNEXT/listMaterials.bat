@@ -11,7 +11,7 @@ set BINS=
 
 if not exist "MATERIALS" mkdir MATERIALS
 
-copy /d "!packPath!\renderer\materials\*.material.bin" "%cd%\MATERIALS\" >nul 2>&1
+copy /d "!packPath!\renderer\materials\*.material.bin" "%cd%\MATERIALS" >nul 2>&1
 echo !YLW![*] Copied !RED!main!YLW! materials.!RST!
 if /i "!hasSubpack!" equ "true" (copy /d "!packPath!\subpacks\!subpackName!\renderer\materials\*.material.bin" "%cd%\MATERIALS" >nul 2>&1)
 echo !YLW![*] Copied !BLU!!subpackName!!YLW! ^(subpack^) materials.!RST!

@@ -47,4 +47,5 @@ echo.
 echo Realm of gathering woes?
 echo.
 endlocal
-cmd /k
+echo on
+@cmd /k

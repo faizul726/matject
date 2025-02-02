@@ -2,10 +2,14 @@
 setlocal enabledelayedexpansion
 if "[%1]" equ "[]" (if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k) else (goto letsgo)
 
+
+:: Make everything writable once again
+for %%F in ("matject.bat" ".\modules\*.bat" ".\modules\matjectNEXT\*.bat") do (attrib -R "%%~fF")
+
 :: Copy itself to tmp folder because during update the file itself will replaced.
 echo !YLW![*] Copying updater to temporary folder...!RST!
 echo.
-if not exist tmp (mkdir tmp) else (del /q tmp\* >nul)
+if not exist tmp (mkdir tmp) else (del /q .\tmp\* >nul)
 
 copy /d "modules\matjectUpdater.bat" "tmp" >nul
 
@@ -33,15 +37,20 @@ for /f "delims=" %%x in ('curl -fSs https://raw.githubusercontent.com/faizul726/
     if "[%%x]" equ "[]" (goto somethingWentWrong) else (
         set "memoire=%%x"
         if "!memoire:~0,1!" neq "v" (goto somethingWentWrong) else (
-            echo !memoire!
-            echo %~1
             if /i "!memoire!" equ "%~1" (set "directUpdate=true") else (set "directUpdate=")
         )
     )
 )
 
+:: Once again, just in case...
+for %%F in ("matject.bat" ".\modules\*.bat" ".\modules\matjectNEXT\*.bat") do (attrib -R "%%~fF")
+
 :: Prioritize git over curl so extracting is not needed.
-echo !YLW![*] Updating from %~1 to %~2
+if defined directUpdate (
+    echo !YLW![*] Updating from %~1 to %~2 ^(Direct update^)
+) else (
+    echo !YLW![*] Updating from %~1 to %~2 ^(Indirect update, will move old data to "Old Matject Data"^)
+)
 echo.
 >nul 2>&1 where git && (
     echo !YLW![*] Downloading ^(using git clone^)...!RST!
@@ -49,12 +58,12 @@ echo.
     git clone https://github.com/faizul726/matject.git
     popd
     if exist "tmp\matject\matject.bat" (
-        rmdir /q /s "tmp\matject\.git"
-        rmdir /q /s "modules"
-        del /q *>nul 2>&1
+        rmdir /q /s ".\tmp\matject\.git"
+        rmdir /q /s ".\modules"
+        del /q .\*>nul 2>&1
         if not defined directUpdate (
             if not exist "Old Matject Data\%~1" (mkdir "Old Matject Data\%~1")
-            for %%f in (.settings Backups logs MATERIALS MCPACKS) do (move /y "%%f" "Old Matject Data\%~1" >nul 2>&1)
+            for %%f in (.settings Backups logs MATERIALS MCPACKS) do (move /y "%%f" ".\Old Matject Data\%~1" >nul 2>&1)
         )
         for /d %%f in (tmp\matject\*) do (move /y "%%f" "%cd%" >nul 2>&1)
         for %%f in (tmp\matject\*) do (move /y "%%f" "%cd%" >nul 2>&1)
@@ -69,8 +78,8 @@ echo.
         powershell -NoProfile -Command Expand-Archive -Force 'tmp/matject-main.zip' 'tmp'
     )
     if exist "tmp\matject-main\matject.bat" (
-        rmdir /q /s "modules"
-        del /q *>nul 2>&1
+        rmdir /q /s ".\modules"
+        del /q .\*>nul 2>&1
         if not defined directUpdate (
             if not exist "Old Matject Data\%~1" (mkdir "Old Matject Data\%~1")
             for %%f in (.settings Backups logs MATERIALS MCPACKS) do (move /y "%%f" "Old Matject Data\%~1" >nul 2>&1)
@@ -92,7 +101,7 @@ if !errorlevel! neq 0 (goto somethingWentWrong)
 goto :EOF
 
 :somethingWentWrong
-!RED![^^!] Something went wrong...!RST!
+echo !RED![^^!] Something went wrong...!RST!
 :somethingNotWentWrong
 echo.
 echo Press any key to exit...

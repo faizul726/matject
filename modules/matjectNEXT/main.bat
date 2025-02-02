@@ -4,7 +4,7 @@ if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[
 cls
 title matjectNEXT %version%%dev%%isPreview%
 
-if not exist "logs\" mkdir logs
+if not exist ".\logs" mkdir logs
 
 if exist %matjectNEXTenabled% goto lessgo
 
@@ -207,7 +207,7 @@ if defined modtime (
                 if !errorlevel! neq 0 (
                     echo [1F[0J!RED![^^!] Shader is not for Windows. Skipping...!RST!
                     echo.
-                    if exist "tmp" (rmdir /q /s "tmp")
+                    if exist "tmp" (rmdir /q /s ".\tmp")
                     del /q /s "MATERIALS\*" >nul
                     echo.
                     if exist "%lastRP%" (

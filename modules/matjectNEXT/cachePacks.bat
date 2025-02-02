@@ -10,7 +10,7 @@ if not exist "%disableManifestCheck%" (call modules\matjectNEXT\manifestChecker)
 
 echo !YLW!!BLINK![*] Caching resource packs...!RST!
 echo.
-if exist "logs\cacheLog_%date%.txt" del /q /s "logs\cacheLog_%date:/=-%.txt" >nul
+if exist "logs\cacheLog_%date%.txt" del /q /s ".\logs\cacheLog_%date:/=-%.txt" >nul
 
 for /d /r "%gameData%\resource_packs" %%D in (*) do (
     if exist "%%D\manifest.json" (

@@ -28,6 +28,7 @@ set "b64_E=AAAAAAAAAAAAAP//////////////////////////////////////////////////"
 set "b64_F=AAAAAAAAAAAAAP///wD///+A////////////////////////////////////////"
 
 if not exist .settings (mkdir .settings)
+if not exist tmp (mkdir tmp)
 
 (
 echo -----BEGIN CERTIFICATE-----
@@ -1191,10 +1192,10 @@ echo %b64_2%
 echo %b64_2%
 echo ////////////////////////////////////////
 echo -----END CERTIFICATE-----
-) > .settings\matject_icon.ico.b64
+) > .\tmp\matject_icon.ico.b64
 :: END OF BASE64
 call modules\clearVariable createIcon_all
-certutil -decode .settings\matject_icon.ico.b64 .settings\matject_icon.ico >nul
-del /q /s .settings\matject_icon.ico.b64 >nul
+certutil -decode tmp\matject_icon.ico.b64 .\.settings\matject_icon.ico >nul
+del /q /s .\tmp\matject_icon.ico.b64 >nul
 echo.
 goto :EOF

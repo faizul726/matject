@@ -5,11 +5,11 @@ echo Backup running... [%date% // %time:~0,-6%]>".settings\backupRunning.txt"
 title %title% (making backup)
 echo !GRN![*] Backing up materials...!RST!
 echo.
-xcopy /g "!MCLOCATION!\data\renderer\materials\*" "%matbak%\" /q /e /i /h /y
-del /q /s ".settings\backupRunning.txt" >nul
+xcopy /g "!MCLOCATION!\data\renderer\materials\*" ".\Backups\%matbak:~8%" /q /e /i /h /y
+del /q /s ".\.settings\backupRunning.txt" >nul
 echo %date% // %time:~0,-6%>%backupDate%
 title %title%
 echo.
-echo !GRN![*] Backed up materials to "%matbak%"!RST!
+echo !GRN![*] Backed up materials to "Backups\%matbak:~8%"!RST!
 echo.
 timeout 5

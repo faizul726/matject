@@ -1,16 +1,27 @@
-<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="56px"></img>Matject v3.5.0</h1>
+<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="56px"></img>Matject v3.5.1</h1>
 
-*Last updated: Jan 15, 2025*
+*Last updated: Feb 02, 2025*
 
 </br>
 
-**[How to use?](#-how-to-use)**
+**[How to use?](#-quick-guide)**
 
 [Features](#-features) | [Credits](#-credits) | [Known issues](#-known-issues) | [FAQ](#-faq) | [Changelog](#-changelog)
 
 </br>
 
 <h3 align="center">❌ DO NOT MIRROR/REUPLOAD THIS ANYWHERE! ❌</h3><br>
+
+<br>
+
+> [!WARNING]  
+> Versions older than v3.5.0 has a dangerous bug that deletes all user files.  
+> It's already fixed in v3.5.1.  
+>
+> **For your safety, you should always use the latest version** and avoid links from Google/YouTube.  
+>
+> DO NOT use old versions.  
+> [github.com/faizul726/matject](https://github.com/faizul726/matject) is the ONLY official source for Matject.
 
 <br>
 
@@ -22,7 +33,7 @@
 
 </br>
 
-![20250115_183159](https://github.com/user-attachments/assets/d6132748-4bd2-4bee-a854-7bd09ddbfbe3)  
+![20250115_183159](https://github.com/user-attachments/assets/740da8aa-0177-482a-a065-4f4f48ac857f)
 
 <p align=center><i>You can also call it Matjet because it's as fast as a jet.<br><code>I know I'm exaggerating...</code></i></p>
 
@@ -32,10 +43,10 @@
 Matject is an **advanced material replacer** that allows users to use Minecraft shaders. It dynamically automates the process of replacing and restoring game files.
  
 **How?**  
-It uses IObit Unlocker to replace/restore game files since Windows doesn't normally allow modifying apps.
+It uses IObit Unlocker to replace/restore game files since Windows doesn't allow modifying apps.
 
 **Why?**  
-**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Jan 15).**  
+**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Feb 02).**  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 I made this script so that users don't have to go through the hassle of replacing game files by themselves.
 
@@ -44,7 +55,7 @@ I made this script so that users don't have to go through the hassle of replacin
 <br>
 
 >[!IMPORTANT]  
-> 🟥 Make sure the shader you're using supports **Windows** and the **game version**.  
+> Make sure the shader you're using supports **Windows** and the **game version**.  
 > Otherwise, you will see invisible blocks or the game will crash.
 > 
 > ***You can also enable material-updater in settings to fix invisible blocks.***
@@ -55,19 +66,17 @@ I made this script so that users don't have to go through the hassle of replacin
 
 </br>
 
-## ✨ What's new in v3.5.0?
-* Added Matject updater
-* Added multiple MCPACK/ZIP support for MCPACKS folder.
-* IObit Unlocker messages are now automatically closed when Matject is run as admin.
-* Added more bugs to fix later.
-* [...See full changelog](#changelog)
+## ✨ What's new in v3.5.1?
+* Fixed a CRITICAL BUG that deletes all user files
+* Added module verification
+* Extracting Matject ZIP file is now mandatory
+* [See full changelog...](#-changelog)
 
 </br><br>
 
 
-# 💡 How to use? 
+# 💡 Quick Guide
 
-Here is a short guide.  
 **See [Guide for Beginners](https://faizul726.github.io/matject/docs/guide-for-beginners) for a better explanation.**
 
 <br>
@@ -85,7 +94,7 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 4. Open `matject.bat`.
 5. The rest is self explanatory.  
 
-**See [📘 Detailed Guide](https://faizul726.github.io/matject/docs/guide-for-beginners)**
+**See 📘 [Detailed Guide](https://faizul726.github.io/matject/docs/guide-for-beginners)**
 
 <br><br>
 
@@ -102,7 +111,7 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 
 ## ⭐ Features
 * **Easy to use:** <u>no Command Prompt/Terminal knowledge</u> is required.
-* **Fully offline:** Can be used offline. Internet is used to enhance experience.
+* **Fully offline:** Can be used offline. Internet is optionally used to enhance experience.
 * **Fast as jet**: Takes less than <u>60 seconds</u> to apply a shader. 
 * **Automatic backups:** Backups are made automatically when game is updated.
 * **Restore game files:** You can go back to original whenever you want. 
@@ -110,7 +119,7 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 * **Auto shader updater:** Shaders can be updated using [material-updater](https://github.com/mcbegamerxx954/material-updater) (also fixes invisible blocks).
 * **Auto updater:** Can automatically update itself if you want.
 * **Dynamic file replacement:** Keeps track of modified files and restores if needed.
-* **Highly customizable:** Adjustments according to your needs can be done from Matject Settings.
+* **Highly customizable:** Adjustments according to your needs can be made in Matject Settings.
 * **matjectNEXT:** Applies shaders based on the first activated pack in Global Resource Packs.
 
 </br><br>
@@ -134,10 +143,11 @@ People of [YSS](https://discord.gg/UJdvR6WBAe) and [Newb Community](https://faiz
 > [!TIP]  
 > **Need help?**  
 > Join [Newb Discord server](https://faizul726.github.io/newb-discord) and send message in `#newb-support`. I will be happy to assist you.
+> You can also ask for help in [YSS Discord Server -> #windows](https://discord.gg/UJdvR6WBAe) or [Bedrock Graphics -> #matject](https://discord.gg/XrQhnTP89R)
 
 </br>
 
-## ⚠ Known issues
+## ⚠️ Known issues
 * Doesn't support long folder path and too many shader files.
 * Antivirus may prevent IObit Unlocker from working. (e.g. AVG)
 
@@ -146,7 +156,7 @@ People of [YSS](https://discord.gg/UJdvR6WBAe) and [Newb Community](https://faiz
 ## 🤔 FAQ
 **Q. What is matjectNEXT?**  
 A. matjectNEXT is an advanced version of Matject that replaces materials based on the pack the user has set in Global Resource Packs, with help of **[jq](https://jqlang.github.io/jq)**.  
-*Inspired by [Draco](https://github.com/mcbegamerxx954/draco-injector) by @mcbegamerxx954*.
+Inspired by [Draco](https://github.com/mcbegamerxx954/draco-injector) which is made by [@mcbegamerxx954](https://github.com/mcbegamerxx954/).
 
 **Q. How is this different from [BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/)?**  
 A. BetterRenderDragon uses *memory injection*, all the changes are made in memory and those don't persist. You have to open BRD each time to use shaders.  
@@ -155,16 +165,18 @@ Changes made by Matject will stay until Minecraft is updated or user restores de
 It's mostly universal, so it should work with any Minecraft version.
 
 **Q. Virus?**  
-A. Well, depends on you. (2) `(hint: It's not.)`
+A. Well, depends on you. (2) `(hint: it's not.)`
 
 **Q. Does it require internet to work?**  
-A. No, internet is only needed to optionally enhance user experience
+A. No, internet is optionally used to enhance user experience
 * To check for updates and show the changelog. Updating is optional.
+* To show Matject announcements
 * To get [jq](https://jqlang.github.io/jq) by itself (for matjectNEXT).  
 * To get [material-updater](https://github.com/mcbegamerxx954/material-updater) by itself.  
 
 **Q. I have questions/need help.**  
-A. Join [Newb Discord Server](https://faizul726.github.io/newb-discord) and send message in #newb-support. I will try to help.
+A. Join [Newb Discord Server](https://faizul726.github.io/newb-discord) and send message in `#newb-support`. I will try to help.  
+
 
 **Q. What folders does it access?**  
 <details closed>
@@ -208,7 +220,7 @@ You can still show your support by giving a star to this project :)
 ## 🕓 Changelog
 <!--TEMPLATE
 
-<details open><summary><b>v3.4.patch - month day, 2025</b></summary>
+<details open><summary><b>v3.5.patch - month day, 2025</b></summary>
 <ul>
   <li>placeholder</li>
   <li>placeholder</li>
@@ -226,7 +238,21 @@ You can still show your support by giving a star to this project :)
 
 -->
 
-<details open><summary><b>v3.5.0 - Jan 15, 2025</b></summary>
+<details open><summary><b>v3.5.1 - Feb 02, 2025</b></summary>
+<ul>
+  <li>Fixed a CRITICAL BUG that deletes all user files.</li>
+  <li>Added module verification to ensure reliability.</li>
+  <li>Matject no longer runs when tried to run without extracting.</li>
+  <li>Matject now uses more "specific" locations.</li>
+  <li>Fixed an issue with Matject updater.</li>
+  <li>Fixed an issue with full restore.</li>
+  <li>Other minor changes.</li>
+</ul>
+</br>
+</details>
+
+
+<details><summary><b>v3.5.0 - Jan 15, 2025</b></summary>
 <ul>
   <li>Added Matject updater.</li>
   <li>Added multiple MCPACK/ZIP support for MCPACKS folder.</li>

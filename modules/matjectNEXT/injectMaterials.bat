@@ -9,7 +9,7 @@ echo !YLW![*] Press [Y] to confirm injection or [B] to cancel.!RST!
 echo.
 choice /c yb /n >nul
 if !errorlevel! neq 1 (
-    del /q /s "MATERIALS\*" >nul
+    del /q /s ".\MATERIALS\*" >nul
     exit /b 9
 )
 
@@ -35,6 +35,18 @@ if exist "%rstrList%" (
 echo matjectNEXT injection running... [%date% // %time:~0,-6%] > ".settings\taskOngoing.txt"
 echo !YLW![*] Step 1/2: Deleting materials to replace...!RST!
 echo.
+if defined debugMode (
+    set /a _matCount=0
+    set /a _bkpMatCount=0
+    for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
+    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
+    echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
+    echo.
+    set "_matCount="
+    set "_bkpMatCount="
+)
+echo.
 echo !GRY!Executing...
 echo "%IObitUnlockerPath%" /advanced /delete !REPLACELIST:%MCLOCATION%=%WHT%%%MCLOCATION%%%GRY%!!RST!
 echo.
@@ -51,6 +63,18 @@ echo.
 :st2
 echo !YLW![*] Step 2/2: Replacing materials...!RST!
 echo.
+if defined debugMode (
+    set /a _matCount=0
+    set /a _bkpMatCount=0
+    for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
+    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
+    echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
+    echo.
+    set "_matCount="
+    set "_bkpMatCount="
+)
+echo.
 echo !GRY!Executing...
 echo "%IObitUnlockerPath%" /advanced /move !SRCLIST:%cd%=%WHT%%%CD%%%GRY%! "!WHT!%%MCLOCATION%%!GRY!\data\renderer\materials"!RST!
 echo.
@@ -60,7 +84,19 @@ if !errorlevel! neq 0 (
     %uacfailed%
     goto st2
 ) else (
-    del /q /s ".settings\taskOngoing.txt" >nul
+    if defined debugMode (
+        set /a _matCount=0
+        set /a _bkpMatCount=0
+        for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
+        for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+        echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
+        echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
+        echo.
+        set "_matCount="
+        set "_bkpMatCount="
+    )
+    echo.
+    del /q /s ".\.settings\taskOngoing.txt" >nul
     echo !GRN![*] Step 2/2 OK.!RST!
 )
 echo.
