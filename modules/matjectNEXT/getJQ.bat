@@ -36,18 +36,18 @@ if /i "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
     if !errorlevel! equ 0 (
         curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe >nul
     ) else (
-        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
-        if not defined chcp_failed (chcp 65001 >nul 2>&1)
+        if not defined chcp_failed (>nul 2>&1 chcp 65001)
     )
 ) else if /i "%PROCESSOR_ARCHITECTURE%" equ "x86" (
     where curl >nul 2>&1
     if !errorlevel! equ 0 (
         curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe >nul
     ) else (
-        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe -OutFile modules\jq.exe"
-        if not defined chcp_failed (chcp 65001 >nul 2>&1)
+        if not defined chcp_failed (>nul 2>&1 chcp 65001)
     )
 ) else (
     echo !RED![^^!] Unknown PROCESSOR_ARCHITECTURE: %PROCESSOR_ARCHITECTURE%. Maybe ARM based PC?!RST!

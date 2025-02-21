@@ -16,6 +16,16 @@ echo [0] Add/remove all shortcuts
 echo.
 if defined status_shortcut (echo %status_shortcut%) else (echo.)
 echo.
+if exist "%preferWtShortcut%" (
+    echo !GRY![*] Windows Terminal will be preferred for shortcuts.!RST!
+) else (
+    echo !GRY![*] Command Prompt will be preferred for shortcuts.!RST!
+)
+if not exist "%disableTips%" (
+    echo.
+    echo !GRN![TIP]!RST! You can change preferred app for shortcuts in Maject Settings.
+)
+echo.
 echo !YLW!Press corresponding key to confirm your choice...!RST!
 echo.
 choice /c 120b /n >nul
@@ -23,18 +33,28 @@ choice /c 120b /n >nul
 if %errorlevel% equ 1 call :copyshortcut "%USERPROFILE%\Desktop\Matject.lnk" & goto createShortcut_main
 if %errorlevel% equ 2 call :copyshortcut "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Matject.lnk" & goto createShortcut_main
 if %errorlevel% equ 3 call :copyshortcut all & goto createShortcut_main
-if %errorlevel% equ 4 goto :EOF
+if %errorlevel% equ 4 (
+    set "status_shortcut="
+    goto :EOF
+)
 
 :copyshortcut
-if not exist ".settings\matject_icon.ico" call "modules\createIcon"
-if not exist ".settings\Matject.lnk" call :createShortcut "%cd%\.settings\Matject.lnk"
+if not exist ".settings\matject_icon.ico" (
+    if exist ".settings\Matject.lnk" (call :deleteallshortcuts & goto :EOF)
+    call "modules\createIcon"
+) else (
+    if [%1] equ [all] (call :deleteallshortcuts & goto :EOF)
+)
+if not exist ".settings\Matject.lnk" (call :createShortcut "%cd%\.settings\Matject.lnk") else (
+    if [%1] equ [all] (call :deleteallshortcuts & goto :EOF)
+)
 if [%1] equ [all] (
     if exist "%USERPROFILE%\Desktop\Matject.lnk" call :deleteallshortcuts & goto :EOF
     if exist "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Matject.lnk" call :deleteallshortcuts & goto :EOF
     for %%D in ("%USERPROFILE%\Desktop" "%APPDATA%\Microsoft\Windows\Start Menu\Programs") do (
         copy /d .settings\Matject.lnk %%D >nul
     )
-    set "status_shortcut=!GRN![*] Shortcuts added to desktop and start menu.!RST!"
+    set "status_shortcut=!GRN![*] Shortcuts have been added to desktop and start menu.!RST!"
     goto :EOF
 )
 if not exist %1 (
@@ -48,9 +68,51 @@ goto :EOF
 
 :createShortcut
 echo !YLW!!BLINK![*] Creating shortcut...!RST!
-if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%1'); $s.TargetPath = '%cd%\matject.bat'; $s.Arguments = 'placebo' ; $s.IconLocation = '%cd%\.settings\matject_icon.ico'; $s.Save()"
-if not defined chcp_failed (chcp 65001 >nul 2>&1)
+echo:
+
+if [%1] equ [all] (
+    >nul 2>&1 where wt && (
+        echo !YLW![?] Which one the shortcut should use to open Matject?!RST!
+        echo:
+        echo !GRN![1] Windows Terminal!RST!
+        echo     Looks modern and beautiful, Windows 11-like UI.
+        echo:
+        echo !RED![2] Command Prompt!RST!
+        echo     Looks ancient. Maybe you love old things?
+        echo:
+        echo !GRY!Note: Both are the same except for how they look.!RST!
+
+        if not exist "%disableTips%" (
+            echo:
+            !GRN![TIP]!RST! You can change this in Matject Settings anytime.
+        )
+
+        choice /c yn /n >nul
+        if !errorlevel! equ 1 (
+            echo Windows users when they see terminal a terminal: *sweats* [%date% // %time:~0,-6%]>"%preferWtShortcut%"
+        ) else (
+            if exist "%preferWtShortcut%" del /q ".\%preferWtShortcut%" >nul
+        )
+    )
+)
+
+
+
+if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+
+if exist "%preferWtShortcut%" (
+    >nul 2>&1 where wt && (
+        for /f "tokens=*" %%W in ('where wt') do (set "shortcut_cmd=$s.TargetPath = '\"%%W\"'; $s.Arguments = 'cmd ")
+    ) || (
+        set "shortcut_cmd=$s.TargetPath = 'cmd'; $s.Arguments = '"
+    )
+) else (
+    set "shortcut_cmd=$s.TargetPath = 'cmd'; $s.Arguments = '"
+)
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%1'); !shortcut_cmd!/k \"%cd%\matject.bat\" fromshortcut' ; $s.IconLocation = '%cd%\.settings\matject_icon.ico'; $s.Description = 'A material replacer for Minecraft Bedrock Edition.'; $s.Save()
+set "shortcut_cmd="
+if not defined chcp_failed (>nul 2>&1 chcp 65001)
 goto :EOF
 
 :deleteallshortcuts
@@ -59,5 +121,5 @@ for %%F in ("%USERPROFILE%\Desktop\Matject.lnk" "%APPDATA%\Microsoft\Windows\Sta
 )
 if exist ".settings\matject_icon.ico" del /q ".\.settings\matject_icon.ico" >nul
 if exist ".settings\Matject.lnk" del /q ".\.settings\Matject.lnk" >nul
-set "status_shortcut=!RED![*] All shortcuts removed.!RST!"
+set "status_shortcut=!RED![*] All shortcuts have been removed.!RST!"
 goto :EOF

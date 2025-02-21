@@ -4,7 +4,7 @@ if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[
 echo.
 
 if exist %disableConfirmation% (goto inject)
-echo !YLW![*] Press [Y] to confirm injection or [B] to cancel.!RST!
+echo !BEL!!YLW![*] Press [Y] to confirm injection or [B] to cancel.!RST!
 >nul 2>&1 where msg && msg * Resource packs changed, injecting new materials...
 echo.
 choice /c yb /n >nul
@@ -39,7 +39,7 @@ if defined debugMode (
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
     echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
     echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
     echo.
@@ -50,7 +50,8 @@ echo.
 echo !GRY!Executing...
 echo "%IObitUnlockerPath%" /advanced /delete !REPLACELIST:%MCLOCATION%=%WHT%%%MCLOCATION%%%GRY%!!RST!
 echo.
-if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 "%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
 if !errorlevel! neq 0 (
     %uacfailed%
@@ -67,7 +68,7 @@ if defined debugMode (
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
     echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
     echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
     echo.
@@ -78,7 +79,8 @@ echo.
 echo !GRY!Executing...
 echo "%IObitUnlockerPath%" /advanced /move !SRCLIST:%cd%=%WHT%%%CD%%%GRY%! "!WHT!%%MCLOCATION%%!GRY!\data\renderer\materials"!RST!
 echo.
-if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 "%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials" >nul
 if !errorlevel! neq 0 (
     %uacfailed%
@@ -88,7 +90,7 @@ if !errorlevel! neq 0 (
         set /a _matCount=0
         set /a _bkpMatCount=0
         for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-        for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+        for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
         echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
         echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
         echo.
@@ -114,6 +116,6 @@ echo "SRC: !SRCLIST:%USERNAME%=CENSORED!"
 echo "RPC: !REPLACELIST!"
 echo "RPE: !REPLACELISTEXPORT!"
 echo.
-)>>"logs\_injectionLog.txt"
+)>>"logs\_injectionLogs.txt"
 
 goto:EOF

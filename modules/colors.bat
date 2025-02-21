@@ -16,6 +16,8 @@ set "hideCursor=[?25l"
 set "showCursor=[?25h"
 :: set "BLINK=[5m"
 
+set "BEL="
+
 if defined murgi goto:EOF
 
 title too late :doggysmurk:

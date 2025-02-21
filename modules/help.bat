@@ -1,7 +1,7 @@
 @echo off
 if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 
-title %title% ^(help^)
+title %title% Help
 cls
 echo !GRN![TIP]!RST! Check !CYN!faizul726.github.io/matject!RST! for better guide.
 echo.

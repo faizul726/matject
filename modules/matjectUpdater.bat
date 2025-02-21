@@ -4,7 +4,7 @@ if "[%1]" equ "[]" (if not defined murgi echo [41;97mYou're supposed to open ma
 
 
 :: Make everything writable once again
-for %%F in ("matject.bat" ".\modules\*.bat" ".\modules\matjectNEXT\*.bat") do (attrib -R "%%~fF")
+for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF")
 
 :: Copy itself to tmp folder because during update the file itself will replaced.
 echo !YLW![*] Copying updater to temporary folder...!RST!
@@ -43,7 +43,7 @@ for /f "delims=" %%x in ('curl -fSs https://raw.githubusercontent.com/faizul726/
 )
 
 :: Once again, just in case...
-for %%F in ("matject.bat" ".\modules\*.bat" ".\modules\matjectNEXT\*.bat") do (attrib -R "%%~fF")
+for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF")
 
 :: Prioritize git over curl so extracting is not needed.
 if defined directUpdate (
@@ -72,7 +72,7 @@ echo.
 ) || (
     echo !YLW![*] Downloading ^(using curl^)...!RST!
     call :downloadSource
-    if exist "%SYSTEMROOT%\system32\tar.exe" (
+    if exist "%SYSTEMROOT%\system32\%tarexe%" (
         tar -xf "tmp\matject-main.zip" -C "tmp"
     ) else (
         powershell -NoProfile -Command Expand-Archive -Force 'tmp/matject-main.zip' 'tmp'

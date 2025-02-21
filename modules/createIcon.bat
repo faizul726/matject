@@ -1,6 +1,6 @@
 @echo off
 if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
-echo [*] Making icon from base64... ^(modules\createIcon.bat^)
+echo [*] Making Matject icon from base64... ^(modules\createIcon.bat^)
 
 :: b64_n variables are used to reduce file size. (minimizing duplicate lines)
 :: reduced size from 80 KB to 28 KB :D

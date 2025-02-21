@@ -18,6 +18,9 @@ set "murgi=KhayDhan"
 :: Mostly referenced as variables from "modules\colors.bat"
 :: Although I used raw escape codes in some places.
 
+:: Starting from v3.5.2, I also added BEL symbol "" = Hex 0x07 / Decimal 7 
+:: Which just plays 'Windows Foreground.wav' or 'Critical Stop' in some confirmation screens.
+
 REM TODO
 REM - STORE SHADER NAME FOR LATER USE [DONE]
 REM - MERGE UNLOCK...BAT WITH MATJECT
@@ -27,10 +30,36 @@ REM - L24, L34, unlockWindowsApps: use && ||
 REM - Check -> Checker
 REM - curl redirect stderr to stdout
 REM - Move common functions to different file
-REM - Use cscript for vbs
+REM - Use cscript for vbs [DONE]
 REM - Use for %%f for colors to set variables
-REM - Use start /b trickery for iobit window closing
-REM - Change up to date to you are using latest version something...
+REM - Use start /b trickery for iobit window closing [DONE]
+REM - Change up to date to you are using latest version something... [DONE]
+
+:: Check critical components
+>nul 2>&1 where certutil || (
+    cls
+    echo [91m[^^!] Critical component 1 not found.[0m
+    echo.
+    echo Exiting...
+    cmd /k
+)
+
+>nul 2>&1 where findstr || (
+    cls
+    echo [91m[^^!] Critical component 2 not found.[0m
+    echo.
+    echo Exiting...
+    cmd /k
+)
+
+>nul 2>&1 where powershell || (
+    cls
+    echo [91m[^^!] PowerShell not found.
+    echo     You can't use Matject without it.[0m
+    echo.
+    echo Exiting...
+    cmd /k
+)
 
 echo %cd% | findstr /C:"Local\Temp" /I >nul && (
     title EXTRACT FIRST^^!
@@ -46,7 +75,7 @@ echo %cd% | findstr /C:"Local\Temp" /I >nul && (
 if not exist "%cd%\matject.bat" (
     title FOLDER NOT FOUND^^!
     cls
-    echo [93mCouldn't get Matject folder automatically[0m
+    echo [93m[^^!] Couldn't get Matject folder automatically[0m
     echo.
     echo Exiting...[?25h
     echo.
@@ -55,12 +84,56 @@ if not exist "%cd%\matject.bat" (
 )
 
 :: Check admin status
+>nul 2>&1 (wmic /locale:ms_409 service where ^(name="LanManServer"^) get state /value | findstr /i "State=Running") 
+if %errorlevel% equ 0 (
+    >nul 2>&1 net session && (set isAdmin=true) || (set "isAdmin=")
+) else (
+    >nul 2>&1 where fltmc && (
+        >nul 2>&1 fltmc && (set isAdmin=true) || (set "isAdmin=")
+    ) || (
+        >nul 2>&1 where openfiles && (
+            >nul 2>&1 openfiles && (set isAdmin=true) || (set "isAdmin=")
+        ) || (set "isAdmin=")
+    )
+)
+
 if [%1] equ [] (
-    if not exist ".settings\runAsAdmin.txt" (start /b "Loading..." cmd /k "%~f0" placebo & exit /b 0) else (
-        net session >nul 2>&1
-        if !errorlevel! neq 0 (
-            if exist ".settings\runAsAdmin.vbs" (".settings\runAsAdmin.vbs" & exit /b 0) else (
-                powershell -NoProfile -Command Start-Process -FilePath 'cmd' -ArgumentList '/k', '\"%cd%\matject.bat\"', 'murgi' -Verb runAs && exit || (
+    if not exist ".settings\runAsAdmin.txt" (
+        if exist ".settings\matject_icon.ico" (
+            if exist ".settings\Matject.lnk" (
+                start /i "Loading..." "%cd%\.settings\Matject.lnk" placebo
+            ) else start /b "Loading..." cmd /k "%~f0" placebo
+        ) else start /b "Loading..." cmd /k "%~f0" placebo
+        goto :EOF
+    ) else (
+        rem net session >nul 2>&1
+        if not defined isAdmin (
+            if exist ".settings\runAsAdmin.vbs" (
+                echo.
+                echo [93m[^^!] Cancelling admin permission request will close Matject.[0m
+                if exist ".settings\matject_icon.ico" (
+                    if exist ".settings\Matject.lnk" (
+                        cscript /NoLogo ".settings\runAsAdmin.vbs" matjet "%cd%\.settings\Matject.lnk"
+                    )
+                ) else cscript /NoLogo ".settings\runAsAdmin.vbs" matjet "%~f0"
+                goto :EOF
+            ) else (
+                if exist ".settings\matject_icon.ico" (
+                    if exist ".settings\Matject.lnk" (
+                        powershell -NoProfile -Command Start-Process -FilePath '\"%cd%\.settings\Matject.lnk\"' -ArgumentList 'murgi' -Verb runAs && exit || (
+                                            del /q ".\.settings\runAsAdmin.txt" >nul 2>&1
+                                            echo [91m[^^!] Failed to launch Matject as admin.
+                                            echo.
+                                            echo [93m[*] Disabled "Run as admin always" to allow normal access to Matject.[0m
+                                            echo.
+                                            echo [*] You may want to open Matject again.
+                                            echo.
+                                            echo Press any key to exit...
+                                            pause >nul
+                                            exit /b 1
+                        )
+                    )
+                ) else powershell -NoProfile -Command Start-Process -FilePath 'cmd' -ArgumentList '/k', '\"%cd%\matject.bat\"', 'murgi' -Verb runAs && exit || (
                     del /q ".\.settings\runAsAdmin.txt" >nul 2>&1
                     echo [91m[^^!] Failed to launch Matject as admin.
                     echo.
@@ -73,12 +146,16 @@ if [%1] equ [] (
                     exit /b 1
                 )
             )
+        ) else (
+            if exist ".settings\matject_icon.ico" (
+                if exist ".settings\Matject.lnk" (
+                    start /i "Loading..." "%cd%\.settings\Matject.lnk" placebo
+                )
+            ) else start /b "Loading..." cmd /k "%~f0" placebo
+            goto :EOF
         )
     )
 )
-
-net session >nul 2>&1
-if %errorlevel% equ 0 (set isAdmin=true) else (set "isAdmin=")
 
 :: Verify modules
 :: All %%h things have two things, lastEightCharactersOfSHA256-FILENAME
@@ -92,10 +169,10 @@ if not exist ".settings\disableModuleVerification.txt" (
 
     :: Make all *.bat files read only
     if not exist ".settings\dontMakeReadOnly.txt" (
-        for %%F in ("matject.bat" ".\modules\*.bat" ".\modules\matjectNEXT\*.bat") do (attrib +R "%%~fF")   
+        for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*.bat") do (attrib +R "%%~fF")   
     )
 
-    for %%h in (66c64dd3-about 35ca1ba2-autoject 44b790c1-backupMaterials 3c893fb2-checkMaterialCompatibility ed76f46d-checkUpdates d27259a2-clearVariable 96ca3edb-colors 0b8ec7e5-createIcon 44c8fecf-createShortcut 6a2dca0a-getMaterialUpdater 4dc7e9f7-getMatjectAnnouncement 278706cb-getMinecraftDetails 453063eb-help 33882c1c-matjectTips 56d17c6f-matjectUpdater 823fabe2-restoreMaterials 1426aadd-settings 7fc54b37-taskkillLoop 1afa7c1b-unlockWindowsApps 53bcbcd2-updateMaterials f9b920d8-variables) do (
+    for %%h in (292a1b59-about bb861993-autoject 9f75531d-backupMaterials 3c893fb2-checkMaterialCompatibility fa7954eb-checkUpdates d27259a2-clearVariable 440aa985-colors 8ba9f113-createIcon b2c8441e-createShortcut 235a4d69-getMaterialUpdater 4dc7e9f7-getMatjectAnnouncement 5c847776-getMinecraftDetails 064778a7-help 7a1cdeb1-matjectTips 11b68e22-matjectUpdater 7ec9918d-restoreMaterials c6f1e445-settings 7189593e-taskkillLoop 6d3ff4e2-unlockWindowsApps 53bcbcd2-updateMaterials 2a903b8d-variables 94d7031a-matjectNEXT\cachePacks 6bb94473-matjectNEXT\getJQ 7c371bcb-matjectNEXT\injectMaterials d972f91e-matjectNEXT\listMaterials e9548fdb-matjectNEXT\main 5a3dd67b-matjectNEXT\manifestChecker 89011b0f-matjectNEXT\parsePackVersion d08947bd-matjectNEXT\parsePackWithCache a666004f-matjectNEXT\parseSubpack e3a120e3-matjectNEXT\syncMaterials 77add459-matjectNEXT\testCompatibility) do (
         set "fileToHash=%%h"
         rem echo !fileToHash:~9! = !fileToHash:~0,8!
         if not exist "modules\!fileToHash:~9!.bat" (
@@ -109,7 +186,7 @@ if not exist ".settings\disableModuleVerification.txt" (
             echo Exiting...[?25h
             echo.
             echo on
-            cmd /k
+            @cmd /k
         ) else (
             for /f "tokens=*" %%A in ('certutil -hashfile "modules\!fileToHash:~9!.bat" SHA256 ^| findstr /v ":"') do (
                 set "fileHash=%%A"
@@ -120,6 +197,8 @@ if not exist ".settings\disableModuleVerification.txt" (
                     echo.
                     echo [93m[^^!] Don't try to fix it yourself if you are not smart enough.
                     echo     Download Matject again from [96mgithub.com/faizul726/matject[93m instead.[0m
+                    echo.
+                    echo [90mDetails: "!fileHash:~56,8!" NEQ "!fileToHash:~0,8!"[0m
                     echo.
                     echo Exiting...[?25h
                     echo.
@@ -156,10 +235,14 @@ if exist ".settings\useForMinecraftPreview.txt" (
 call "modules\variables"
 if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
 
+:: It's tricky to do logical OR in Windows Batch.
+:: So, using weird variable to make sure 'if exist tar' fails.
+if not exist "%fallbackToExpandArchive%" (set "tarexe=tar.exe") else (set "tarexe=confused_unga/bunga")
+
 
 :: SET VERSION AND WINDOW TITLE
 ::set "dev=-dev ^(20241209^)"
-set "version=v3.5.1"
+set "version=v3.5.2"
 set "title=Matject %version%%dev%%isPreview%"
 title %title%
 
@@ -181,9 +264,12 @@ if not defined matbak (
     echo.
     @cmd /k
 )
-if exist ".\Backups\%matbak:~8%" (
-    if not exist ".\Backups\%matbak:~8%\*.material.bin" (
-        rmdir /q /s ".\Backups\%matbak:~8%"
+if exist ".\Backups%matbak:~7%" (
+    if not exist ".\Backups%matbak:~7%\*.material.bin" (
+        rmdir /q /s ".\Backups%matbak:~7%"
+        rem if exist "%rstrList%" (>nul del /q ".\%rstrList%")
+        rem if exist "%lastMCPACK%" del /q /s ".\%lastMCPACK%" >nul
+        rem if exist "%lastRP%" del /q /s ".\%lastRP%" >nul
     )
 )
 if not exist logs (mkdir logs)
@@ -213,10 +299,11 @@ echo - Deferred/PBR/RTX packs are not supported.
 echo - DO NOT MODIFY files while using Matject.
 echo - DO NOT USE THIS, IF IT'S NOT FROM !CYN!%githubLink:~8,-1%!YLW!
 echo   That's the one and only official source. Avoid using downloading from Google/YouTube.
+echo - DO NOT USE Matject on debloated/optimized Windows ^(Atlas/Revi/Tiny/Chris Titus Utility^)
 echo - English is not my primary language. So, grammatical errors are expected.!RST!
 echo.
 echo %showCursor%
-set /p "firstRun=Type !GRN!yes!RST! to confirm:!GRN! "
+set /p "firstRun=Type !RED!yes!RST! and press [Enter] to confirm:!GRN! "
 echo %hideCursor%
 if "!firstRun!" neq "yes" (
     echo !ERR![^^!] WRONG INPUT!RST!
@@ -244,7 +331,7 @@ if "!firstRun!" neq "yes" (
     echo !GRN![Y] Yes !GRY!^(Desktop and Start menu^)
     echo !RED![N] No!RST!
     echo.
-    echo !GRN![TIP]!RST! You can add/remove shortcuts from Restore ^& Others anytime.!RST!
+    echo !GRN![TIP]!RST! You can add/remove shortcuts from "Remove Shaders/Tools" anytime.!RST!
     echo.
     choice /c yn /n >nul
     if !errorlevel! equ 1 call "modules\createShortcut" all
@@ -291,7 +378,7 @@ call "modules\settings" toggleP2_3
 :checkIObitUnlocker
 if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     cls
-    echo !RED![^^!] Seems like you don't have IObit Unlocker installed.!RST!
+    echo !BEL!!RED![^^!] It seems like you don't have IObit Unlocker installed.!RST!
     echo     It's required to use Matject.
     echo.
 
@@ -310,7 +397,7 @@ if not exist "%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe" (
     if !errorlevel! equ 1 (start https://www.iobit.com/en/iobit-unlocker.php & exit)
     if !errorlevel! equ 2 (exit)
     if !errorlevel! equ 3 (call "modules\settings" toggleP2_3)
-    ) else (set "IObitUnlockerPath=%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker")
+    ) else (set "IObitUnlockerPath=%ProgramFiles(x86)%\IObit\IObit Unlocker\IObitUnlocker.exe")
 
 :iobitUnlockerFound
 if exist "%customMinecraftAppPath%" (
@@ -334,9 +421,9 @@ if exist "%customMinecraftAppPath%" (
             set /p OLDVERSION=<%oldMinecraftVersion%
             echo %hideCursor%>nul
         ) else (
-            if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+            if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
             for /f "tokens=*" %%i in ('powershell -NoProfile -command "(Get-AppxPackage -Name Microsoft.%productID%).Version"') do (set "CURRENTVERSION=%%i" & set "OLDVERSION=%%i")
-            if not defined chcp_failed (chcp 65001 >nul 2>&1)
+            if not defined chcp_failed (>nul 2>&1 chcp 65001)
         )
     )
 ) else (
@@ -375,7 +462,7 @@ if exist "%unlocked%" goto DELETEOLDBACKUP
 
 if not exist "%unlocked%" (
     cls 
-    echo !YLW![*] You don't have "%ProgramFiles%\WindowsApps" folder unlocked.!RST!
+    echo !BEL!!YLW![*] You don't have "%ProgramFiles%\WindowsApps" folder unlocked.!RST!
     echo.
     echo !RED!Without unlocking Matject CANNOT backup materials.!RST!
     echo.
@@ -390,9 +477,9 @@ if not exist "%unlocked%" (
         cls
         title %title% ^(unlocking WindowsApps^)
         echo !YLW!!BLINK![*] Unlocking WindowsApps folder...!RST!
-        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
-        powershell -NoProfile -command Start-Process -File '\"%cd%\modules\unlockWindowsApps.bat\"' -Verb runas -Wait
-        if not defined chcp_failed (chcp 65001 >nul 2>&1)
+        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+        powershell -NoProfile -command Start-Process -File '\"%cd%\modules\unlockWindowsApps.bat\"' -ArgumentList 'murgi' -Verb runas -Wait
+        if not defined chcp_failed (>nul 2>&1 chcp 65001)
         echo.
         if not exist %unlocked% (title %title% && echo !ERR![^^!] FAILED. Saved log in .settings\unlockLog.txt. You might need it for finding the issue later.!RST! && %exitmsg%) else (
             echo !GRN![*] Unlocked.!RST!
@@ -409,10 +496,10 @@ if exist ".settings\backupRunning.txt" (
     echo.
     echo !YLW![*] Making new backup...!RST!
     echo.
-    if exist ".\Backups\%matbak:~8%" rmdir /q /s ".\Backups\%matbak:~8%"
+    if exist ".\Backups%matbak:~7%" rmdir /q /s ".\Backups%matbak:~7%"
     call "modules\backupMaterials"
 )
-if exist ".\Backups\%matbak:~8%" (
+if exist ".\Backups%matbak:~7%" (
     if "!CURRENTVERSION!" neq "!OLDVERSION!" (
     cls
     echo !RED![^^!] OLD SHADER BACKUP DETECTED.!RST!
@@ -422,11 +509,11 @@ if exist ".\Backups\%matbak:~8%" (
     if exist %dontRetainOldBackups% (
         echo !YLW![*] Deleting old backup...!RST!
         echo.
-        rmdir /q /s ".\Backups\%matbak:~8%"
+        rmdir /q /s ".\Backups%matbak:~7%"
     ) else (
         echo !YLW![*] Renaming old backup...!RST!
         echo.
-        rename ".\Backups\%matbak:~8%" "Old Materials Backup (v!OLDVERSION!)"
+        rename ".\Backups%matbak:~7%" "Old Materials Backup (v!OLDVERSION!)"
     )
     if exist %materialUpdaterArg% del /q /s .\%materialUpdaterArg% > NUL
     if exist ".settings\taskOngoing.txt" del /q /s ".\.settings\taskOngoing.txt" >nul
@@ -443,11 +530,11 @@ if exist ".\Backups\%matbak:~8%" (
     call "modules\backupMaterials"
 )
 
-for /f "tokens=2 delims==" %%a in ('"wmic os get localdatetime /value"') do (
-    set "deiteu=%%a"
-    set /a "imy=!deiteu:~2,2!-21"
-    set "deiteu=!deiteu:~4,4!"
-)
+rem for /f "tokens=2 delims==" %%a in ('"wmic os get localdatetime /value"') do (
+rem     set "deiteu=%%a"
+rem     set /a "imy=!deiteu:~2,2!-21"
+rem     set "deiteu=!deiteu:~4,4!"
+rem )
 
 if exist %disableInterruptionCheck% (
     if exist ".settings\taskOngoing.txt" del /q /s ".\.settings\taskOngoing.txt" >nul
@@ -455,7 +542,7 @@ if exist %disableInterruptionCheck% (
 )
 if exist ".settings\taskOngoing.txt" (
     cls
-    echo !YLW![*] Seems like last injection didn't go well...
+    echo !BEL!!YLW![*] Seems like last injection didn't go well...
     echo.
     echo [?] Do you want to perform a Full Restore?!RST!
     echo.
@@ -492,20 +579,24 @@ if exist %defaultMethod% (
 :INTRODUCTION
 set "usingCustomPath="
 cls
+if defined isAdmin (set "isAdmin=Running as admin. ")
 if exist "%customMinecraftAppPath%"  (set usingCustomPath=true)
 if exist "%customMinecraftDataPath%" (set usingCustomPath=true)
 if exist "%customIObitUnlockerPath%" (set usingCustomPath=true)
 
 if exist "%useForMinecraftPreview%" (
     if defined usingCustomPath (
-        echo !GRY![*] Using for Minecraft Preview with custom path^(s^) enabled.!RST!
+        echo !GRY![*] %isAdmin%Using for Minecraft Preview with custom path^(s^) enabled.!RST!
     ) else (
-        echo !GRY![*] Using for Minecraft Preview.!RST!
+        echo !GRY![*] %isAdmin%Using for Minecraft Preview.!RST!
     )
     echo.
 ) else (
     if defined usingCustomPath (
-        echo !GRY![*] Custom path^(s^) enabled.!RST!
+        echo !GRY![*] %isAdmin%Custom path^(s^) enabled.!RST!
+        echo.
+    ) else if defined isAdmin (
+        echo !GRY![*] %isAdmin%!RST!
         echo.
     )
 )
@@ -516,8 +607,11 @@ if exist "%lastMCPACK%" (
     set "tmp_lastMCPACK=!GRY!^(Last injected: !tmp_lastMCPACK!^)!RST!"
 ) else (set "tmp_lastMCPACK=")
 
-if "%deiteu%" equ "0726" echo !BLU!Happy birthday rwxrw-r-- U+1F337 ^(%imy%^)!RST!
+rem if "%deiteu%" equ "0726" echo !BLU!Happy birthday rwxrw-r-- U+1F337 ^(%imy%^)!RST!
 set RESTORETYPE=
+:: HOME SWEET HOME
+:: START SCREEN
+:: INIT
 if %time:~0,2% geq 00 if %time:~0,2% lss 05 echo !WHT!You should sleep now.
 if %time:~0,2% geq 05 if %time:~0,2% lss 12 echo !WHT!Good morning,
 if %time:~0,2% geq 12 if %time:~0,2% lss 18 echo !WHT!Good afternoon,
@@ -548,7 +642,7 @@ echo     Draco for Windows but not really.
 echo.
 
 echo.
-echo !WHT![H] Help    [A] About    [S] Matject Settings    [R] Restore ^& Others!RST!
+echo !WHT![H] Help    [A] About    [S] Matject Settings    [R] Remove Shaders/Tools!RST!
 echo.
 echo !RED![B] Exit!RST!
 echo.
@@ -566,8 +660,9 @@ exit
 :option7
 cls
 echo !RED!^< [B] Back!RST!
+::echo !RED!^< [B] Back !RST!^| !WHT!Home -^> Tools!RST!
 echo.
-echo [1] Restore default materials
+echo [1] Remove shaders / Restore default materials
 echo [2] Open Minecraft app folder
 echo [3] Open Minecraft data folder
 echo.
@@ -605,7 +700,7 @@ if defined debugMode (
 
 :others9
 cls
-echo !YLW![?] Are you sure? This will deactivate all active global resource packs.!RST!
+echo !BEL!!YLW![?] Are you sure? This will deactivate all active global resource packs.!RST!
 echo.
 echo !RED![Y] Yes    !GRN![N] No, go back!RST!
 echo.
@@ -665,16 +760,16 @@ if not exist "%disableConfirmation%" (
 )
 echo !YLW!!BLINK![*] Extracting the backup...!RST!
 echo.
-if exist ".\Backups\%matbak:~8%" (del /q /s ".\Backups\%matbak:~8%\*" >nul) else (mkdir ".\Backups\%matbak:~8%")
+if exist ".\Backups%matbak:~7%" (del /q /s ".\Backups%matbak:~7%\*" >nul) else (mkdir ".\Backups%matbak:~7%")
 if exist "%backupDate%" del /q /s ".\%backupDate%" >nul
-if exist "%SYSTEMROOT%\system32\tar.exe" (
-    tar -xf "%matbak:~0,-19%\!backupFile!" -C ".\Backups\%matbak:~8%"
+if exist "%SYSTEMROOT%\system32\%tarexe%" (
+    tar -xf "%matbak:~0,-19%\!backupFile!" -C ".\Backups%matbak:~7%"
 ) else (
-    if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
-    powershell -NoProfile -Command "Expand-Archive -Force '%matbak:~0,-19%\!backupFile!' '.\Backups\%matbak:~8%'"
-    if not defined chcp_failed (chcp 65001 >nul 2>&1)
+    if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+    powershell -NoProfile -Command "Expand-Archive -Force '%matbak:~0,-19%\!backupFile!' '.\Backups%matbak:~7%'"
+    if not defined chcp_failed (>nul 2>&1 chcp 65001)
 )
-if exist ".\Backups\%matbak:~8%\*.material.bin" (
+if exist ".\Backups%matbak:~7%\*.material.bin" (
     echo !GRN![*] Successfully replaced backup from !backupFile!.!RST!
     echo %date% // %time:~0,-6%>%backupDate%
     echo.
@@ -683,7 +778,7 @@ if exist ".\Backups\%matbak:~8%\*.material.bin" (
     echo !RED![^^!] Failed to get materials from backup.
     echo     Maybe not an actual materials ZIP?!RST!
     %backmsg:~0,56%
-    del /q /s ".\Backups\%matbak:~8%\*" >nul
+    del /q /s ".\Backups%matbak:~7%\*" >nul
 )
 set "backupFile="
 goto option7
@@ -724,6 +819,7 @@ if defined isAdmin (call "modules\restoreMaterials") else (
             echo :: This file was created to pass some of the current variables to restoreMaterials.bat [%date% // %time:~0,-6%]
             echo.
             echo set "backupDate=!backupDate!"
+            echo set "debugMode=!debugMode!"
             echo set "exitmsg=!exitMsg!"
             echo set "IObitUnlockerPath=!IObitUnlockerPath!"
             echo set "isPreview=!isPreview!"
@@ -734,10 +830,10 @@ if defined isAdmin (call "modules\restoreMaterials") else (
             echo set "restoreDate=!restoreDate!"
             echo set "rstrList=!rstrList!"
             echo set "uacfailed=!uacfailed!"
-        )>tmp\adminVariables2.bat
-        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+        )>tmp\adminVariables_restoreMaterials.bat
+        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
         powershell -NoProfile -Command Start-Process -FilePath '\"%cd%\modules\restoreMaterials.bat\"' -ArgumentList 'placebo3' -Verb runAs -Wait || (
-            if not defined chcp_failed (chcp 65001 >nul 2>&1)
+            if not defined chcp_failed (>nul 2>&1 chcp 65001)
             echo !RED![^^!] Failed to start "Restore default materials" as admin.!RST!
             echo.
             echo !YLW![*] Disabled "Run IObit Unlocker as admin" and starting normally...!RST!
@@ -746,7 +842,7 @@ if defined isAdmin (call "modules\restoreMaterials") else (
             timeout 3 >nul
             call "modules\restoreMaterials"
         )
-        if not exist ".\Backups\%matbak:~8%\*.material.bin" (exit)
+        if not exist ".\Backups%matbak:~7%\*.material.bin" (exit)
     ) else (call "modules\restoreMaterials")
 )
 goto option7
@@ -754,21 +850,29 @@ goto option7
 :: HOME OPTIONS
 
 :option6
+cls
+echo Loading...
 call "modules\settings"
 title %title%
 goto INTRODUCTION
 
 :option5
+cls
+echo Loading...
 call "modules\about"
 title %title%
 goto INTRODUCTION
 
 :option4
+cls
+echo Loading...
 call "modules\help"
 title %title%
 goto INTRODUCTION
 
 :option3
+cls
+echo Loading...
 :matjectNEXT
 call "modules\matjectNEXT\main"
 title Matject %version%%dev%%isPreview%
@@ -788,6 +892,8 @@ echo.
 if not exist %dontOpenFolder% (
     if not exist %disableTips% (echo !GRN![TIP]!RST! You can disable auto folder opening from Matject settings.)
 )
+echo.
+if not exist %disableTips% (echo !GRN![TIP]!RST! You can put multiple MCPACK/ZIP files in the "MCPACKS" folder.)
 echo.
 
 if not exist "%dontOpenFolder%" (start "" /i explorer "%cd%\MCPACKS")
@@ -891,12 +997,12 @@ echo.
 echo !YLW!!BLINK![*] Extracting MCPACK/ZIP to temporary folder...!RST!
 echo.
 
-if exist "%SYSTEMROOT%\system32\tar.exe" (
+if exist "%SYSTEMROOT%\system32\%tarexe%" (
     tar -xf "tmp\mcpack.zip" -C "tmp"
 ) else (
-    if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+    if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
     powershell -NoProfile -command "Expand-Archive -LiteralPath 'tmp\mcpack.zip' -DestinationPath 'tmp'"
-    if not defined chcp_failed (chcp 65001 >nul 2>&1)
+    if not defined chcp_failed (>nul 2>&1 chcp 65001)
 )
 timeout 1 >nul
 
@@ -1073,7 +1179,11 @@ set "REPLACELISTEXPORT=%REPLACELIST%"
 
 set "REPLACELIST=%REPLACELIST:-=.material.bin%"
 set "REPLACELIST=%REPLACELIST:_=!MCLOCATION!\data\renderer\materials\%"
-if exist %disableConfirmation% goto INJECTIONCONFIRMED
+if exist %disableConfirmation% (
+    echo !YLW![*] Injecting now...!RST!
+    timeout 2 >nul
+    goto INJECTIONCONFIRMED
+)
 if defined selected_mcpack (
     echo !WHT!Chosen MCPACK/ZIP:!RST! !MCPACKNAME!
     if defined selected_subpack (echo !WHT!Chosen subpack:!RST! %selected_subpack%)
@@ -1094,7 +1204,7 @@ echo.
 
 
 :INJECTCONSENT
-echo !YLW![?] Do you want to proceed with injecting?!RST!
+echo !BEL!!YLW![?] Do you want to proceed with injecting?!RST!
 echo.
 echo !RED![Y] Yes    !BLU![R] Refresh list    !GRN![N] No, go back!RST!
 echo.
@@ -1125,18 +1235,20 @@ if defined selected_mcpack (
     echo.
 )
 
-if exist %thanksMcbegamerxx954% call "modules\updateMaterials"
+if exist "%thanksMcbegamerxx954%" call "modules\updateMaterials"
 if exist "tmp\" (del /q .\tmp\* >nul) else (mkdir tmp)
 echo.
 echo.
 
 if defined isAdmin (call "modules\autoject") else (
-    if exist %runIObitUnlockerAsAdmin% (
+    if exist "%runIObitUnlockerAsAdmin%" (
         echo !YLW!!BLINK![*] Starting IObit Unlocker as admin...!RST!
+        echo.
         (
             echo :: This file was created to pass some of the current variables to autoject.bat [%date% // %time:~0,-6%]
             echo.
             echo set "backupDate=!backupDate!"
+            echo set "debugMode=!debugMode!"
             echo set "exitmsg=!exitMsg!"
             echo set "IObitUnlockerPath=!IObitUnlockerPath!"
             echo set "isPreview=!isPreview!"
@@ -1154,10 +1266,10 @@ if defined isAdmin (call "modules\autoject") else (
             echo set "SRCLIST=!SRCLIST!"
             echo set "thanksMcbegamerxx954=!thanksMcbegamerxx954!"
             echo set "uacfailed=!uacfailed!"
-        )>tmp\adminVariables.bat
-        if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+        )>tmp\adminVariables_autoject.bat
+        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
         powershell -NoProfile -Command Start-Process -FilePath '\"%cd%\modules\autoject.bat\"' -ArgumentList 'placebo2' -Verb runAs -Wait || (
-            if not defined chcp_failed (chcp 65001 >nul 2>&1)
+            if not defined chcp_failed (>nul 2>&1 chcp 65001)
             echo !RED![^^!] Failed to launch IObit Unlocker as admin.!RST!
             echo.
             echo !YLW![*] Disabled "Run IObit Unlocker as admin" and running injection normally...!RST!
@@ -1169,7 +1281,6 @@ if defined isAdmin (call "modules\autoject") else (
 )
 
 :SUCCESS
-timeout 2 >nul
 cls
 echo !GRN![*] INJECTION SUCCEED.!RST!
 echo.
@@ -1210,14 +1321,13 @@ if not exist %autoOpenMCPACK% (
 if not exist %disableTips% (
     echo !GRN![TIP]!RST! Activate the shader resource pack for full experience.
     echo       If you selected a subpack, it's better to select the same from shader settings. ^(gear icon in resource pack^)
+    echo.
+    echo.
 )
 if exist %disableSuccessMsg% (
     timeout 1 > NUL
     exit
 )
-
-echo.
-echo.
 
 echo !GRN!Thanks for using Matject, have a good day.!RST!
 %exitmsg%
