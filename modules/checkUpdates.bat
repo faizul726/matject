@@ -82,7 +82,7 @@ echo.
 call :fetchChangelog
 echo.
 echo.
-echo !YLW![?] Do you want to automatically update to Matject %latesturl:~50%?!RST!
+echo !BEL!!YLW![?] Do you want to automatically update to Matject %latesturl:~50%?!RST!
 echo.
 echo !RED![Y] Yes [BETA]    !GRN![N] No, go back!RST!
 choice /c yn /n >nul

@@ -5,15 +5,21 @@ title About %title%
 cls
 
 echo !YLW!What's new in %title: ^(Preview Mode^)=%?!RST!
-echo !YLW!Released on: Feb 02, 2025!RST!
 echo.
-echo - Fixed a CRITICAL BUG that deletes all user files.
-echo - Added module verification to ensure reliability.                                    !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
-echo - Matject no longer runs when tried to run without extracting.                        !p1!              !p1!
-echo - Matject now uses more "specific" locations.                                         !p1!  !p1!  !p1!      !p1!
-echo - Fixed an issue with Matject updater.                                                !p1!  !p1!        !p1!
-echo - Fixed an issue with full restore.                                                   !p1!  !p1!!p1!!p1!    !p1!
-echo - Other minor changes.
+echo !YLW!Released on: Feb 21, 2025!RST!
+echo.
+echo - Fixed WindowsApps unlock failure
+echo - Fixed Minecraft Preview backup handling
+echo - Auto closing for IObit Unlocker no longer shows a separate window             !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+echo - Shortcuts can now open Matject in Windows Terminal                            !p1!              !p1!
+echo - Added notification sound in some confirmation screens                         !p1!  !p1!  !p1!      !p1!
+echo - Added a setting to force using PowerShell for extracting ZIPs                 !p1!  !p1!        !p1!
+echo - Added 10 new Matject tips                                                     !p1!  !p1!!p1!!p1!    !p1!
+echo - Added MIT license
+echo - Improved admin permission detection
+echo - Improved Matject opening behavior
+echo - Improved shortcut creation/deletion
+echo - Minor UI improvements
 echo.
 echo Matject is a material replacer for Minecraft Bedrock Edition.
 echo It allows user to use shaders easily without going through the hassle of making backups and placing files.
@@ -26,3 +32,11 @@ echo.
 echo Also thanks to the creators of !RED!IObit Unlocker!RST!, !GRN!jq!RST!, !BLU!material-updater!RST!
 
 %backmsg%
+
+
+:: Copy Pasta
+:: !p1!!p1!!p1!!p1!!p1!  !p1!!p1!!p1!
+:: !p1!              !p1!
+:: !p1!  !p1!  !p1!      !p1!
+:: !p1!  !p1!        !p1!
+:: !p1!  !p1!!p1!!p1!    !p1!

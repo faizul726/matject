@@ -4,7 +4,7 @@ if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[
 set "toggleOff=!GRY![ ]!RST!"
 set "toggleOn=!GRN![x]!RST!"
 
-title %title% settings
+title %title% Settings
 
 if not "%1" equ "" goto %1
 
@@ -63,7 +63,7 @@ echo !GRY![M] Show Matject announcements !YLW!^(requires internet^)!RST! !toggle
 echo.
 
 echo !YLW!Press corresponding key to toggle desired option...!RST!
-echo.
+echo !GRY!Press [A] or [D] to switch tab...!RST!
 choice /c 12345678bad09m /n >nul
 
 goto toggleP1_!errorlevel!
@@ -169,7 +169,7 @@ echo.
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
-echo.
+echo !GRY!Press [A] or [D] to switch tab...!RST!
 choice /c 123bad /n >nul
 goto toggleP2_!errorlevel!
 
@@ -323,7 +323,7 @@ echo.
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
-echo.
+echo !GRY!Press [A] or [D] to switch tab...!RST!
 choice /c 1bad2 /n >nul
 
 goto toggleP3_!errorlevel!
@@ -366,16 +366,16 @@ echo.
 echo !toggleP4_1! 1. Check for updates at Matject startup !YLW!^(requires internet^)!RST!
 echo !toggleP4_2! 2. Disable interruption check !RED!^(prevents recovery from incomplete injection^)!RST!
 echo !toggleP4_3! 3. Disable material compatibility check ^(testing purpose only^)
-echo !toggleP4_4! 4. Run IObit Unlocker as admin ^(admin prompts will be reduced to 1^) !RED![BETA, WIP]!RST!
+echo !toggleP4_4! 4. Run IObit Unlocker as admin ^(admin prompts will be reduced to 1^) !RED![BETA]!RST!
 echo.
 echo [M] Check for updates manually !YLW!^(requires internet^)!RST!
 echo !GRY![0] DEBUG MODE!RST! !toggleP4_6!
-echo !GRY![X] Run Matject as admin always !RED![BETA]!RST! !toggleP4_7!
+echo !GRY![X] Always run Matject as admin !RED![BETA]!RST! !toggleP4_7!
 echo !GRY![Z] Reset .settings!RST!
 echo ----------!YLW![S] Go down!RST!----------
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
-echo.
+echo !GRY!Press [A] or [D] to switch tab...!RST!
 choice /c 1m0bad23zx4ws /n >nul
 
 goto toggleP4_!errorlevel!
@@ -413,7 +413,7 @@ goto settingsP4
 cls
 echo !RED![?] ARE YOU SURE ABOUT RESETTING .settings?!RST!
 echo.
-echo !GRY!Enter yEs to confirm. ^(case sensitive^)!RST!
+echo !GRY!Type yEs and press [Enter] to confirm. ^(case sensitive^)!RST!
 echo Giving wrong/blank input will cancel.
 echo %showCursor%
 set /p "tmpinput=Input: "
@@ -449,7 +449,7 @@ echo !WHT![2] VBscript !RED![BETA]!RST!
 echo     Fast, using a helper .vbs script created in .settings
 echo.
 echo.
-echo !GRY![*] Alternatively, you can create a shortcut from Restore ^& Others ^> Create shortcuts
+echo !GRY![*] Alternatively, you can create a shortcut from Remove Shaders/Tools ^> Create shortcuts
 echo     And then, right click the shortcut ^> Shortcut tab ^> Advanced ^> Turn on "Run as administrator"
 echo     Or... Just right click matject.bat and Run as administrator.!RST!
 echo.
@@ -462,20 +462,24 @@ if %errorlevel% equ 2 (
     goto settingsP4
 )
 :: VBscript obtained from https://ss64.com/vb/shellexecute.html
+:: Thanks to ChatGPT for providing Args detection and MsgBox
 if %errorlevel% equ 3 (
-    if exist ".settings\Matject.lnk" (
-        if exist ".settings\matject_icon.ico" (
-            >".settings\runAsAdmin.vbs" echo CreateObject^("Shell.Application"^).ShellExecute "%cd%\.settings\Matject.lnk", "", "", "runas", 1
-        )
-    ) else (
-        >".settings\runAsAdmin.vbs" echo CreateObject^("Shell.Application"^).ShellExecute "%cd%\matject.bat", "murgi", "", "runas", 1
-    )
+(
+echo If WScript.Arguments^(0^) ^<^> "matjet" OR WScript.Arguments.Count ^< 2 Then
+echo WScript.Echo "Be careful smarty :)"
+echo MsgBox "You're NOT supposed to open this file^^!" ^& vbCrLf ^& "Understand?", vbExclamation, "Attention^^!"
+echo WScript.Quit 1
+echo End If
+echo.
+echo CreateObject^("Shell.Application"^).ShellExecute WScript.Arguments^(1^), "murgi", "", "runas", 1
+)>".settings\runAsAdmin.vbs"
     echo sudo is better anyways. [%date% // %time:~0,-6%]>"%runAsAdmin%"
+    attrib +R "%runAsAdmin%"
     goto settingsP4
 )
 
 :toggleP4_11
-if not exist %runIObitUnlockerAsAdmin% (echo 4 - 3 = 1 [%date% // %time:~0,-6%]>%runIObitUnlockerAsAdmin%) else (del /q /s .\%runIObitUnlockerAsAdmin% >nul)
+if not exist %runIObitUnlockerAsAdmin% (echo 4 minus 3 equals 1 hmm... [%date% // %time:~0,-6%]>%runIObitUnlockerAsAdmin%) else (del /q /s .\%runIObitUnlockerAsAdmin% >nul)
 goto settingsP4
 
 :toggleP4_12
@@ -490,14 +494,16 @@ echo.
 
 if exist "%disableModuleVerification%" (set toggleP4_02_1=!toggleOn!) else (set toggleP4_02_1=!toggleOff!)
 if exist "%dontMakeReadOnly%" (set toggleP4_02_2=!toggleOn!) else (set toggleP4_02_2=!toggleOff!)
+if exist "%fallbackToExpandArchive%" (set toggleP4_02_3=!toggleOn!) else (set toggleP4_02_3=!toggleOff!)
+if exist "%preferWtShortcut%" (set toggleP4_02_4=!toggleOn!) else (set toggleP4_02_4=!toggleOff!)
 
 echo !WHT!Here you can check for updates or enable in-development features.!RST!
 echo.
 echo -----------!YLW![W] Go up!RST!-----------
 echo !toggleP4_02_1! 1. Disable module verification !RED!^(UNSAFE^)!RST!
 echo !toggleP4_02_2! 2. Don't make .bat files read-only
-echo.
-echo.
+echo !toggleP4_02_3! 3. Force fallback to PowerShell Expand-Archive
+echo !toggleP4_02_4! 4. Prefer Windows Terminal over Command Prompt for shortcuts !GRY!^(Shortcuts will not be recreated^)!RST!
 echo.
 echo.
 echo.
@@ -506,7 +512,7 @@ echo.
 echo.
 echo.
 echo !YLW!Press corresponding key to toggle desired option...!RST!
-echo.
+echo !GRY!Press [A] or [D] to switch tab...!RST!
 choice /c 1234567890bwasd /n >nul
 
 goto toggleP4_02_!errorlevel!
@@ -516,11 +522,23 @@ if not exist %disableModuleVerification% (echo well, this is only needed when yo
 goto settingsP4_02
 
 :toggleP4_02_2
-if not exist %dontMakeReadOnly% (echo allows module modification... [%date% // %time:~0,-6%]>%dontMakeReadOnly%) else (del /q /s .\%dontMakeReadOnly% >nul)
+if not exist %dontMakeReadOnly% (echo good luck modifying modules ;^) [%date% // %time:~0,-6%]>%dontMakeReadOnly%) else (del /q /s .\%dontMakeReadOnly% >nul)
 goto settingsP4_02
 
 :toggleP4_02_3
+if not exist "%fallbackToExpandArchive%" (
+    echo tar is fast tho... [%date% // %time:~0,-6%]>"%fallbackToExpandArchive%"
+    set "tarexe=confused_unga/bunga"
+) else (
+    >nul del /q /s ".\%fallbackToExpandArchive%"
+    set "tarexe=tar.exe"
+)
+goto settingsP4_02
+
 :toggleP4_02_4
+if not exist %preferWtShortcut% (echo Windows users when they see terminal a terminal: *sweats* [%date% // %time:~0,-6%]>"%preferWtShortcut%") else (del /q /s ".\%preferWtShortcut%" >nul)
+goto settingsP4_02
+
 :toggleP4_02_5
 :toggleP4_02_6
 :toggleP4_02_7

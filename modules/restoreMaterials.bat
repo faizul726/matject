@@ -4,7 +4,22 @@ setlocal enabledelayedexpansion
 if [%1] equ [placebo3] (
     title Matject: Restore default materials
     set "murgi=KhayDhan"
-    >nul 2>&1 net session && set "isAdmin=true" || set "isAdmin="
+
+    >nul 2>&1 where fltmc && (
+        >nul 2>&1 fltmc && (set isAdmin=true) || (set "isAdmin=")
+    ) || (
+        >nul 2>&1 where openfiles && (
+            >nul 2>&1 openfiles && (set isAdmin=true) || (set "isAdmin=")
+        ) || (
+            >nul 2>&1 where wmic && (
+                >nul 2>&1 (wmic /locale:ms_409 service where ^(name="LanManServer"^) get state /value | findstr /i "State=Running")
+                if %errorlevel% equ 0 (
+                    >nul 2>&1 net session && (set isAdmin=true) || (set "isAdmin=")
+                ) else (set "isAdmin=")
+            ) || (set "isAdmin=")
+        )
+    )
+
     pushd "%~dp0"
     cd ..
     call "modules\colors"
@@ -15,8 +30,7 @@ if [%1] equ [placebo3] (
         pause >nul
         exit /b 9
     )
-    call "tmp\adminVariables2.bat"
-    if exist ".settings\debugMode.txt" (set "debugMode=true") else (set "debugMode=")
+    call "tmp\adminVariables_restoreMaterials.bat"
 )
 if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 :restoreMaterials
@@ -30,7 +44,7 @@ if "!RESTORETYPE!" equ "full" (
 if "!RESTORETYPE!" equ "partial" (goto partialRestore)
 
 cls
-if not exist ".\Backups\%matbak:~8%" (
+if not exist ".\Backups%matbak:~7%" (
     echo !ERR![^^!] No previous backup found.!RST!
     %backmsg%
 ) else (
@@ -39,13 +53,16 @@ if not exist ".\Backups\%matbak:~8%" (
 )
 
 cls
-echo !RED!^< [B] Back!RST!
+::echo !RED!^< [B] Back !RST!^| Home -^> Tools -^> Restore default materials
+if [%1] neq [murgi] (echo !RED!^< [B] Back!RST!) else (echo !RED!^< [B] Exit!RST!)
 echo.
 echo !YLW![?] How would you like to restore?!RST!
 echo     !GRY!Backup made on:   !backupTimestamp!!RST!
 if exist %restoreDate% (
+    echo.
     set /p restoreTimestamp=<%restoreDate%
-    echo     %hideCursor%!GRY!Last restored on: !restoreTimestamp!!RST!
+    echo     %hideCursor%!GRY!Last restored on: !restoreTimestamp!
+    echo     Current time:     %date% // %time:~0,-6%!RST!
 )
 echo.
 echo.
@@ -62,7 +79,7 @@ if !errorlevel! equ 1 (
     cls
     echo !RED!^< [B] Back!RST!
     echo.
-    echo !YLW![?] Are you sure about performing a Full Restore?!RST!
+    echo !BEL!!YLW![?] Are you sure about performing a Full Restore?!RST!
     echo.
     echo !RED![Y] Yes!RST!    !GRN![N] No, go back!RST!
     echo.
@@ -78,7 +95,7 @@ if !errorlevel! equ 2 (
     cls
     echo !RED!^< [B] Back!RST!
     echo.
-    echo !YLW![?] Are you sure about performing a Dynamic Restore?!RST!
+    echo !BEL!!YLW![?] Are you sure about performing a Dynamic Restore?!RST!
     echo.
     echo !RED![Y] Yes!RST!    !GRN![N] No, go back!RST!
     choice /c ynb /n >nul
@@ -100,12 +117,12 @@ if exist "tmp\" (
     mkdir "tmp"
 )
 set rstrCount=
-for %%f in (".\Backups\%matbak:~8%\*") do (
+for %%f in (".\Backups%matbak:~7%\*") do (
     set /a rstrCount+=1
 )
 
 if not defined rstrCount (
-    echo !ERR![^^!] "Backups\%matbak:~8%" folder is empty.!RST!
+    echo !ERR![^^!] "Backups%matbak:~7%" folder is empty.!RST!
     %backmsg%
 )
 
@@ -127,7 +144,7 @@ if defined debugMode (
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
     echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
     echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
     echo.
@@ -135,7 +152,8 @@ if defined debugMode (
     set "_bkpMatCount="
 )
 if exist "!MCLOCATION!\data\renderer\materials\" (
-    if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+    if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+    rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
     if defined debugMode (
         echo.
         echo !GRY!Executing...
@@ -165,14 +183,15 @@ if defined debugMode (
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
     echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
     echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
     echo.
     set "_matCount="
     set "_bkpMatCount="
 )
-if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 if defined debugMode (
     echo.
     echo !GRY!Executing...
@@ -198,15 +217,15 @@ if defined debugMode (
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
 )
 set splitCount=
-for %%F in (".\Backups\%matbak:~8%\*") do (
+for %%F in (".\Backups%matbak:~7%\*") do (
     set /a splitCount+=1
     if !splitCount! leq 20 (move /y "%%~fF" ".\tmp" >nul 2>&1)
 )
 if not defined splitCount (
-    if exist ".\Backups\%matbak:~8%" (rmdir /s /q ".\Backups\%matbak:~8%")
+    if exist ".\Backups%matbak:~7%" (rmdir /s /q ".\Backups%matbak:~7%")
     if exist ".\tmp" (rmdir /q /s ".\tmp")
     goto completed
 )
@@ -229,7 +248,8 @@ for %%f in (tmp\*) do (
 )
 echo.
 
-if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 if defined debugMode (
     echo.
     echo !GRY!Executing...
@@ -260,18 +280,23 @@ if exist "%rstrList%" (
     set /p COPYBINS=<"%rstrList%"
     echo %hideCursor%>nul
     if "!RESTORETYPE!" equ "partial" (
-        set "RESTORETYPE="
         if not defined isGoingVanilla (
             if "!COPYBINS:,= !" equ "!BINS!" goto:EOF
         ) else (set "isGoingVanilla=")
     )
     set /p restoreList=<"%rstrList%"
     echo %hideCursor%>nul
-    set "COPYBINS=!restoreList:,= !"
-    set "COPYBINS=!COPYBINS:_=.\Backups\%matbak:~8%\!"
+    
+    set "COPYBINS=!restoreList!"
     set "COPYBINS=!COPYBINS:-=.material.bin!"
-    set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"
+    rem new entry
+    set "SRCLIST2=!COPYBINS!"
+    set "SRCLIST2=!SRCLIST2:_=%cd%\tmp\!"
+    rem new entry
+    set "COPYBINS=!COPYBINS:_=.\Backups%matbak:~7%\!"
+    set "COPYBINS=!COPYBINS:,= !"
     set "restoreList=!restoreList:-=.material.bin!"
+    set "restoreList=!restoreList:_=%MCLOCATION%\data\renderer\materials\!"
     for %%f in (!COPYBINS!) do (copy /d %%f "tmp" >nul)
     goto restore1
 ) else (
@@ -288,7 +313,7 @@ if defined debugMode (
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
     echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
     echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
     echo.
@@ -297,12 +322,8 @@ if defined debugMode (
     set "_bkpMatCount="
 )
 
-set "SRCLIST2="
-for %%f in (tmp\*) do (
-    set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
-)
-
-if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 if defined debugMode (
     echo.
     echo !GRY!Executing...
@@ -323,12 +344,23 @@ echo.
 :restore2
 echo !YLW![*] Dynamic Restore: Step 2/2...!RST!
 
+rem set "SRCLIST2="
+rem for %%f in (tmp\*) do (
+rem     set SRCLIST2=!SRCLIST2!,"%cd%\%%f"
+rem )
+rem echo !SRCLIST2:~1!
+rem echo.
+rem echo.
+rem echo.
+rem echo !_SRCLIST2!
+rem pause
+
 if defined debugMode (
     echo.
     set /a _matCount=0
     set /a _bkpMatCount=0
     for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-    for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+    for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
     echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
     echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
     echo.
@@ -337,21 +369,23 @@ if defined debugMode (
     set "_bkpMatCount="
 )
 
-if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
 if defined debugMode (
     echo.
     echo !GRY!Executing...
-    echo "%%IObitUnlockerPath%%" /advanced /move +ExtraComma!SRCLIST2:%USERNAME%=CENSORED! "!MCLOCATION:%ProgramFiles%\WindowsApps=...!\data\renderer\materials"!RST!
+    echo "%%IObitUnlockerPath%%" /advanced /move !SRCLIST2:%USERNAME%=CENSORED! "!MCLOCATION:%ProgramFiles%\WindowsApps=...!\data\renderer\materials"!RST!
     echo.
     echo.
 )
-"%IObitUnlockerPath%" /advanced /move !SRCLIST2:~1! "!MCLOCATION!\data\renderer\materials" >nul
+"%IObitUnlockerPath%" /advanced /move !SRCLIST2! "!MCLOCATION!\data\renderer\materials" >nul
 if !errorlevel! neq 0 (
     %uacfailed%
     goto restore2
 ) else (
     del /q /s ".\.settings\taskOngoing.txt" >nul
     echo %date% // %time:~0,-6% ^(%isUserInitiated%Dynamic^)>%restoreDate%
+
     echo [1F[0J!GRN![*] Dynamic Restore: Step 2/2 succeed^^!!RST!
     echo.
     echo.
@@ -360,14 +394,13 @@ if !errorlevel! neq 0 (
         set /a _matCount=0
         set /a _bkpMatCount=0
         for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (set /a _matCount+=1)
-        for %%z in (".\Backups\%matbak:~8%\*") do (set /a _bkpMatCount+=1)
+        for %%z in (".\Backups%matbak:~7%\*") do (set /a _bkpMatCount+=1)
         echo [DEBUG] !RED!!_matCount!!RST! files in MCLOCATION\materials.
         echo         !GRN!!_bkpMatCount!!RST! files in !matbak!.
         echo.
         echo.
         set "_matCount="
         set "_bkpMatCount="
-        timeout 2 >nul
     )
     if exist "%lastMCPACK%" del /q /s ".\%lastMCPACK%" >nul
     if exist "%lastRP%" del /q /s ".\%lastRP%" >nul
@@ -380,8 +413,15 @@ if !errorlevel! neq 0 (
         echo "RSTR: !restoreList!"
         echo.
     )>>"logs\_restoreLogs.txt"
-    timeout 2 > NUL
-    goto:EOF
+
+    if not defined RESTORETYPE (
+        set "RESTORETYPE="
+        echo !GRN![*] Dynamic Restore completed successfully^^!!RST!
+        echo.
+        echo !WHT!Default materials have been restored.!RST!
+        timeout 3 >nul
+    )
+    goto :EOF
 )
 
 :completed
@@ -391,9 +431,11 @@ if exist "%lastMCPACK%" del /q /s ".\%lastMCPACK%" >nul
 if exist "%lastRP%" del /q /s ".\%lastRP%" >nul
 if exist ".settings\taskOngoing.txt" del /q /s ".\.settings\taskOngoing.txt" >nul
 if exist "%backupDate%" del /q /s ".\%backupDate%" > NUL
-if exist ".\Backups\%matbak:~8%" (rmdir /q /s ".\Backups\%matbak:~8%")
+if exist ".\Backups%matbak:~7%" (rmdir /q /s ".\Backups%matbak:~7%")
 echo %date% // %time:~0,-6% ^(%isUserInitiated%Full^)>%restoreDate%
-echo !GRN![*] Full Restore OK.!RST!
+echo !GRN![*] Full Restore completed successfully^^!!RST!
+echo.
+echo !WHT!All default materials have been restored.!RST!
 (
     echo Full Restore%isPreview% [%date% // %time:~0,-6%]
     echo "lastCount: !rstrCount!"

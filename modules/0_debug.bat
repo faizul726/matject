@@ -8,6 +8,8 @@ setlocal enabledelayedexpansion
 :: 4 matject tree
 :: 5 origin + bkp mats details incl. size
 :: 6 open minecraft folder
+:: 7 disable module verification
+:: 8 make all files write(able)
 
 :: Select either MinecraftUWP or MinecraftWindowsBeta
 set "productID=MinecraftUWP"
@@ -23,7 +25,7 @@ if /i [%selfName:~0,7%] equ [0_debug] (
     echo Dropped to shell.
     echo.
     echo on
-    cmd
+    @cmd
 )
 if /i [%selfName:~0,7%] equ [1_debug] (
     echo.>.settings\unlockedWindowsApps.txt 
@@ -159,12 +161,24 @@ if /i [%selfName:~0,7%] equ [5_debug] (
 
 
 if /i [%selfName:~0,7%] equ [6_debug] (
-    echo [93mOpening MinecraftUWP folder...[0m
+    echo [93mOpening %productID% folder...[0m
     echo.
     for /f "tokens=*" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage -Name Microsoft.%productID%).InstallLocation"') do (
         start "" /i explorer "%%i"
     )
     echo Debug #6: Opened %productID% folder
+)
+
+
+if /i [%selfName:~0,7%] equ [7_debug] (
+    echo.>.settings\disableModuleVerification.txt 
+    echo Debug #7: Disabled module verification
+)
+
+
+if /i [%selfName:~0,7%] equ [8_debug] (
+    for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF")
+    echo Debug #8: Made files write^(able^)
 )
 echo.
 echo Press any key to exit...
