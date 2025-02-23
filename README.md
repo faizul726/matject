@@ -1,12 +1,12 @@
-<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="56px"></img>Matject v3.5.1</h1>
+<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="54px"></img>Matject v3.5.2</h1>
 
-*Last updated: Feb 02, 2025*
+*Last updated: Feb 23, 2025*
 
 </br>
 
-**[How to use?](#-quick-guide)**
+**[💡 How to use?](#-quick-guide)**
 
-[Features](#-features) | [Credits](#-credits) | [Known issues](#-known-issues) | [FAQ](#-faq) | [Changelog](#-changelog)
+[Features](#-features) | [Credits](#-credits) | [Known issues](#%EF%B8%8F-known-issues) | [FAQ](#-faq) | [Changelog](#-changelog)
 
 </br>
 
@@ -15,8 +15,8 @@
 <br>
 
 > [!WARNING]  
-> Versions older than v3.5.0 has a dangerous bug that deletes all user files.  
-> It's already fixed in v3.5.1.  
+> Versions including v3.5.0 and older ones have a dangerous bug that deletes all user files.  
+> The bug has been fixed in v3.5.1.  
 >
 > **For your safety, you should always use the latest version** and avoid links from Google/YouTube.  
 >
@@ -46,7 +46,7 @@ Matject is an **advanced material replacer** that allows users to use Minecraft 
 It uses IObit Unlocker to replace/restore game files since Windows doesn't allow modifying apps.
 
 **Why?**  
-**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Feb 02).**  
+**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Feb 21).**  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 I made this script so that users don't have to go through the hassle of replacing game files by themselves.
 
@@ -62,14 +62,16 @@ I made this script so that users don't have to go through the hassle of replacin
 >
 > * **Non RenderDragon shaders (aka HAL) are not supported.**  
 > * You don't need BetterRenderDragon to use Matject.
+> * You don't have to open Matject every time for shaders.
+> * DO NOT USE Matject on debloated/optimized Windows (Atlas/Revi/Tiny/Chris Titus Tool)
 > * Matject ≠ Patched
 
 </br>
 
-## ✨ What's new in v3.5.1?
-* Fixed a CRITICAL BUG that deletes all user files
-* Added module verification
-* Extracting Matject ZIP file is now mandatory
+## ✨ What's new in v3.5.2?
+* Added MIT license
+* Improved admin permission detection
+* Other minor improvements
 * [See full changelog...](#-changelog)
 
 </br><br>
@@ -103,7 +105,7 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 > Original files are restored automatically when the game is updated.
 
 1. Open Matject.
-2. Go to **[R] Restore & Others**.
+2. Go to **[R] Remove Shaders/Tools**.
 3. Go to **[1] Restore default materials**
 4. Select **[1] Dynamic Restore** or **[2] Full Restore** (full restore takes a bit more time).
 
@@ -149,7 +151,8 @@ People of [YSS](https://discord.gg/UJdvR6WBAe) and [Newb Community](https://faiz
 
 ## ⚠️ Known issues
 * Doesn't support long folder path and too many shader files.
-* Antivirus may prevent IObit Unlocker from working. (e.g. AVG)
+* Antivirus may prevent IObit Unlocker from working. (AVG and Norton are known to do this)
+* Some shaders crash. It's not an issue of Matject.
 
 </br>
 
@@ -238,7 +241,26 @@ You can still show your support by giving a star to this project :)
 
 -->
 
-<details open><summary><b>v3.5.1 - Feb 02, 2025</b></summary>
+<details open><summary><b>v3.5.2 - Feb 21, 2025</b></summary>
+<ul>
+  <li>Fixed WindowsApps unlock failure</li>
+  <li>Fixed Minecraft Preview backup handling</li>
+  <li>Auto closing for IObit Unlocker no longer shows a separate window</li>
+  <li>Shortcuts can now open Matject in Windows Terminal</li>
+  <li>Added notification sound in some confirmation screens</li>
+  <li>Added a setting to force using PowerShell for extracting ZIPs</li>
+  <li>Added 10 new Matject tips</li>
+  <li>Added MIT license</li>
+  <li>Improved Matject opening behavior</li>
+  <li>Improved admin permission detection</li>
+  <li>Improved shortcut creation/deletion</li>
+  <li>Minor UI improvements</li> 
+</ul>
+</br>
+</details>
+
+
+<details><summary><b>v3.5.1 - Feb 02, 2025</b></summary>
 <ul>
   <li>Fixed a CRITICAL BUG that deletes all user files.</li>
   <li>Added module verification to ensure reliability.</li>
@@ -271,6 +293,7 @@ You can still show your support by giving a star to this project :)
   <li>First run now asks to download material-updater.</li>
   <li>curl should no longer be able to execute using variables.</li>
   <li>Fixed a math related issue with update checker.</li>
+  <li>Fixed a issue with how MCPACKs are processed <code>Thanks to raden</code></li>
   <li>Cursor is now hidden where it's not needed.</li>
   <li>Some UI improvements.</li>
 </ul>

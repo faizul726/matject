@@ -9,14 +9,14 @@ if not exist "%disableTips%" (
     )
 )
 
-if not defined chcp_failed (chcp %chcp_default% >nul 2>&1)
+if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
 :: PowerShell command by @FlaredRoverCodes
 for /f "tokens=1,2 delims=///" %%i in ('powershell -NoProfile -Command "(Get-AppxPackage -Name Microsoft.%productID%).InstallLocation + '///' + (Get-AppxPackage -Name Microsoft.%productID%).Version"') do (
     set MCLOCATION=%%i
     set CURRENTVERSION=%%j
 )
 echo.
-if not defined chcp_failed (chcp 65001 >nul 2>&1)
+if not defined chcp_failed (>nul 2>&1 chcp 65001)
 
 if not defined MCLOCATION (
     echo !ERR![^^!] Minecraft%preview% is not installed.!RST!

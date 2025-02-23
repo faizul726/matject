@@ -17,7 +17,7 @@ echo - Resource pack from world is not supported.
 echo - Some packs might be incompatible.
 echo - Deferred/PBR/RTX packs are not supported.
 echo - May not work with caps UUIDs.
-echo - Manifests with // or /**/ comments are not supported.
+echo - Manifests ^(JSONC^) with // or /**/ comments are not supported.
 echo - Manifest checker will replace current clipboard entry if any error is found.
 echo - Marketplace packs are NOT supported. Avoid putting them on top of the global resource pack list.
 echo.
@@ -30,7 +30,7 @@ echo     !GRY!And you also have to update it when needed.!RST!
 echo %showCursor%
 
 set "mjnInput="
-set /p "mjnInput=Enter !RED!matjectNEXT!RST! to continue (case sensitive): !RED!"
+set /p "mjnInput=Type !RED!matjectNEXT!RST! and press [Enter] to confirm (case sensitive): !RED!"
 echo %hideCursor%!RST!
 
 if "!mjnInput!" equ "matjectNEXT" (
@@ -79,7 +79,7 @@ call modules\matjectNEXT\syncMaterials
 cls
 if "!errorlevel!" equ "0" echo !GRN![*] Sync OK. Materials from top pack are applied. You can exit now.!RST!
 if "!errorlevel!" equ "9" (
-    echo !RED![^^!] Sync cancelled. Shader is on top, but its materials are not applied. Still, you can exit now if you want.!RST!   
+    echo !BEL!!RED![^^!] Sync cancelled. Shader is on top, but its materials are not applied. Still, you can exit now if you want.!RST!   
 )
 echo.
 if exist "%syncThenExit%" (
@@ -89,7 +89,7 @@ if exist "%syncThenExit%" (
     timeout 5 >nul
     exit
 )
-echo !YLW![?] Or... Do you want to start monitoring for more changes?!RST!
+echo !BEL!!YLW![?] Or... Do you want to start monitoring for more changes?!RST!
 echo.
 echo !WHT![Y] Yes    [N] No, go back!RST!
 echo.
