@@ -1,3 +1,34 @@
+### 🟢 [Notice]: BetterRenderDragon is back!
+So far, Matject only served as a temporary workaround for those who really wanted to use shaders.  
+You can download it from https://github.com/dreamguxiang/BetterRenderDragon-xmake/releases/latest
+
+<br>
+
+**• What does it mean for you?**  
+You can now use BetterRenderDragon instead of Matject. BRD provides an even easier way to use shaders.  
+Just activate shader resource pack and it will work as long as BRD is open.  
+
+**• Will Matject still receive updates?**  
+Yes, it will but less often.
+
+**• How to remove Matject/remove shaders?**  
+To remove shaders follow this:  
+1. Open Matject
+2. Remove Shader/Tools -> Remove Shaders/Restore Default Materials -> Full Restore
+3. Confirm the restore
+4. Accept all admin permission requests
+5. Close Matject when it's done.
+
+Matject doesn't store any files outside its own folder. So if you don't want to use Matject anymore, simply **delete** its folder.  
+(MAKE SURE TO RESTORE ORIGINAL MATERIALS FIRST)  
+
+<br>
+
+As always, thank you for using Matject. Have good day!
+
+<hr>
+
+
 <h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="54px"></img>Matject v3.5.2</h1>
 
 *Last updated: Feb 23, 2025*
@@ -46,7 +77,8 @@ Matject is an **advanced material replacer** that allows users to use Minecraft 
 It uses IObit Unlocker to replace/restore game files since Windows doesn't allow modifying apps.
 
 **Why?**  
-**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Feb 21).**  
+**BetterRenderDragon now supports Minecraft v1.21.60+**
+~~**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Feb 21).**~~  
 Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
 I made this script so that users don't have to go through the hassle of replacing game files by themselves.
 
