@@ -1,0 +1,12 @@
+:root {
+    /*--vp-custom-block-tip-bg: #ceead6;
+    --vp-custom-block-tip-text: #188038;
+    /*--vp-custom-block-info-bg: #e8f0fe;
+    --vp-custom-block-info-text: #1967d2;*/
+}
+
+iconify-icon {
+    display: inline;
+    width: 1em;
+    height: 1em;
+}
