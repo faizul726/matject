@@ -1,41 +1,11 @@
-### 🟢 [Notice]: BetterRenderDragon is back!
-So far, Matject only served as a temporary workaround for those who really wanted to use shaders.  
-You can download it from https://github.com/dreamguxiang/BetterRenderDragon-xmake/releases/latest
+<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="54px"></img>Matject v3.6.0</h1>
 
-<br>
-
-**• What does it mean for you?**  
-You can now use BetterRenderDragon instead of Matject. BRD provides an even easier way to use shaders.  
-Just activate shader resource pack and it will work as long as BRD is open.  
-
-**• Will Matject still receive updates?**  
-Yes, it will but less often.
-
-**• How to remove Matject/remove shaders?**  
-To remove shaders follow this:  
-1. Open Matject
-2. Remove Shader/Tools -> Remove Shaders/Restore Default Materials -> Full Restore
-3. Confirm the restore
-4. Accept all admin permission requests
-5. Close Matject when it's done.
-
-Matject doesn't store any files outside its own folder. So if you don't want to use Matject anymore, simply **delete** its folder.  
-(MAKE SURE TO RESTORE ORIGINAL MATERIALS FIRST)  
-
-<br>
-
-As always, thank you for using Matject. Have good day!
-
-<hr>
-
-
-<h1 align="center"><img src="https://raw.githubusercontent.com/faizul726/faizul726.github.io/refs/heads/main/matject-misc/logo.png" height="54px"></img>Matject v3.5.2</h1>
-
-*Last updated: Feb 23, 2025*
+*Last updated: Apr 16, 2025*  
+*Creators note: Some info on this page maybe a little outdated. I will update those soon.*
 
 </br>
 
-**[💡 How to use?](#-quick-guide)**
+**[💡 How to use?](#-quick-guide)** | **[🔄 How to remove shaders](#-how-to-restore-to-default--uninstall-shaders)**
 
 [Features](#-features) | [Credits](#-credits) | [Known issues](#%EF%B8%8F-known-issues) | [FAQ](#-faq) | [Changelog](#-changelog)
 
@@ -68,29 +38,17 @@ As always, thank you for using Matject. Have good day!
 
 <p align=center><i>You can also call it Matjet because it's as fast as a jet.<br><code>I know I'm exaggerating...</code></i></p>
 
-<br>
 
-**What?**  
-Matject is an **advanced material replacer** that allows users to use Minecraft shaders. It dynamically automates the process of replacing and restoring game files.
- 
-**How?**  
-It uses IObit Unlocker to replace/restore game files since Windows doesn't allow modifying apps.
-
-**Why?**  
-**BetterRenderDragon now supports Minecraft v1.21.60+**
-~~**[BetterRenderDragon](https://github.com/ddf8196/BetterRenderDragon/) still doesn't support version above v1.21.2 (as of Feb 21).**~~  
-Windows players who want to try shaders have to replace game files manually which is a pretty time consuming process.  
-I made this script so that users don't have to go through the hassle of replacing game files by themselves.
-
-<br>
 <hr>
 <br>
 
 >[!IMPORTANT]  
+> **DO NOT RUN MATJECT WITHOUT EXTRACTING THE ZIP FILE FIRST.**
+>
 > Make sure the shader you're using supports **Windows** and the **game version**.  
 > Otherwise, you will see invisible blocks or the game will crash.
 > 
-> ***You can also enable material-updater in settings to fix invisible blocks.***
+> ***You can also enable material-updater in Matject Settings to fix invisible blocks.***
 >
 > * **Non RenderDragon shaders (aka HAL) are not supported.**  
 > * You don't need BetterRenderDragon to use Matject.
@@ -100,10 +58,12 @@ I made this script so that users don't have to go through the hassle of replacin
 
 </br>
 
-## ✨ What's new in v3.5.2?
-* Added MIT license
-* Improved admin permission detection
-* Other minor improvements
+## ✨ What's new in v3.6.0?
+* Added auto version detection for material-updater
+* Added new loading screen
+* Added direct write mode
+* Fixed full restore
+* Other small technical changes
 * [See full changelog...](#-changelog)
 
 </br><br>
@@ -115,7 +75,7 @@ I made this script so that users don't have to go through the hassle of replacin
 
 <br>
 
-1. Install [IObit Unlocker](https://www.iobit.com/en/iobit-unlocker.php). (don't change its install location)  
+1. Install [IObit Unlocker](https://www.iobit.com/en/iobit-unlocker.php)   
 
 ![screenshot](https://github.com/user-attachments/assets/4422464e-26a3-4068-993e-adc76817ca9c)
 
@@ -125,8 +85,8 @@ I made this script so that users don't have to go through the hassle of replacin
 Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 
 3. Extract the ZIP file.
-4. Open `matject.bat`.
-5. The rest is self explanatory.  
+4. Open `matject`/`matject.bat` (with gear icon).
+5. Follow on screen instructions.  
 
 **See 📘 [Detailed Guide](https://faizul726.github.io/matject/docs/guide-for-beginners)**
 
@@ -137,16 +97,18 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 > Original files are restored automatically when the game is updated.
 
 1. Open Matject.
-2. Go to **[R] Remove Shaders/Tools**.
+2. Go to **[R] Shader removal/Tools**.
 3. Go to **[1] Restore default materials**
-4. Select **[1] Dynamic Restore** or **[2] Full Restore** (full restore takes a bit more time).
+4. Select **[1] Dynamic Restore** or **[2] Full Restore** (both are same, except full restore takes a bit more time).
 
 </br>
 
 ## ⭐ Features
-* **Easy to use:** <u>no Command Prompt/Terminal knowledge</u> is required.
+* **Easy to use:** No Command Prompt/Terminal knowledge is required.
 * **Fully offline:** Can be used offline. Internet is optionally used to enhance experience.
-* **Fast as jet**: Takes less than <u>60 seconds</u> to apply a shader. 
+* **Portable:** All necessary files are stored in the same folder as Matject.
+* **Fast as jet**: Takes less than **60 seconds** to apply a shader. 
+* **Preview support**: Also supports Minecraft Preview backups and some settings are stored separately Preview and Release.  
 * **Automatic backups:** Backups are made automatically when game is updated.
 * **Restore game files:** You can go back to original whenever you want. 
 * **Automatic processing:** MCPACK/ZIPs are automatically processed.
@@ -170,25 +132,32 @@ Or use `git clone https://github.com/faizul726/matject.git` if you prefer.
 People of [YSS](https://discord.gg/UJdvR6WBAe) and [Newb Community](https://faizul726.github.io/newb-discord) for their humble support.  
 
 [@TrngN0786](https://x.com/TrngN0786) and [@Theffyxz](https://github.com/Theffyxz) for helping me to fix bugs.  
-[@Sharkitty](https://github.com/Sharkitty), [@FlaredRoverCodes](https://github.com/FlaredRoverCodes) and all other people who tested and gave feedback.
+[@Sharkitty](https://github.com/Sharkitty), [@FlaredRoverCodes](https://github.com/FlaredRoverCodes), [@BatmanBinSuparman49](https://github.com/BatmanBinSuparman49) and all other people who tested and gave feedback.
 
 </br>
 
-> [!TIP]  
-> **Need help?**  
-> Join [Newb Discord server](https://faizul726.github.io/newb-discord) and send message in `#newb-support`. I will be happy to assist you.
-> You can also ask for help in [YSS Discord Server -> #windows](https://discord.gg/UJdvR6WBAe) or [Bedrock Graphics -> #matject](https://discord.gg/XrQhnTP89R)
+### Need help?  
+> Join any server below and mention me.  
+> **[Bedrock Graphics](https://faizul726.github.io/bedrockgraphics-discord)** `In channel #matject`  
+> Or  
+> [Newb Discord server](https://faizul726.github.io/newb-discord) `In channel #newb-support or #renderdragon`  
+> [YSS Discord Server](https://faizul726.github.io/yss-discord) `In channel #windows or #renderdragon`  
+> 
+> And, I will try to help you. I don't own any Discord server.
 
 </br>
 
 ## ⚠️ Known issues
 * Doesn't support long folder path and too many shader files.
-* Antivirus may prevent IObit Unlocker from working. (AVG and Norton are known to do this)
-* Some shaders crash. It's not an issue of Matject.
+* Some antivirus may prevent IObit Unlocker from working. (AVG and Norton are known to do this)
+* Some shaders crash or show red sky. It's not an issue of Matject.
 
 </br>
 
 ## 🤔 FAQ
+**Q. Is it safe?**  
+A. Yes, it is. You're welcome to review the code.
+
 **Q. What is matjectNEXT?**  
 A. matjectNEXT is an advanced version of Matject that replaces materials based on the pack the user has set in Global Resource Packs, with help of **[jq](https://jqlang.github.io/jq)**.  
 Inspired by [Draco](https://github.com/mcbegamerxx954/draco-injector) which is made by [@mcbegamerxx954](https://github.com/mcbegamerxx954/).
@@ -199,9 +168,6 @@ A. BetterRenderDragon uses *memory injection*, all the changes are made in memor
 Changes made by Matject will stay until Minecraft is updated or user restores default materials from Matject.  
 It's mostly universal, so it should work with any Minecraft version.
 
-**Q. Virus?**  
-A. Well, depends on you. (2) `(hint: it's not.)`
-
 **Q. Does it require internet to work?**  
 A. No, internet is optionally used to enhance user experience
 * To check for updates and show the changelog. Updating is optional.
@@ -210,7 +176,7 @@ A. No, internet is optionally used to enhance user experience
 * To get [material-updater](https://github.com/mcbegamerxx954/material-updater) by itself.  
 
 **Q. I have questions/need help.**  
-A. Join [Newb Discord Server](https://faizul726.github.io/newb-discord) and send message in `#newb-support`. I will try to help.  
+A. Ask in one of the Discord servers [above](#need-help)
 
 
 **Q. What folders does it access?**  
@@ -271,9 +237,32 @@ You can still show your support by giving a star to this project :)
 </br>
 </details>
 
--->
+2 lines gap between each -->
 
-<details open><summary><b>v3.5.2 - Feb 21, 2025</b></summary>
+<details open><summary><b>v3.6.0 - Apr 16, 2025</b></summary>
+<ul>
+  <li>Added auto version detection for material-updater [preview not supported]</li>
+  <li>Added direct write mode: Use normal move/delete commands instead of IObit Unlocker [sideloaded installation only]</li>
+  <li>Added new settings UI for material-updater</li>
+  <li>Added a brand new loading screen</li>
+  <li>Added a setting to change the number of materials processed per cycle for full restore</li>
+  <li>Added a secret game</li>
+  <li>Reworked full restore logic: It should work better now</li>
+  <li>Full restore no longer empties backup folder</li>
+  <li>A warning now will be shown if materials are ntot moved/deleted properly</li>
+  <li>MATERIALS folder now has to be empty before using auto/manual</li>
+  <li>Custom path toggle color will be orange if path is invalid</li>
+  <li>matjectNEXT now supports IObit Unlocker popup reduction</li>
+  <li>Updated about screen</li>
+  <li>Fixed non-English text display issues in some places</li>
+  <li>Fixed an issue with GameData location</li>
+  <li>Lots of small UI improvements</li>
+</ul>
+</br>
+</details>
+
+
+<details><summary><b>v3.5.2 - Feb 21, 2025</b></summary>
 <ul>
   <li>Fixed WindowsApps unlock failure</li>
   <li>Fixed Minecraft Preview backup handling</li>

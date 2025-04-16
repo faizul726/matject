@@ -1,5 +1,8 @@
+:: Made possible thanks to github.com/mcbegamerxx954 (creator of draco and mbl2)
+:: getMaterialUpdater.bat // Made by github.com/faizul726
+
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 cls
 if "%PROCESSOR_ARCHITECTURE%" neq "AMD64" (
@@ -11,9 +14,10 @@ if "%PROCESSOR_ARCHITECTURE%" neq "AMD64" (
     pause > NUL
     goto:EOF
 )
-if [%1] equ [skip_intro] (goto skip_intro_material-updater)
+if "[%~1]" equ "[skip_intro]" (goto skip_intro_material-updater)
 echo !RED!^< [B] Back!RST!
 echo.
+if "[%~1]" equ "[skip_intro_settings]" (goto skip_intro_material-updater)
 
 echo material-updater is a tool made by @mcbegamerxx954.
 echo It allows you to update outdated materials to support latest version ^(or desired version^).
@@ -46,6 +50,9 @@ if !errorlevel! neq 1 goto:EOF
 echo.
 
 if not exist "tmp\" mkdir tmp
+if exist ".\modules\material-updater.exe" (
+    del /q /f ".\modules\material-updater.exe" >nul
+)
 echo !YLW!!BLINK![*] Downloading material-updater...!RST!
 where curl >nul 2>&1
 if !errorlevel! equ 0 (
@@ -53,12 +60,12 @@ if !errorlevel! equ 0 (
     if exist "%SYSTEMROOT%\system32\%tarexe%" (
         tar -xf "tmp\material-updater-x86_64-pc-windows-msvc.zip" -C "modules" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
     ) else (
-        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+        if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
         powershell -NoProfile -Command "Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
         if not defined chcp_failed (>nul 2>&1 chcp 65001)
     )
 ) else (
-    if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+    if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
     powershell -NoProfile -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
     if not defined chcp_failed (>nul 2>&1 chcp 65001)
 )

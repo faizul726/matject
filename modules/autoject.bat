@@ -1,6 +1,7 @@
+:: autoject.bat // Made by github.com/faizul726
 @echo off
 setlocal enabledelayedexpansion
-if [%1] equ [placebo2] (
+if "[%~1]" equ "[placebo2]" (
     title Matject: Injecting...
     set "murgi=KhayDhan"
 
@@ -31,10 +32,10 @@ if [%1] equ [placebo2] (
     )
     call "tmp\adminVariables_autoject.bat"
 )
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 if exist "%rstrList%" (
-    set "RESTORETYPE=partial"
+    set "RESTORETYPE=dynamic"
     call "modules\restoreMaterials"
 )
 
@@ -58,25 +59,56 @@ if defined debugMode (
     set "_bkpMatCount="
 )
 
-if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
-rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
-if defined debugMode (
-    echo:
-    echo !GRY!Executing...
-    echo "%%IObitUnlockerPath%%" /advanced /delete !REPLACELIST:%ProgramFiles%\WindowsApps=...!!RST!
-    echo:
-    echo:
-)
-"%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
-if !errorlevel! neq 0 (
-    %uacfailed%
-    goto STEP1
+:: Count materials for warning
+set /a warn_matCount_holder=0
+for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (
+    set /a warn_matCount_holder+=1
 )
 
+if not exist "%directWriteMode%" (
+    if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+    rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+    if defined debugMode (
+        echo:
+        echo !GRY![DEBUG] Executing...
+        echo "%%IObitUnlockerPath%%" /advanced /delete !REPLACELIST:%ProgramFiles%\WindowsApps=...!!RST!
+        echo:
+        echo:
+    )
+    "%IObitUnlockerPath%" /advanced /delete !REPLACELIST! >nul
+    if !errorlevel! neq 0 (
+        %uacfailed%
+        cls
+        goto STEP1
+    )
+) else (
+    for %%M in (%REPLACELIST%) do (
+        if defined debugMode (echo [DEBUG] Executing: del /q %%M)
+        del /q %%M >nul 2>&1
+        echo.
+    )
+    if defined debugMode (
+        echo.
+        timeout 2 >nul
+    )
+)
+
+set /a warn_matCount=0
+for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (
+    set /a warn_matCount+=1
+)
+if %warn_matCount_holder% equ %warn_matCount% (
+    echo.
+    echo !YLW![^^!] Maybe injection step 1 didn't complete successfully... !GRY!^(%warn_matCount_holder% EQU %warn_matCount%^)
+    if exist "%directWriteMode%" (echo     [Direct write mode])
+    echo.
+    echo.
+    timeout 2 >nul
+)
 
 
 echo [1F[0J!GRN![*] Injection: Step 1/2 succeed.!RST!
-if exist "%lastRP%" del /q /s ".\%lastRP%" >nul
+if exist "%lastRP%" del /q ".\%lastRP%" >nul
 echo.
 
 
@@ -98,20 +130,53 @@ if defined debugMode (
     set "_bkpMatCount="
 )
 
-if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
-rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
-if defined debugMode (
-    echo:
-    echo !GRY!Executing...
-    echo "%%IObitUnlockerPath%%" /advanced /move !SRCLIST:%USERNAME%=CENSORED! "!MCLOCATION:%ProgramFiles%\WindowsApps=...!\data\renderer\materials"!RST!
-    echo:
-    echo:
+set /a warn_matCount_holder=0
+for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (
+    set /a warn_matCount_holder+=1
 )
-"%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials" >nul
-if !errorlevel! neq 0 (
-    %uacfailed%
-    goto STEP2
+
+if not exist "%directWriteMode%" (
+    if defined isAdmin start /i /b cmd /c "modules\taskkillLoop" /b /i
+    rem if defined isAdmin start /MIN /i "Waiting for IObit Unlocker to appear..." "modules\taskkillLoop"
+    if defined debugMode (
+        echo:
+        echo !GRY![DEBUG] Executing...
+        echo "%%IObitUnlockerPath%%" /advanced /move !SRCLIST:%USERNAME%=[REDACTED]! "!MCLOCATION:%ProgramFiles%\WindowsApps=...!\data\renderer\materials"!RST!
+        echo:
+        echo:
+    )
+    "%IObitUnlockerPath%" /advanced /move !SRCLIST! "!MCLOCATION!\data\renderer\materials" >nul
+    if !errorlevel! neq 0 (
+        %uacfailed%
+        cls
+        goto STEP2
+    )
+) else (
+    for %%M in (%SRCLIST%) do (
+        if defined debugMode (echo [DEBUG] Executing: move /Y %%M "!MCLOCATION!\data\renderer\materials")
+        move /Y %%M "!MCLOCATION!\data\renderer\materials" >nul 2>&1
+        echo.
+    )
+    if defined debugMode (
+        echo.
+        timeout 2 >nul
+    )
 )
+
+set /a warn_matCount=0
+for %%z in ("!MCLOCATION!\data\renderer\materials\*") do (
+    set /a warn_matCount+=1
+)
+if %warn_matCount_holder% equ %warn_matCount% (
+    echo.
+    echo !YLW![^^!] Maybe injection step 2 didn't complete successfully... !GRY!^(%warn_matCount_holder% EQU %warn_matCount%^)
+    if exist "%directWriteMode%" (echo     [Direct write mode])
+    echo.
+    echo.
+    timeout 2 >nul
+)
+set "warn_matCount="
+set "warn_matCount_holder="
 
 echo [1F[0J!GRN![*] Injection: Step 2/2 succeed.!RST!
 
@@ -129,13 +194,13 @@ if defined selected_mcpack (
     del /q .\%lastMCPACK% >nul 2>&1
     (
     echo Manual%isPreview% [%date% // %time:~0,-6%]
-    echo "SRC: !SRCLIST:%USERNAME%=CENSORED!"
+    echo "SRC: !SRCLIST:%USERNAME%=[REDACTED]!"
     echo "RPC: !REPLACELIST!"
     echo "RPE: !REPLACELISTEXPORT!"
     echo.
     )>>"logs\_injectionLogs.txt"
 )
-del /q /s ".\.settings\taskOngoing.txt" >nul
+del /q ".\.settings\taskOngoing.txt" >nul
 if exist "tmp" (rmdir /q /s .\tmp)
 
 if defined debugMode (
@@ -153,5 +218,5 @@ if defined debugMode (
 )
 
 timeout 2 >nul
-if [%1] equ [murgi] exit 0
+if "[%~1]" equ "[murgi]" exit 0
 goto :EOF

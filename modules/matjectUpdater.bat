@@ -1,15 +1,12 @@
+:: matjectUpdater.bat // Made by github.com/faizul726
 @echo off
 setlocal enabledelayedexpansion
-if "[%1]" equ "[]" (if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k) else (goto letsgo)
-
-
-:: Make everything writable once again
-for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF")
+if "[%~1]" equ "[]" (if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k) else (goto letsgo)
 
 :: Copy itself to tmp folder because during update the file itself will replaced.
 echo !YLW![*] Copying updater to temporary folder...!RST!
 echo.
-if not exist tmp (mkdir tmp) else (del /q .\tmp\* >nul)
+if not exist tmp (mkdir tmp) else (del /q /f .\tmp\* >nul)
 
 copy /d "modules\matjectUpdater.bat" "tmp" >nul
 
@@ -60,7 +57,7 @@ echo.
     if exist "tmp\matject\matject.bat" (
         rmdir /q /s ".\tmp\matject\.git"
         rmdir /q /s ".\modules"
-        del /q .\*>nul 2>&1
+        del /q /f .\*>nul 2>&1
         if not defined directUpdate (
             if not exist "Old Matject Data\%~1" (mkdir "Old Matject Data\%~1")
             for %%f in (.settings Backups logs MATERIALS MCPACKS) do (move /y "%%f" ".\Old Matject Data\%~1" >nul 2>&1)

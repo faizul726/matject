@@ -1,6 +1,7 @@
+:: unlockWindowsApps.bat // Made by github.com/faizul726
 @echo off
 setlocal enabledelayedexpansion
-if not [%1] equ [murgi] echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not "[%~1]" equ "[murgi]" echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 pushd "%~dp0"
 cd ..
@@ -52,10 +53,11 @@ if %errorlevel% equ 0 (
         echo [96m
         echo https://faizul726.github.io/newb-discord
         echo [0m[?25h
+        endlocal
         echo on
         @cmd /k
     )
 ) else (
     echo [91m[^^!] Code RED[0m ^(ERRORLEVEL: !errorlevel!^) & echo Take a screenshot. It might be helpful later. [%date%] & echo. & pause >nul
-    echo Output: "%errorlevel%" //  Current directory: "!cd:%USERNAME%=CENSORED!" >> ".settings\_unlockLog.txt"
+    echo Output: "%errorlevel%" //  Current directory: "!cd:%USERNAME%=[REDACTED]!" >> ".settings\_unlockLog.txt"
 )

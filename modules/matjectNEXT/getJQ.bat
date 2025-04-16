@@ -1,5 +1,6 @@
+:: getJQ.bat // Made by github.com/faizul726
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 echo !YLW![*] matjectNEXT needs jq by @jqlang to process Minecraft JSON files.!RST!
 echo.
@@ -36,7 +37,7 @@ if /i "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
     if !errorlevel! equ 0 (
         curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe >nul
     ) else (
-        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+        if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-amd64.exe -OutFile modules\jq.exe"
         if not defined chcp_failed (>nul 2>&1 chcp 65001)
     )
@@ -45,7 +46,7 @@ if /i "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
     if !errorlevel! equ 0 (
         curl -L -o modules/jq.exe https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe >nul
     ) else (
-        if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+        if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
         powershell -NoProfile -Command "Invoke-WebRequest https://github.com/jqlang/jq/releases/latest/download/jq-windows-i386.exe -OutFile modules\jq.exe"
         if not defined chcp_failed (>nul 2>&1 chcp 65001)
     )

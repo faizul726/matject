@@ -1,5 +1,6 @@
+:: createIcon.bat // Made by github.com/faizul726
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 echo [*] Making Matject icon from base64... ^(modules\createIcon.bat^)
 
 :: b64_n variables are used to reduce file size. (minimizing duplicate lines)
@@ -1196,6 +1197,6 @@ echo -----END CERTIFICATE-----
 :: END OF BASE64
 call modules\clearVariable createIcon_all
 certutil -decode tmp\matject_icon.ico.b64 .\.settings\matject_icon.ico >nul
-del /q /s .\tmp\matject_icon.ico.b64 >nul
+del /q .\tmp\matject_icon.ico.b64 >nul
 echo.
 goto :EOF

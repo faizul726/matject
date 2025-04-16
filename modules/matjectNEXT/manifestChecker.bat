@@ -1,5 +1,6 @@
+:: manifestChecker.bat // Made by github.com/faizul726
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 :: If you prefer a different code editor,
 :: You can uncomment by removing ::
@@ -10,7 +11,6 @@ if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[
 echo !YLW![*] manifest-checker: Checking manifests from resource packs...!RST!
 echo.
 
-set "gameData=%localappdata%\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang"
 for /d /r "%gameData%\resource_packs" %%D in (*) do (
     if exist "%%D\manifest.json" (
         modules\jq -r ".header.name" "%%D\manifest.json" >nul || call :invalidManifest "%%~nD" "%%D"

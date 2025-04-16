@@ -1,10 +1,11 @@
 :: Made possible thanks to https://medium.com/@dbilanoski/how-to-tuesdays-shortcuts-with-powershell-how-to-make-customize-and-point-them-to-places-1ee528af2763
+:: createShortcut.bat // Made by github.com/faizul726
 
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 set "status_shortcut="
-if [%1] equ [all] (call :copyshortcut all & goto :EOF)
-if [%1] equ [deleteallshortcuts] (call :deleteallshortcuts & goto :EOF)
+if "[%~1]" equ "[all]" (call :copyshortcut all & goto :EOF)
+if "[%~1]" equ "[deleteallshortcuts]" (call :deleteallshortcuts & goto :EOF)
 :createShortcut_main
 cls
 echo !RED!^< [B] Back!RST!
@@ -39,16 +40,18 @@ if %errorlevel% equ 4 (
 )
 
 :copyshortcut
+if "[%~1]" equ "[]" goto :EOF
+if "[%~1]" equ "[]" goto :EOF
 if not exist ".settings\matject_icon.ico" (
     if exist ".settings\Matject.lnk" (call :deleteallshortcuts & goto :EOF)
     call "modules\createIcon"
 ) else (
-    if [%1] equ [all] (call :deleteallshortcuts & goto :EOF)
+    if "[%~1]" equ "[all]" (call :deleteallshortcuts & goto :EOF)
 )
-if not exist ".settings\Matject.lnk" (call :createShortcut "%cd%\.settings\Matject.lnk") else (
-    if [%1] equ [all] (call :deleteallshortcuts & goto :EOF)
+if not exist ".settings\Matject.lnk" (call :createShortcut) else (
+    if "[%~1]" equ "[all]" (call :deleteallshortcuts & goto :EOF)
 )
-if [%1] equ [all] (
+if "[%~1]" equ "[all]" (
     if exist "%USERPROFILE%\Desktop\Matject.lnk" call :deleteallshortcuts & goto :EOF
     if exist "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Matject.lnk" call :deleteallshortcuts & goto :EOF
     for %%D in ("%USERPROFILE%\Desktop" "%APPDATA%\Microsoft\Windows\Start Menu\Programs") do (
@@ -70,7 +73,7 @@ goto :EOF
 echo !YLW!!BLINK![*] Creating shortcut...!RST!
 echo:
 
-if [%1] equ [all] (
+if "[%~1]" equ "[all]" (
     >nul 2>&1 where wt && (
         echo !YLW![?] Which one the shortcut should use to open Matject?!RST!
         echo:
@@ -98,20 +101,32 @@ if [%1] equ [all] (
 
 
 
-if not defined chcp_failed (>nul 2>&1 chcp %chcp_default%)
+if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
 
 if exist "%preferWtShortcut%" (
     >nul 2>&1 where wt && (
-        for /f "tokens=*" %%W in ('where wt') do (set "shortcut_cmd=$s.TargetPath = '\"%%W\"'; $s.Arguments = 'cmd ")
+        for /f "tokens=*" %%W in ('where wt') do (
+            set "TargetPath=%%W"
+        )
+        set "cmd_placebo=cmd "
     ) || (
-        set "shortcut_cmd=$s.TargetPath = 'cmd'; $s.Arguments = '"
+        set "TargetPath=cmd"
+        set "cmd_placebo="
     )
 ) else (
-    set "shortcut_cmd=$s.TargetPath = 'cmd'; $s.Arguments = '"
+    set "TargetPath=cmd"
+    set "cmd_placebo="
 )
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%1'); !shortcut_cmd!/k \"%cd%\matject.bat\" fromshortcut' ; $s.IconLocation = '%cd%\.settings\matject_icon.ico'; $s.Description = 'A material replacer for Minecraft Bedrock Edition.'; $s.Save()
-set "shortcut_cmd="
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+$ws = New-Object -ComObject WScript.Shell; ^
+$s = $ws.CreateShortcut('.settings\Matject.lnk'); ^
+$s.TargetPath = '\"' + \"!TargetPath!\" + '\"'; ^
+$s.Arguments = '!cmd_placebo!/k \"' + \"$PWD\matject.bat\" + '\" fromshortcut'; ^
+$s.IconLocation = \"%cd%\.settings\matject_icon.ico\"; ^
+$s.Description = 'A material replacer for Minecraft Bedrock Edition.'; ^
+$s.Save()
+set "TargetPath="
 if not defined chcp_failed (>nul 2>&1 chcp 65001)
 goto :EOF
 

@@ -1,15 +1,16 @@
+:: 0_debug.bat // Made by github.com/faizul726
 @echo off
 setlocal enabledelayedexpansion
 :: for testing purpose only
 
-:: 1 Add unlockedWindowsApps.txt
-:: 2 Make all folders
-:: 3 Copy logs
-:: 4 matject tree
-:: 5 origin + bkp mats details incl. size
-:: 6 open minecraft folder
-:: 7 disable module verification
-:: 8 make all files write(able)
+:: 1_ Add unlockedWindowsApps.txt
+:: 2_ Make all folders
+:: 3_ Copy logs
+:: 4_ matject tree
+:: 5_ origin + bkp mats details incl. size
+:: 6_ open minecraft folder
+:: 7_ disable module verification
+:: 8_ make all files writable
 
 :: Select either MinecraftUWP or MinecraftWindowsBeta
 set "productID=MinecraftUWP"
@@ -62,7 +63,7 @@ if /i [%selfName:~0,7%] equ [4_debug] (
     echo:
     (
         echo Date and time:         %date% // %time:~0,-6%
-        echo Matject location:      "!cd:%USERNAME%=CENSORED!"
+        echo Matject location:      "!cd:%USERNAME%=[REDACTED]!"
         echo.
         echo.
 
@@ -101,7 +102,7 @@ if /i [%selfName:~0,7%] equ [5_debug] (
     (
         echo Date and time:         %date% // %time:~0,-6%
         echo:
-        echo Matject location:      "!cd:%USERNAME%=CENSORED!"
+        echo Matject location:      "!cd:%USERNAME%=[REDACTED]!"
         echo MinecraftUWP location: "!MCLOCATION!"
         echo MinecraftUWP version:  v!CURRENTVERSION!
         echo:
@@ -178,7 +179,7 @@ if /i [%selfName:~0,7%] equ [7_debug] (
 
 if /i [%selfName:~0,7%] equ [8_debug] (
     for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF")
-    echo Debug #8: Made files write^(able^)
+    echo Debug #8: Made files writable
 )
 echo.
 echo Press any key to exit...

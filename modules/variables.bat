@@ -1,11 +1,14 @@
+:: variables.bat // Made by github.com/faizul726
 @echo off
 
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 if not defined isPreview (
+    rem Variables for release
     set "backupDate=.settings\backupDate.log"
     set "customMinecraftAppPath=.settings\customMinecraftAppPath.txt"
     set "customMinecraftDataPath=.settings\customMinecraftDataPath.txt"
+    set "directWriteMode=.settings\directWriteMode.txt"
     set "lastMCPACK=.settings\lastMCPACK.log"
     set "lastRP=.settings\lastPack.log"
     set "matbak=Backups\Materials (backup)"
@@ -15,9 +18,11 @@ if not defined isPreview (
     set "restoreDate=.settings\restoreDate.txt"
     set "rstrList=.settings\.restoreList.log"
 ) else (
+    rem Variables for preview
     set "backupDate=.settings\backupDatePreview.log"
     set "customMinecraftAppPath=.settings\customMinecraftPreviewAppPath.txt"
     set "customMinecraftDataPath=.settings\customMinecraftPreviewDataPath.txt"
+    set "directWriteMode=.settings\directWriteModePreview.txt"
     set "lastMCPACK=.settings\lastMCPACKPreview.log"
     set "lastRP=.settings\lastPackPreview.log"
     set "matbak=Backups (Preview)\Materials (backup)"
@@ -31,6 +36,31 @@ if not defined isPreview (
 set "autoOpenMCPACK=.settings\autoOpenMCPACK.txt"
 set "customIObitUnlockerPath=.settings\customIObitUnlockerPath.txt"
 set "defaultGameData=%localappdata%\Packages\Microsoft.%productID%_8wekyb3d8bbwe\LocalState\games\com.mojang"
+:: Set full restore max materials per cycle
+set /a defaultMaterialsPerCycle=10
+set "fullRestoreMaterialsPerCycle=.settings\fullRestoreMaterialsPerCycle.txt"
+if exist "%fullRestoreMaterialsPerCycle%" (
+    set /p materialsPerCycle=<"%fullRestoreMaterialsPerCycle%"
+    set "materialsPerCycle=!materialsPerCycle: =!"
+    echo !materialsPerCycle!|findstr /R "^[1-9][0-9]*$" >nul
+    if !errorlevel! neq 0 (
+        del /q ".\%fullRestoreMaterialsPerCycle%"
+        set /a materialsPerCycle=!defaultMaterialsPerCycle!
+    ) else (
+        set /a materialsPerCycle=!materialsPerCycle!
+        if !materialsPerCycle! lss 2 (
+            set /a materialsPerCycle=!defaultMaterialsPerCycle!
+            del /q ".\%fullRestoreMaterialsPerCycle%"
+        )
+        if !materialsPerCycle! gtr 75 (
+            set /a materialsPerCycle=!defaultMaterialsPerCycle!
+            del /q ".\%fullRestoreMaterialsPerCycle%"
+        )
+    )
+) else (
+    set /a materialsPerCycle=!defaultMaterialsPerCycle!
+)
+
 set "defaultMethod=.settings\defaultMethod.txt"
 set "disableConfirmation=.settings\disableConfirmation.txt"
 set "disableInterruptionCheck=.settings\disableInterruptionCheck.txt"

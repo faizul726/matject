@@ -1,3 +1,4 @@
+:: colors.bat // Made by github.com/faizul726
 @echo off
 
 set "GRY=[90m"
