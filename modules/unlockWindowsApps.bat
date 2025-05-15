@@ -1,7 +1,8 @@
-:: unlockWindowsApps.bat // Made by github.com/faizul726
+:: unlockWindowsApps.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not "[%~1]" equ "[murgi]" echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
 setlocal enabledelayedexpansion
-if not "[%~1]" equ "[murgi]" echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 pushd "%~dp0"
 cd ..
@@ -28,7 +29,7 @@ if not exist "matject.bat" (echo [93m[^^!] Wrong folder.[0m & echo. & goto set
         >nul 2>&1 openfiles && (set isAdmin=true) || (set "isAdmin=")
     ) || (
         >nul 2>&1 where wmic && (
-            >nul 2>&1 (wmic /locale:ms_409 service where ^(name="LanManServer"^) get state /value | findstr /i "State=Running")
+            >nul 2>&1 (wmic /locale:ms_409 service where ^(name="LanManServer"^) get state /value 2>nul | findstr /i "State=Running" >nul 2>&1)
             if %errorlevel% equ 0 (
                 >nul 2>&1 net session && (set isAdmin=true) || (set "isAdmin=")
             ) else (set "isAdmin=")
@@ -36,7 +37,6 @@ if not exist "matject.bat" (echo [93m[^^!] Wrong folder.[0m & echo. & goto set
     )
 )
 
-if not exist ".\.settings" (mkdir .settings)
 
 takeown /f "%ProgramFiles%\WindowsApps" || (
     >logs\_unlockLog.txt takeown /f "%ProgramFiles%\WindowsApps"
@@ -49,9 +49,9 @@ if %errorlevel% equ 0 (
         echo Failed to create success file. Are you using any antivirus that's preventing from creating files?
         echo.
         echo Take a screenshot of the window. It might be helpful later. [%date%]
-        echo If you can, report the issue on GitHub repo or join Newb Discord server and report in #newb-support
+        echo If you can, report the issue on GitHub repo or join Bedrock Graphics Discord server and report in #matject
         echo [96m
-        echo https://faizul726.github.io/newb-discord
+        echo https://faizul726.github.io/bedrockgraphics-discord
         echo [0m[?25h
         endlocal
         echo on

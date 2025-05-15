@@ -1,6 +1,8 @@
-:: getMinecraftDetails.bat // Made by github.com/faizul726
+:: getMinecraftDetails.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
+
 if "[%~1]" equ "[failure]" (
     echo !YLW!!BLINK![*] Automatically getting Minecraft%preview% details...!RST!
     set "MCLOCATION="
@@ -9,8 +11,8 @@ if "[%~1]" equ "[failure]" (
     echo !YLW!!BLINK![*] Getting Minecraft%preview% details...!RST!
 )
 
-if not exist "%disableTips%" (
-    if not exist "%customMinecraftAppPath%" (
+if not defined mt_hideTips (
+    if not defined mt_customMinecraftAppPath (
         echo.
         echo !GRN![TIP]!RST! You can make getting details faster by enabling "Use custom Minecraft app path"
     )
@@ -32,7 +34,19 @@ if not defined MCLOCATION (
     echo.
     if defined isPreview (
         echo !YLW![*] Disabled "Use for Minecraft Preview" to allow normal access to Matject.!RST!
-        del /q ".\%useForMinecraftPreview%" >nul
+        del /q /f ".\%useForMinecraftPreview%" >nul
+    ) else (
+        echo !YLW![?] Do you want to use Matject for Minecraft Preview instead?
+        echo.
+        echo !GRN![Y] Yes    !RED![N] No!RST!
+        choice /c ynb /n >nul
+        if !errorlevel! equ 1 (
+            break>"%useForMinecraftPreview%"
+            cls
+            echo !YLW![^^!] Target app changed.
+            echo     Relaunch to take effect...!RST!
+            %relaunchmsg%
+        )
     )
     %exitmsg%
 )
@@ -40,13 +54,23 @@ if not defined MCLOCATION (
 echo !WHT!Minecraft%preview% location:!RST! !MCLOCATION!
 echo !WHT!Minecraft%preview% version:!RST!  v!CURRENTVERSION!
 
+if "[%~1]" equ "[failure]" (
+    call "modules\settingsV3" set mt_customMinecraftAppPath "!MCLOCATION!"
+)
+
 if "[%~1]" equ "[savepath]" (
-    echo !MCLOCATION!>%customMinecraftAppPath%
+    call "modules\settingsV3" set mt_customMinecraftAppPath "!MCLOCATION!"
     timeout 2 >nul
     exit /b 0
 )
 
-if not exist "%oldMinecraftVersion%" (echo !CURRENTVERSION!>"%oldMinecraftVersion%") else (set /p OLDVERSION=<"%oldMinecraftVersion%")
+rem if not exist "%oldMinecraftVersion%" (echo !CURRENTVERSION!>"%oldMinecraftVersion%") else (set /p OLDVERSION=<"%oldMinecraftVersion%")
+if defined mt_oldMinecraftVersion (
+    set "OLDVERSION=!mt_oldMinecraftVersion!"
+) else (
+    call "modules\settingsV3" set mt_oldMinecraftVersion "!CURRENTVERSION!"
+    call "modules\settingsV3"
+)
 echo %hideCursor%>nul
 
-if "[%~1]" neq "[failure]" (timeout 2 > NUL)
+timeout 2 > NUL

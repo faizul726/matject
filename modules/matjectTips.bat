@@ -1,8 +1,8 @@
 :: Made possible thanks to https://stackoverflow.com/questions/5777400/how-to-use-random-in-batch-script
-:: matjectTips.bat // Made by github.com/faizul726
-@echo off
+:: matjectTips.bat // Made by github.com/faizul726, licence issued by YSS Group
 
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
+@echo off
 
 set /a num=%RANDOM% %% 2
 
@@ -15,7 +15,7 @@ if %num% equ 4 call :tip "Set default method in !WHT![S] Matject Settings!RST! i
 if %num% equ 5 call :tip "You can disable automatic folder opening in !WHT![S] Matject Settings!RST! if you find it annoying"
 if %num% equ 6 call :tip "You can use Matject for Minecraft Preview by enabling 'Use for Minecraft Preview' in !WHT![S] Matject Settings!RST!"
 if %num% equ 7 call :tip "Getting Minecraft app location can be made faster by setting custom Minecraft app path"
-if %num% equ 8 call :tip "Join !CYN!faizul726.github.io/newb-discord!RST! for updates and support"
+if %num% equ 8 call :tip "Join !CYN!faizul726.github.io/bedrockgraphics-discord!RST! for updates and support"
 if %num% equ 9 call :tip "Run Matject as admin to auto close IObit Unlocker popups. ^(or enable Run IObit Unlocker as admin in !WHT![S] Matject Settings!RST!^)"
 if %num% equ 10 call :tip "You can remove shader at any time from !WHT![R] Shader Removal/Tools!RST!"
 if %num% equ 11 call :tip "There's a hidden easter egg somewhere in the files. Can you find it?"
@@ -30,20 +30,20 @@ if %num% equ 19 call :tip "You like Matject? You can star the GitHub repo or don
 if %num% equ 20 call :tip "Chickens are basically smol dinosaurs"
 if %num% equ 21 call :tip "You don't have to open Matject every time for shaders"
 if %num% equ 22 call :tip "Check out !WHT![S] Matject Settings!RST! to enhance overall experience"
-if %num% equ 23 call :tip "Old shaders, RTX, PBR packs are NOT SUPPORTED"
-if %num% equ 24 call :tip "Matject is not a replacement for BetterRenderDragon. Rather, it's a workaround"
-if %num% equ 25 call :tip "You shouldn't use Matject if you use any kind of Windows debloater/optimizer"
+if %num% equ 23 call :tip "Old shaders ^(HAL^) are NOT SUPPORTED"
+if %num% equ 24 call :tip "Restore won't work properly if you had modified materials already before using Matject"
+if %num% equ 25 call :tip "Press Q in some screens to know what each action does."
 if %num% equ 26 call :tip "Some antivirus may prevent IObit Unlocker from working"
 if %num% equ 27 call :tip "The GitHub link is the only official source for Matject"
 if %num% equ 28 call :tip "Matject was born on August 29, 2024"
 if %num% equ 29 call :tip "Matject was previously called 'Material Injector'"
 if %num% equ 30 call :tip "Matjet goes hard. & echo     !GRY!- Arc, YSS Discord admin!RST!"
-if %num% equ 31 call :tip "A chimken pixel art game is hidden somewhere in the UI. Can you find it? ;^)"
+if %num% equ 31 call :tip "A chimken pixel art game is hidden somewhere. Can you find it? ;^)"
 if %num% equ 32 call :tip "Deleting Matject or deactivating resource pack won't remove shaders. Use [R] Shader Removal below instead"
 if %num% equ 33 call :tip "Matject doesn't make Minecraft act like 'Patched App'. & echo     You have to use Matject every time for applying/switching/removing shaders"
-if %num% equ 34 call :tip "If you can make changes in Minecraft app folder without IObit Unlocker, & echo       consider trying out 'Direct write mode' from 'Updates and Debug' in !WHT![S] Matject settings!RST!"
+if %num% equ 34 call :tip "If you can make changes in Minecraft app folder without IObit Unlocker, & echo       consider trying out 'Direct write mode' from 'Updates and Debug' in !WHT![S] Matject Settings!RST!"
 if %num% equ 35 call :tip "Dynamic and Full restore are the same except Full restore is slow and restores even the unmodified files."
-if %num% equ 36 call :tip "You can disable tips in !WHT![S] Matject Settings!RST!"
+if %num% equ 36 call :tip "You can hide tips in !WHT![S] Matject Settings!RST!"
 if %num% equ 37 call :tip "By changing some settings, you can make Matject work with just 2 clicks. Good luck explorer"
 if %num% equ 38 call :tip "Matject can update itself automatically when you want"
 if %num% equ 39 call :tip "Matject is universal. It will continue to work until Mojang changes how shaders work."

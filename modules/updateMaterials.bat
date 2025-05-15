@@ -3,14 +3,14 @@
 :: github.com/ABUCKY0        (PS Installer Developer of BetterRTX)
 :: github.com/jcau8          (Master plan giver o7)
 :: https://stackoverflow.com/q/2143187
-:: updateMaterials.bat // Made by github.com/faizul726
+:: updateMaterials.bat // Made by github.com/faizul726, licence issued by YSS Group
 
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 :askVer
 set "IsAutoDetected="
-if not exist "%materialUpdaterArg%" (
+if not defined mt_materialUpdaterArg (
     if not defined isPreview (
         set "CURRENTVERSION_stripped=!CURRENTVERSION:.=!"
         set "CURRENTVERSION_stripped=!CURRENTVERSION_stripped: =!"
@@ -36,14 +36,19 @@ if not exist "%materialUpdaterArg%" (
         echo [4] v1.18.30 - v1.19.51
         echo !RST!
         choice /c 1234 /n >nul
-        if !errorlevel! equ 1 echo v1-21-20>%materialUpdaterArg%
-        if !errorlevel! equ 2 echo v1-20-80>%materialUpdaterArg%
-        if !errorlevel! equ 3 echo v1-19-60>%materialUpdaterArg%
-        if !errorlevel! equ 4 echo v1-18-30>%materialUpdaterArg%
+        rem if !errorlevel! equ 1 echo v1-21-20>%materialUpdaterArg%
+        rem if !errorlevel! equ 2 echo v1-20-80>%materialUpdaterArg%
+        rem if !errorlevel! equ 3 echo v1-19-60>%materialUpdaterArg%
+        rem if !errorlevel! equ 4 echo v1-18-30>%materialUpdaterArg%
+
+        if !errorlevel! equ 1 call "modules\settingsV3" set mt_materialUpdaterArg "v1-21-20"
+        if !errorlevel! equ 2 call "modules\settingsV3" set mt_materialUpdaterArg "v1-20-80"
+        if !errorlevel! equ 3 call "modules\settingsV3" set mt_materialUpdaterArg "v1-19-60"
+        if !errorlevel! equ 4 call "modules\settingsV3" set mt_materialUpdaterArg "v1-18-30"
         goto askVer
     )
 ) else (
-    set /p targetVer=<%materialUpdaterArg%
+    set "targetVer=!mt_materialUpdaterArg!"
     if defined targetVer (
         set "targetVer=!targetVer: =!"
     ) else (
@@ -52,7 +57,7 @@ if not exist "%materialUpdaterArg%" (
     
     echo %hideCursor%>nul
     if "!targetVer!" neq "v1-21-20" if "!targetVer!" neq "v1-20-80" if "!targetVer!" neq "v1-19-60" if "!targetVer!" neq "v1-18-30" (
-        echo !RED![^^!] material-updater: "%materialUpdaterArg%" is invalid. Proceeding with v1-21-20...!RST!
+        echo !RED![^^!] material-updater: Invalid argument given. Proceeding with v1-21-20...!RST!
         set "targetVer=v1-21-20"
     )
 )

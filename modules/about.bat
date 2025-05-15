@@ -1,20 +1,23 @@
-:: about.bat // Made by github.com/faizul726
+:: about.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 title About %title%
-cls
-
 
 >nul 2>&1 where mode
 
 if !errorlevel! neq 0 (
     set "x_spacer=  "
 ) else (
-    for /f "tokens=2 delims=:" %%a in ('mode con ^| findstr "Columns"') do set "window_width=%%a"
-    set /a window_width=^(!window_width!-20^)/2
+    set "x_spacer="
+    for /f "tokens=2" %%N in ('mode con ^| find "Columns"') do set /a window_width=^(%%N-20^)/2
+    if window_width leq 0 (set /a window_width=50)
+    rem for /f "tokens=2 delims=:" %%a in ('mode con ^| findstr "Columns"') do set "window_width=%%a"
+    rem set /a window_width=^(!window_width!-20^)/2
     for /L %%I in (1,1,!window_width!) do (set "x_spacer=!x_spacer! ")
 )
+cls
 echo.
 echo.
 echo.
@@ -27,9 +30,11 @@ for %%S in (
 ) do (echo !x_spacer!%%~S)
 echo.
 echo.
-::echo !x_spacer!123456789abcdefghi
-echo !x_spacer:~0,-10!!WHT!Matject %version% !GRY!by github.com/faizul726!RST!
-echo !x_spacer:~0,-4!!GRY!Released on: Apr 16, 2025!RST!
+rem echo !x_spacer!123456789abcdefghi
+echo !x_spacer!!x_spacer:~-2!!WHT!Matject %version%!RST!
+echo !x_spacer!!x_spacer:~-9!!GRY!-
+echo !x_spacer:~0,-6!Made by !CYN!github.com/faizul726!RST!
+echo !x_spacer:~0,-4!!GRY!Released on May 15, 2025!RST!
 echo.
 echo !x_spacer:~0,-3!!WHT!Made possible thanks to:!RST!
 echo !x_spacer:~0,-7!!BLU!@mcbegamerxx954!RST!, @jcau8, @Veka0
@@ -40,30 +45,37 @@ echo !x_spacer:~0,-17!!GRY!TrngN0786, @Theffyxz, @CallMeSoumya2063, @MrWang2408,
 echo !x_spacer:~0,-14!@Sharkitty, @FlaredRoverCodes and many more...!RST!
 echo.
 echo.
-echo !x_spacer:~0,-4!!GRY!Made with !RED!^<3!GRY! in Bangladesh!RST!
-echo.
 echo !x_spacer:~0,-15!Press any key to read changelog and then go back...
 pause >nul
 cls
 echo !YLW![*] What's new in Matject %version%?!RST!
-echo     !GRY!Released on: Apr 16, 2025!RST!
+echo     !GRY!Released on: May 15, 2025!RST!
 echo.
-echo - Added auto version detection for material-updater [preview not supported]
-echo - Added direct write mode: Use normal move/delete commands instead of IObit Unlocker [sideloaded installation only]
-echo - Added new settings UI for material-updater
-echo - Added a brand new loading screen
-echo - Added a setting to change the number of materials processed per cycle for full restore
-echo - Added a secret game
-echo - Reworked full restore logic: It should work better now
-echo - Full restore no longer empties backup folder
-echo - A warning now will be shown if materials are ntot moved/deleted properly
-echo - MATERIALS folder now has to be empty before using auto/manual
-echo - Custom path toggle color will be orange if path is invalid
-echo - matjectNEXT now supports IObit Unlocker popup reduction
-echo - Updated about screen
-echo - Fixed non-English text display issues in some places
-echo - Fixed an issue with GameData location
-echo - Lots of small UI improvements
+echo - Added Matject Exam
+echo - Added separate help pages for some places
+echo - Added new guiding texts in some places to make it more user friendly
+echo - Added target pack number setting for matjectNEXT
+echo - Added setting to automatically open Minecraft after matjectNEXT sync
+echo - Added setting to reapply the same pack for matjectNEXT
+echo - Added setting to scan only development or normal resource packs
+echo - Added progress bar for Full restore step 3
+echo - Added progress bar for Materials backup
+echo - Added Never Gonna Give You Up
+echo - Matject is now distributed under a license from YSS Group.
+echo - Matject Settings now stores most settings in single text file
+echo - matjectNEXT is no longer BETA
+echo - Full restore now shows an error if Full Restore didn't go well
+echo - Incomplete backup/injection is now handled separately for both editions of Minecraft
+echo - Direct write mode now uses COPY and DEL instead of MOVE
+echo - Improved Custom Minecraft app path setting
+echo - Improved resource pack scanning for matjectNEXT
+echo - Improved custom path inputs
+echo - Improved Matject startup logic
+echo - Moved a lot of extra information under debug mode
+echo - More robust file/folder creation in some cases
+echo - Fixed 'terminal to use' prompt of initial shortcut creation
+echo - Fixed an issue with dynamic restore when run IObit Unlocker as admin is on
+echo - Deprecated Auto and Manual method
 
 %backmsg%
 :: Copy Pasta

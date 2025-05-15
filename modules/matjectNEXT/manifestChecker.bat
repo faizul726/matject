@@ -1,12 +1,13 @@
-:: manifestChecker.bat // Made by github.com/faizul726
+:: manifestChecker.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 :: If you prefer a different code editor,
 :: You can uncomment by removing ::
-:: Then put path to code editor executable inside double quotes ""
+:: Then put path to code editor executable after the equal sign
 
-::set code_editor_to_use="path-to-code-editor-executable"
+::set "code_editor_to_use=path-to-code-editor-executable"
 
 echo !YLW![*] manifest-checker: Checking manifests from resource packs...!RST!
 echo.
@@ -32,7 +33,7 @@ echo.
 echo.
 echo.
 echo.
-echo !RED![^^!] manifest-checker: Manifest not fixed.!RST!
+echo !YLW![^^!] manifest-checker: Manifest was not fixed.!RST!
 echo.
 echo !WHT!Location:!RST!
 echo !GRY!"%~2\manifest.json"!RST!
@@ -52,7 +53,7 @@ echo [1] Fix it myself       [2] Auto fix it on codebeautify.org
 echo [3] Disable the pack    [4] Copy it to desktop and exit
 echo %RED%[5] Exit%RST%
 echo.
-if not exist %disableTips% (
+if not defined mt_hideTips (
     echo !GRN![TIP]!RST! It's better to deactivate that pack from game first if activated then close Minecraft.
     echo       Make sure the game is closed during fixing.!RST!
 )
@@ -62,7 +63,8 @@ echo.
 choice /c 12345 >nul
 if not defined code_editor_to_use (set code_editor_to_use=notepad)
 if %errorlevel% equ 1 (
-    start /wait /i "" %code_editor_to_use:"=% "%~2\manifest.json"
+    echo !GRY![*] Waiting for user to close the text/code editor...!RST!
+    start /wait /i "" "%code_editor_to_use:"=%" "%~2\manifest.json"
     modules\jq -r ".header.name" "%~2\manifest.json" >nul && goto :EOF || goto manifestNotFixed
 )
 if %errorlevel% equ 2 (
@@ -75,6 +77,6 @@ if %errorlevel% equ 2 (
     start /i /min /wait "" %code_editor_to_use:"=% "%~2\manifest.json"
     modules\jq -r ".header.name" "%~2\manifest.json" >nul && goto :EOF || goto manifestNotFixed
 )
-if %errorlevel% equ 3 (move "%~2\manifest.json" "%~2\manifest.json.bak")
-if %errorlevel% equ 4 (copy /d "%~2\manifest.json" "%USERPROFILE%\Desktop" & exit)
+if %errorlevel% equ 3 (rename "%~2\manifest.json" "manifest.json.disable" >nul 2>&1)
+if %errorlevel% equ 4 (copy /d /b "%~2\manifest.json" "%USERPROFILE%\Desktop" & exit)
 if %errorlevel% equ 5 (exit)
