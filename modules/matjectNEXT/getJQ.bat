@@ -1,6 +1,7 @@
-:: getJQ.bat // Made by github.com/faizul726
+:: getJQ.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 echo !YLW![*] matjectNEXT needs jq by @jqlang to process Minecraft JSON files.!RST!
 echo.
@@ -55,7 +56,7 @@ if /i "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
     %exitmsg%
 )
 
-
+echo.
 if exist "modules\jq.exe" (echo !GRN![*] Downloaded to "modules\jq.exe"!RST!) else (echo !RED![*] Download FAILED.!RST! && echo Press any key to close... && pause > NUL && exit)
 echo.
 pause && goto:EOF

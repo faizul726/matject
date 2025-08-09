@@ -1,6 +1,7 @@
-:: clearVariable.bat // Made by github.com/faizul726
+:: clearVariable.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 if /i "[%~1]" equ "[auto_all]" (
     for %%f in (manifestFound MCPACK MCPACKCOUNT MCPACKDIR MCPACKNAME tmp_input tmp_mcpacknames tmp_subpack_counter tmp_subpacknames selected_mcpack selected_subpack) do (

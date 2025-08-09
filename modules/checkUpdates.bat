@@ -1,6 +1,7 @@
-:: checkUpdates.bat // Made by github.com/faizul726
+:: checkUpdates.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 cls
 echo !YLW!!BLINK![*] Checking for Matject updates...!RST!
@@ -83,9 +84,9 @@ echo.
 call :fetchChangelog
 echo.
 echo.
-echo !BEL!!YLW![?] Do you want to automatically update to Matject %latesturl:~50%?!RST!
+echo !BEL!!YLW![?] Do you want to update to Matject %latesturl:~50%?!RST!
 echo.
-echo !RED![Y] Yes [BETA]    !GRN![N] No, go back!RST!
+echo !RED![Y] Yes    !GRN![N] No, go back!RST!
 choice /c yn /n >nul
 echo.
 if !errorlevel! equ 1 (
@@ -98,7 +99,7 @@ if !errorlevel! equ 1 (
         echo !YLW![^^!] You have to restore default materials ^(Minecraft Preview^) before you can continue.!RST!
         %backmsg%
     )
-    echo !YLW![*] This will download latest source from !githubLink:~8,-1! extract it.!RST!
+    echo !YLW![*] This will download latest source from github.com/faizul726/matject extract it.!RST!
     echo.
     echo !YLW![?] Are you sure you want to continue?!RST!
     echo.

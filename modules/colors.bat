@@ -1,6 +1,8 @@
-:: colors.bat // Made by github.com/faizul726
+:: colors.bat // Made by github.com/faizul726, licence issued by YSS Group
+
 @echo off
 
+set "ESC=["
 set "GRY=[90m"
 set "RED=[91m"
 set "GRN=[92m"

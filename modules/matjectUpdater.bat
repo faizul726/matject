@@ -1,14 +1,15 @@
-:: matjectUpdater.bat // Made by github.com/faizul726
+:: matjectUpdater.bat // Made by github.com/faizul726, licence issued by YSS Group
+
 @echo off
 setlocal enabledelayedexpansion
 if "[%~1]" equ "[]" (if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k) else (goto letsgo)
 
 :: Copy itself to tmp folder because during update the file itself will replaced.
-echo !YLW![*] Copying updater to temporary folder...!RST!
+echo [?25l!YLW![*] Copying updater to temporary folder...!RST!
 echo.
-if not exist tmp (mkdir tmp) else (del /q /f .\tmp\* >nul)
+if not exist tmp (mkdir tmp) else (del /q /f ".\tmp\*" >nul)
 
-copy /d "modules\matjectUpdater.bat" "tmp" >nul
+copy /d /b "modules\matjectUpdater.bat" "tmp" >nul
 
 echo !YLW![*] Copied. Updating now...!RST!
 start /i "" cmd /k ""tmp\matjectUpdater.bat" "%version%" "%latesturl:~50%""
@@ -25,7 +26,7 @@ if not exist "%cd%\matject.bat" (
     )
 )
 
-set murgi=something
+set "murgi=something"
 call "modules\colors"
 
 :: See if direct update is possible
@@ -33,14 +34,14 @@ for /f "delims=" %%x in ('curl -fSs https://raw.githubusercontent.com/faizul726/
     set "memoire=%%x"
     if "[%%x]" equ "[]" (goto somethingWentWrong) else (
         set "memoire=%%x"
-        if "!memoire:~0,1!" neq "v" (goto somethingWentWrong) else (
+        if /i "!memoire:~0,1!" neq "v" (goto somethingWentWrong) else (
             if /i "!memoire!" equ "%~1" (set "directUpdate=true") else (set "directUpdate=")
         )
     )
 )
 
 :: Once again, just in case...
-for %%F in ("matject.bat" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF")
+for %%F in ("matject.bat" ".\.settings\*.ini" ".\.settings\*.vbs" ".\modules\*" ".\modules\matjectNEXT\*") do (attrib -R "%%~fF" >nul 2>&1)
 
 :: Prioritize git over curl so extracting is not needed.
 if defined directUpdate (
@@ -51,16 +52,18 @@ if defined directUpdate (
 echo.
 >nul 2>&1 where git && (
     echo !YLW![*] Downloading ^(using git clone^)...!RST!
+    echo.
     pushd tmp
     git clone https://github.com/faizul726/matject.git
+    echo.
     popd
     if exist "tmp\matject\matject.bat" (
         rmdir /q /s ".\tmp\matject\.git"
         rmdir /q /s ".\modules"
-        del /q /f .\*>nul 2>&1
+        del /q /f ".\*">nul 2>&1
         if not defined directUpdate (
             if not exist "Old Matject Data\%~1" (mkdir "Old Matject Data\%~1")
-            for %%f in (.settings Backups logs MATERIALS MCPACKS) do (move /y "%%f" ".\Old Matject Data\%~1" >nul 2>&1)
+            for %%f in (".settings" "Backups" "Backups (Preview)" "logs" "MATERIALS" "MCPACKS") do (move /y "%%f" ".\Old Matject Data\%~1" >nul 2>&1)
         )
         for /d %%f in (tmp\matject\*) do (move /y "%%f" "%cd%" >nul 2>&1)
         for %%f in (tmp\matject\*) do (move /y "%%f" "%cd%" >nul 2>&1)
@@ -68,6 +71,7 @@ echo.
     ) else (goto somethingWentWrong)
 ) || (
     echo !YLW![*] Downloading ^(using curl^)...!RST!
+    echo.
     call :downloadSource
     if exist "%SYSTEMROOT%\system32\%tarexe%" (
         tar -xf "tmp\matject-main.zip" -C "tmp"
@@ -76,7 +80,7 @@ echo.
     )
     if exist "tmp\matject-main\matject.bat" (
         rmdir /q /s ".\modules"
-        del /q .\*>nul 2>&1
+        del /q /f ".\*">nul 2>&1
         if not defined directUpdate (
             if not exist "Old Matject Data\%~1" (mkdir "Old Matject Data\%~1")
             for %%f in (.settings Backups logs MATERIALS MCPACKS) do (move /y "%%f" "Old Matject Data\%~1" >nul 2>&1)
@@ -90,7 +94,11 @@ echo.
 :updateDone
 echo.
 echo !GRN![*] Successfully updated to %~2!RST!
-goto somethingNotWentWrong
+echo.
+echo !YLW!Press any key to open Matject %~2.!RST!
+pause >nul
+start /i cmd /k "%cd%\matject.bat" placebo
+exit 0
 
 :downloadSource
 curl -fSsL -o "tmp\matject-main.zip" https://github.com/faizul726/matject/archive/main.zip
@@ -99,7 +107,6 @@ goto :EOF
 
 :somethingWentWrong
 echo !RED![^^!] Something went wrong...!RST!
-:somethingNotWentWrong
 echo.
 echo Press any key to exit...
 pause >nul

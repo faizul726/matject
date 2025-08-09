@@ -1,8 +1,8 @@
-:: Made possible thanks to github.com/mcbegamerxx954 (creator of draco and mbl2)
-:: getMaterialUpdater.bat // Made by github.com/faizul726
+:: Made possible thanks to github.com/mcbegamerxx954 (creator of Draco and MaterialBinLoader2)
+:: getMaterialUpdater.bat // Made by github.com/faizul726, licence issued by YSS Group
 
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 cls
 if "%PROCESSOR_ARCHITECTURE%" neq "AMD64" (
@@ -58,15 +58,15 @@ where curl >nul 2>&1
 if !errorlevel! equ 0 (
     curl -L -o tmp\material-updater-x86_64-pc-windows-msvc.zip https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip >nul
     if exist "%SYSTEMROOT%\system32\%tarexe%" (
-        tar -xf "tmp\material-updater-x86_64-pc-windows-msvc.zip" -C "modules" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
+        tar -xf "tmp\material-updater-x86_64-pc-windows-msvc.zip" -C "modules" && call "modules\settingsV3" set mt_useMaterialUpdater true
     ) else (
         if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
-        powershell -NoProfile -Command "Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
+        powershell -NoProfile -Command "Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && call "modules\settingsV3" set mt_useMaterialUpdater true
         if not defined chcp_failed (>nul 2>&1 chcp 65001)
     )
 ) else (
     if not defined chcp_failed (>nul 2>&1 chcp !chcp_default!)
-    powershell -NoProfile -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater>%thanksMcbegamerxx954%)
+    powershell -NoProfile -Command "Invoke-WebRequest https://github.com/mcbegamerxx954/material-updater/releases/latest/download/material-updater-x86_64-pc-windows-msvc.zip -OutFile tmp/material-updater-x86_64-pc-windows-msvc.zip ; Expand-Archive -Force tmp/material-updater-x86_64-pc-windows-msvc.zip 'modules'" && call "modules\settingsV3" set mt_useMaterialUpdater true
     if not defined chcp_failed (>nul 2>&1 chcp 65001)
 )
 rmdir /q /s ".\tmp"

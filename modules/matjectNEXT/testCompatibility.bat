@@ -1,6 +1,7 @@
-:: testCompatibility.bat // Made by github.com/faizul726
+:: testCompatibility.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 cls
 echo !YLW![*] Testing compatibility for matjectNEXT!RST!

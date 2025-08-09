@@ -1,6 +1,7 @@
-:: settings.bat // Made by github.com/faizul726
+:: settings.bat // Made by github.com/faizul726, licence issued by YSS Group
+
+@if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P & cmd /k
 @echo off
-if not defined murgi echo [41;97mYou're supposed to open matject.bat, NOT ME.[0m :P[?25h & echo on & @cmd /k
 
 set "toggleOff=!GRY![ ]!RST!"
 set "toggleOn=!GRN![x]!RST!"
@@ -12,25 +13,50 @@ title %title% Settings
 if not "[%~1]" equ "[]" goto %~1
 
 :settingsP1
+call "modules\settingsV3"
 cls
 
+echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !WHT![General]!GRY! /  Custom paths  /  matjectNEXT settings  /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
 
-if not exist %defaultMethod% (
-    set "toggleone=!RED![None]!GRY! /  Auto  /  Manual  /  matjectNEXT!RST!"
-    set toggleP1_1=!toggleOff!
-    set "selectedMethod="
-) else (
+if defined mt_defaultMethod (
+    if /i "!mt_defaultMethod!" equ "Auto" set "toggleP1_one=!GRY! None  / !GRN![Auto]!GRY! /  Manual  /  matjectNEXT!RST!"
+    if /i "!mt_defaultMethod!" equ "Manual" set "toggleP1_one=!GRY! None  /  Auto  / !BLU![Manual]!GRY! /  matjectNEXT!RST!"
+    if /i "!mt_defaultMethod!" equ "matjectNEXT" set "toggleP1_one=!GRY! None  /  Auto  /  Manual  / !RED![matjectNEXT]!RST!"
     set "toggleP1_1=!toggleOn!"
-    set /p selectedMethod=<"%defaultMethod%"
-    echo %hideCursor%>nul
-    if /i "!selectedMethod: =!" equ "Auto" set "toggleone=!GRY! None  / !GRN![Auto]!GRY! /  Manual  /  matjectNEXT!RST!"
-    if /i "!selectedMethod: =!" equ "Manual" set "toggleone=!GRY! None  /  Auto  / !BLU![Manual]!GRY! /  matjectNEXT!RST!"
-    if /i "!selectedMethod: =!" equ "matjectNEXT" set "toggleone=!GRY! None  /  Auto  /  Manual  / !RED![matjectNEXT]!RST!"
+) else (
+    set "toggleP1_one=!RED![None]!GRY! /  Auto  /  Manual  /  matjectNEXT!RST!"
+    set "toggleP1_1=!toggleOff!"
 )
 
-if exist %thanksMcbegamerxx954% (
+
+if defined mt_disableConfirmation (set "toggleP1_3=!toggleOn!") else (set "toggleP1_3=!toggleOff!")
+if defined mt_dontRetainOldBackups (set "toggleP1_4=!toggleOn!") else (set "toggleP1_4=!toggleOff!")
+if defined mt_disableSuccessMsg (set "toggleP1_5=!toggleOn!") else (set "toggleP1_5=!toggleOff!")
+if defined mt_dontOpenFolder (set "toggleP1_7=!toggleOn!") else (set "toggleP1_7=!toggleOff!")
+if defined mt_autoImportMCPACK (set "toggleP1_6=!toggleOn!") else (set "toggleP1_6=!toggleOff!")
+if defined mt_hideTips (set "toggleP1_9=!toggleOn!") else (set "toggleP1_9=!toggleOff!")
+if defined mt_showAnnouncements (set "toggleP1_10=!RED![ON]!RST!") else (set "toggleP1_10=!GRY![OFF]!RST!")
+
+:: i will miss you...
+:: 20250509
+:: if not exist %defaultMethod% (
+::     set "toggleone=!RED![None]!GRY! /  Auto  /  Manual  /  matjectNEXT!RST!"
+::     set toggleP1_1=!toggleOff!
+::     set "selectedMethod="
+:: ) else (
+::     set "toggleP1_1=!toggleOn!"
+::     set /p selectedMethod=<"%defaultMethod%"
+::     echo %hideCursor%>nul
+::     if /i "!selectedMethod: =!" equ "Auto" set "toggleone=!GRY! None  / !GRN![Auto]!GRY! /  Manual  /  matjectNEXT!RST!"
+::     if /i "!selectedMethod: =!" equ "Manual" set "toggleone=!GRY! None  /  Auto  / !BLU![Manual]!GRY! /  matjectNEXT!RST!"
+::     if /i "!selectedMethod: =!" equ "matjectNEXT" set "toggleone=!GRY! None  /  Auto  /  Manual  / !RED![matjectNEXT]!RST!"
+:: )
+
+
+
+if defined mt_useMaterialUpdater (
     if not exist "modules\material-updater.exe" (
-        del /q ".\%thanksMcbegamerxx954%" >nul
+        call "modules\settingsV3" clear mt_useMaterialUpdater
         set toggleP1_2=!toggleOff!
     ) else (
         call :set_mtupdate_target main_settings
@@ -38,17 +64,16 @@ if exist %thanksMcbegamerxx954% (
     )
 ) else set "toggleP1_2=!toggleOff!"
 
-if exist %disableConfirmation% (set toggleP1_3=!toggleOn!) else (set toggleP1_3=!toggleOff!)
-if exist %dontRetainOldBackups% (set toggleP1_4=!toggleOn!) else (set toggleP1_4=!toggleOff!)
-if exist %disableSuccessMsg% (set toggleP1_5=!toggleOn!) else (set toggleP1_5=!toggleOff!)
-if exist %autoOpenMCPACK% (set toggleP1_6=!toggleOn!) else (set toggleP1_6=!toggleOFF!)
-if exist %dontOpenFolder% (set toggleP1_7=!toggleOn!) else (set toggleP1_7=!toggleOFF!)
+rem if exist %disableConfirmation% (set toggleP1_3=!toggleOn!) else (set toggleP1_3=!toggleOff!)
+rem if exist %dontRetainOldBackups% (set toggleP1_4=!toggleOn!) else (set toggleP1_4=!toggleOff!)
+rem if exist %disableSuccessMsg% (set toggleP1_5=!toggleOn!) else (set toggleP1_5=!toggleOff!)
+rem if exist %autoOpenMCPACK% (set toggleP1_6=!toggleOn!) else (set toggleP1_6=!toggleOff!)
+rem if exist %dontOpenFolder% (set toggleP1_7=!toggleOn!) else (set toggleP1_7=!toggleOff!)
 if exist %useForMinecraftPreview% (set toggleP1_8=!toggleOn:GRN=RED!) else (set toggleP1_8=!toggleOff!)
-if exist %disableTips% (set toggleP1_9=!toggleOn!) else (set toggleP1_9=!toggleOff!)
-if exist %showAnnouncements% (set toggleP1_10=!RED![ON]!RST!) else (set toggleP1_10=!GRY![OFF]!RST!)
+rem if exist %disableTips% (set toggleP1_9=!toggleOn!) else (set toggleP1_9=!toggleOff!)
+rem if exist %showAnnouncements% (set toggleP1_10=!RED![ON]!RST!) else (set toggleP1_10=!GRY![OFF]!RST!)
 
 
-echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !WHT![General]!GRY! /  Custom paths  /  matjectNEXT settings  /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
 echo.
 echo.
 
@@ -56,7 +81,7 @@ echo !WHT!Here you can change how Matject works.!RST!
 echo !GRY!Press [0] to open settings folder.!RST!
 echo.
 
-echo !toggleP1_1! 1. Default method: %toggleone%
+echo !toggleP1_1! 1. Default method: %toggleP1_one%
 if "!toggleP1_2!" equ "!toggleOff!" (
     echo !toggleP1_2! 2. Use material-updater to update materials ^(fixes invisible blocks^)
 ) else (
@@ -68,28 +93,44 @@ echo !toggleP1_4! 4. Don't retain old backups
 echo !toggleP1_5! 5. Disable success message ^(auto/manual^)
 echo !toggleP1_6! 6. Auto import MCPACK after injection ^(auto only^)
 echo !toggleP1_7! 7. Don't open folder automatically ^(auto/manual^)
-echo !toggleP1_8! 8. Use for Minecraft Preview !RED![BETA]!RST!
-echo !toggleP1_9! 9. Disable tips
+echo !toggleP1_8! 8. Use for Minecraft Preview!RST!
+echo !toggleP1_9! 9. Hide tips
 echo !GRY![M] Show Matject announcements !YLW!^(requires internet^)!RST! !toggleP1_10!
 echo.
 
-echo !YLW!Press corresponding key to toggle desired option...!RST!
+echo !YLW!Press corresponding key to confirm your choice. !GRY!Press Q to know what each action does.!RST!
 echo !GRY!Press [A] or [D] to switch tab...!RST!
-choice /c 12345678bad09mw /n >nul
+choice /c 12345678bad09mwq /n >nul
 
 goto toggleP1_!errorlevel!
 
 :toggleP1_1
-if not defined selectedMethod (echo Auto>%defaultMethod%) else (
-    if /i "!selectedMethod!" equ "Auto" echo Manual>%defaultMethod%
-    if /i "!selectedMethod!" equ "Manual" echo matjectNEXT>%defaultMethod%
-    if /i "!selectedMethod!" equ "matjectNEXT" del /q ".\%defaultMethod%" >nul
-) 
+if not defined mt_defaultMethod (
+    call "modules\settingsV3" set mt_defaultMethod Auto
+    goto settingsP1
+)
+if /i "!mt_defaultMethod!" equ "Auto" (
+    call "modules\settingsV3" set mt_defaultMethod Manual
+    goto settingsP1
+)
+if /i "!mt_defaultMethod!" equ "Manual" (
+    call "modules\settingsV3" set mt_defaultMethod matjectNEXT
+    goto settingsP1
+)
+if /i "!mt_defaultMethod!" equ "matjectNEXT" (
+    call "modules\settingsV3" clear mt_defaultMethod
+    goto settingsP1
+)
+:: if not defined selectedMethod (echo Auto>%defaultMethod%) else (
+::     if /i "!selectedMethod!" equ "Auto" echo Manual>%defaultMethod%
+::     if /i "!selectedMethod!" equ "Manual" echo matjectNEXT>%defaultMethod%
+::     if /i "!selectedMethod!" equ "matjectNEXT" del /q ".\%defaultMethod%" >nul
+:: )
 goto settingsP1
 
 
 :toggleP1_2
-if exist "%thanksMcbegamerxx954%" (
+if defined mt_useMaterialUpdater (
     :material_updater_settings
     cls
     echo !RED!^< [B] Back!RST!
@@ -102,7 +143,7 @@ if exist "%thanksMcbegamerxx954%" (
     echo.
     echo [2] Re-download/update material-updater
     echo.
-    echo !RED![3] Turn off material-updater!RST!
+    echo [3] Turn off material-updater
     echo.
     echo !YLW!Press corresponding key to confirm your choice...!RST!
     choice /c 123b /n >nul
@@ -110,8 +151,9 @@ if exist "%thanksMcbegamerxx954%" (
     if !errorlevel! equ 4 goto settingsP1
     if !errorlevel! equ 3 (
         set "toggleP1_2=!toggleOff!"
-        del /q ".\%thanksMcbegamerxx954%" >nul
-        if exist "%materialUpdaterArg%" del /q ".\%materialUpdaterArg%" >nul
+        call "modules\settingsV3" clear mt_useMaterialUpdater
+        rem if exist "%materialUpdaterArg%" del /q ".\%materialUpdaterArg%" >nul
+        call "modules\settingsV3" clear mt_materialUpdaterArg
         goto settingsP1
     )
     if !errorlevel! equ 2 (
@@ -133,9 +175,9 @@ if exist "%thanksMcbegamerxx954%" (
         echo.
         echo.
         if not defined isPreview (
-            echo [0] Auto: Automatically detect game version !GRN![Recommended] !RED![BETA] ^(Preview not supported^)!RST!
+            echo [0] Auto: Automatically detect game version !GRN![Recommended] !GRY!^(Preview not supported^)!RST!
         ) else (
-            echo !GRY![0] Auto: Automatically detect game version [Recommended] [BETA] ^(Preview not supported^)!RST!
+            echo !GRY![0] Auto: Automatically detect game version [Recommended] ^(Preview not supported^)!RST!
         )
         echo.
         echo [1] v1.21.20+
@@ -146,41 +188,53 @@ if exist "%thanksMcbegamerxx954%" (
         echo !YLW!Press corresponding key to confirm your choice...!RST!
         if defined isPreview (choice /c 1234b /n >nul) else (choice /c 1234b0 /n >nul)
         rem TODO Do for %%C here to avoid double run
-        if !errorlevel! equ 6 if exist "%materialUpdaterArg%" del /q ".\%materialUpdaterArg%" >nul
+        if !errorlevel! equ 6 (if not defined isPreview call "modules\settingsV3" clear mt_materialUpdaterArg)
         if !errorlevel! equ 5 goto material_updater_settings
-        if !errorlevel! equ 4 echo v1-18-30>%materialUpdaterArg%
-        if !errorlevel! equ 3 echo v1-19-60>%materialUpdaterArg%
-        if !errorlevel! equ 2 echo v1-20-80>%materialUpdaterArg%
-        if !errorlevel! equ 1 echo v1-21-20>%materialUpdaterArg%
+        if !errorlevel! equ 4 call "modules\settingsV3" set mt_materialUpdaterArg "v1-18-30"
+        if !errorlevel! equ 3 call "modules\settingsV3" set mt_materialUpdaterArg "v1-19-60"
+        if !errorlevel! equ 2 call "modules\settingsV3" set mt_materialUpdaterArg "v1-20-80"
+        if !errorlevel! equ 1 call "modules\settingsV3" set mt_materialUpdaterArg "v1-21-20"
+        rem if !errorlevel! equ 4 echo v1-18-30>%materialUpdaterArg%
+        rem if !errorlevel! equ 3 echo v1-19-60>%materialUpdaterArg%
+        rem if !errorlevel! equ 2 echo v1-20-80>%materialUpdaterArg%
+        rem if !errorlevel! equ 1 echo v1-21-20>%materialUpdaterArg%
         goto material_updater_settings
     )
 ) else (
     if not exist "modules\material-updater.exe" (
         call "modules\getMaterialUpdater"
     ) else (
-        if not exist %thanksMcbegamerxx954% (echo github.com/mcbegamerxx954/material-updater > %thanksMcbegamerxx954%)
+        call "modules\settingsV3" set mt_useMaterialUpdater true
     )
 )
 goto settingsP1
 
 :toggleP1_3
-if not exist %disableConfirmation% (echo You are c21hcnQ= [%date% // %time:~0,-6%]>%disableConfirmation%) else (del /q ".\%disableConfirmation%" > NUL)
+rem if not exist %disableConfirmation% (echo You are c21hcnQ= [%date% // %time:~0,-6%]>%disableConfirmation%) else (del /q ".\%disableConfirmation%" > NUL)
+if defined mt_disableConfirmation (call "modules\settingsV3" clear mt_disableConfirmation) else (call "modules\settingsV3" set mt_disableConfirmation true)
 goto settingsP1
 
 :toggleP1_4
-if not exist %dontRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time:~0,-6%]>%dontRetainOldBackups%) else (del /q ".\%dontRetainOldBackups%" > NUL)
+rem if not exist %dontRetainOldBackups% (echo Just like old backups, you shouldn't overthink about your past. Improve yourself for future instead. [%date% // %time:~0,-6%]>%dontRetainOldBackups%) else (del /q ".\%dontRetainOldBackups%" > NUL)
+if defined mt_dontRetainOldBackups (call "modules\settingsV3" clear mt_dontRetainOldBackups) else (call "modules\settingsV3" set mt_dontRetainOldBackups true)
 goto settingsP1
 
 :toggleP1_5
-if not exist %disableSuccessMsg% (echo Thanks for using Matject, have a good day^^! [%date% // %time:~0,-6%]>%disableSuccessMsg%) else (del /q ".\%disableSuccessMsg%" > NUL)
+if defined mt_disableSuccessMsg (call "modules\settingsV3" clear mt_disableSuccessMsg) else (call "modules\settingsV3" set mt_disableSuccessMsg true)
+rem TODO
+rem if defined mt_disableSuccessMsg (call :clear mt_disableSuccessMsg) else (call :set mt_disableSuccessMsg true)
+
+rem if not exist %disableSuccessMsg% (echo Thanks for using Matject, have a good day^^! [%date% // %time:~0,-6%]>%disableSuccessMsg%) else (del /q ".\%disableSuccessMsg%" > NUL)
 goto settingsP1
 
 :toggleP1_6
-if not exist %autoOpenMCPACK% (echo You are lazy [%date% // %time:~0,-6%]>%autoOpenMCPACK%) else (del /q ".\%autoOpenMCPACK%" > NUL)
+rem if not exist %autoOpenMCPACK% (echo You are lazy [%date% // %time:~0,-6%]>%autoOpenMCPACK%) else (del /q ".\%autoOpenMCPACK%" > NUL)
+if defined mt_autoImportMCPACK (call "modules\settingsV3" clear mt_autoImportMCPACK) else (call "modules\settingsV3" set mt_autoImportMCPACK true)
 goto settingsP1
 
 :toggleP1_7
-if not exist %dontOpenFolder% (echo Opening folder seems slow innit? [%date% // %time:~0,-6%]>%dontOpenFolder%) else (del /q ".\%dontOpenFolder%" > NUL)
+rem if not exist %dontOpenFolder% (echo Opening folder seems slow innit? [%date% // %time:~0,-6%]>%dontOpenFolder%) else (del /q ".\%dontOpenFolder%" > NUL)
+if defined mt_dontOpenFolder (call "modules\settingsV3" clear mt_dontOpenFolder) else (call "modules\settingsV3" set mt_dontOpenFolder true)
 goto settingsP1
 
 :toggleP1_8
@@ -205,23 +259,30 @@ start /i "" explorer "%cd%\.settings"
 goto settingsP1
 
 :toggleP1_13
-if not exist %disableTips% (echo tips are helpful, but no problem. [%date% // %time:~0,-6%]>%disableTips%) else (del /q ".\%disableTips%" > NUL)
+if defined mt_hideTips (call "modules\settingsV3" clear mt_hideTips) else (call "modules\settingsV3" set mt_hideTips true)
+rem if not exist %disableTips% (echo tips are helpful, but no problem. [%date% // %time:~0,-6%]>%disableTips%) else (del /q ".\%disableTips%" > NUL)
 goto settingsP1
 
 :toggleP1_14
-where curl >nul 2>&1 || (
+>nul 2>&1 where curl || (
     cls
     echo !RED![^^!] curl is not available on your system. It is required to show announcements.!RST!
     %backmsg:EOF=settingsP1%
 )
-if not exist %showAnnouncements% (echo thanks for being up to date about Matject [%date% // %time:~0,-6%]>%showAnnouncements%) else (del /q ".\%showAnnouncements%" > NUL)
+rem if not exist %showAnnouncements% (echo thanks for being up to date about Matject [%date% // %time:~0,-6%]>%showAnnouncements%) else (del /q ".\%showAnnouncements%" > NUL)
+if defined mt_showAnnouncements (call "modules\settingsV3" clear mt_showAnnouncements) else (call "modules\settingsV3" set mt_showAnnouncements true)
 goto settingsP1
 
 :toggleP1_15
 call :hmmmmm_20250413_1545
 goto settingsP1
 
+:toggleP1_16
+call "modules\help" settingsP1
+goto settingsP1
+
 :settingsP2
+call "modules\settingsV3"
 cls
 
 echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !GRY! General  / !WHT![Custom paths]!GRY! /  matjectNEXT settings  /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
@@ -232,28 +293,49 @@ echo !WHT!Here you can set paths to be used by Matject/matjectNEXT.!RST!
 echo.
 echo.
 
-if exist "%customMinecraftAppPath%" (
-    set /p tmp_customMinecraftAppPath=<"%customMinecraftAppPath%"
-    echo %hideCursor%>nul
-    if not exist "!tmp_customMinecraftAppPath!" (
+if defined mt_customMinecraftAppPath (
+    if not exist "!mt_customMinecraftAppPath!\AppxManifest.xml" (
         set toggleP2_1=!toggleMalfunction!
     ) else (
         set toggleP2_1=!toggleOn!
     )
-    set "tmp_customMinecraftAppPath="
-) else (set toggleP2_1=!toggleOff!)
+) else (
+    set toggleP2_1=!toggleOff!
+)
 
-if exist %customMinecraftDataPath% (
-    set /p tmp_customMinecraftDataPath=<"%customMinecraftDataPath%"
-    echo %hideCursor%>nul
-    if not exist "!tmp_customMinecraftAppPath!" (
+if defined mt_customMinecraftDataPath (
+    if not exist "!mt_customMinecraftDataPath!\minecraftpe\options.txt" (
         set toggleP2_2=!toggleMalfunction!
     ) else (
         set toggleP2_2=!toggleOn!
     )
-    set "tmp_customMinecraftDataPath="
-) else (set toggleP2_2=!toggleOff!)
-if exist %customIObitUnlockerPath% (set toggleP2_3=!toggleOn!) else (set toggleP2_3=!toggleOff!)
+) else (
+    set toggleP2_2=!toggleOff!
+)
+
+if defined mt_customIObitUnlockerPath (set "toggleP2_3=!toggleOn!") else (set "toggleP2_3=!toggleOff!")
+
+:: if exist "%customMinecraftAppPath%" (
+::     set /p tmp_customMinecraftAppPath=<"%customMinecraftAppPath%"
+::     echo %hideCursor%>nul
+::     if not exist "!tmp_customMinecraftAppPath!" (
+::         set toggleP2_1=!toggleMalfunction!
+::     ) else (
+::         set toggleP2_1=!toggleOn!
+::     )
+::     set "tmp_customMinecraftAppPath="
+:: ) else (set toggleP2_1=!toggleOff!)
+
+:: if exist %customMinecraftDataPath% (
+::     set /p tmp_customMinecraftDataPath=<"%customMinecraftDataPath%"
+::     echo %hideCursor%>nul
+::     if not exist "!tmp_customMinecraftAppPath!" (
+::         set toggleP2_2=!toggleMalfunction!
+::     ) else (
+::         set toggleP2_2=!toggleOn!
+::     )
+::     set "tmp_customMinecraftDataPath="
+:: ) else (set toggleP2_2=!toggleOff!)
 
 echo !toggleP2_1! 1. Use custom Minecraft app path ^(makes Matject start faster^)
 echo !toggleP2_2! 2. Use custom Minecraft data path ^(for Bedrock Launcher or similar^) !RED!^(USE WITH CARE^)!RST!
@@ -266,20 +348,27 @@ echo IObit Unlocker:!GRY! "!IObitUnlockerPath:%ProgramFiles(x86)%=%WHT%%%Program
 echo.
 echo.
 echo.
-echo !YLW!Press corresponding key to toggle desired option...!RST!
+echo !YLW!Press corresponding key to confirm your choice. !GRY!Press Q to know what each action does.!RST!
 echo !GRY!Press [A] or [D] to switch tab...!RST!
-choice /c 123badw /n >nul
+choice /c 123badwq /n >nul
 goto toggleP2_!errorlevel!
 
 :toggleP2_1
-if exist "%customMinecraftAppPath%" (
-    del /q ".\%customMinecraftAppPath%" > NUL
+rem if exist "%customMinecraftAppPath%" (
+rem     del /q ".\%customMinecraftAppPath%" > NUL
+rem     cls
+rem     call "modules\getMinecraftDetails"
+rem     goto settingsP2
+rem )
+
+if defined mt_customMinecraftAppPath (
+    if not exist "!MCLOCATION!\AppxManifest.xml" call "modules\getMinecraftDetails"
+    call "modules\settingsV3" clear mt_customMinecraftAppPath
     cls
-    call "modules\getMinecraftDetails"
     goto settingsP2
 )
+
 cls
-set "setcustomMinecraftAppPath="
 echo !RED!^< [B] Back!RST!
 echo.
 echo.
@@ -301,20 +390,25 @@ if !errorlevel! equ 2 (
     goto settingsP2
 )
 if !errorlevel! equ 3 (
+    set "mt_customMinecraftAppPath_holder="
     cls
     echo.
     echo !YLW![*] Enter your custom Minecraft app path ^(make sure not to include unnecessary space. Leave blank to cancel^)!RST!
     echo %showCursor%
-    set /p "setcustomMinecraftAppPath=Custom Minecraft app path: "
+    set /p "mt_customMinecraftAppPath_holder=!WHT!Custom Minecraft app path:!RST! "
     echo %hideCursor%
-    if not defined setcustomMinecraftAppPath (
+    if not defined mt_customMinecraftAppPath_holder (
         goto settingsP2
     ) else (
-        set "setcustomMinecraftAppPath=!setcustomMinecraftAppPath:"=!"
-        set "setcustomMinecraftAppPath=!setcustomMinecraftAppPath:8wekyb3d8bbwe\=8wekyb3d8bbwe!"
-        if exist "!setcustomMinecraftAppPath!\AppxManifest.xml" (
-            if exist "!setcustomMinecraftAppPath!\Minecraft.Windows.exe" (
-                echo !setcustomMinecraftAppPath!>%customMinecraftAppPath%
+        set "mt_customMinecraftAppPath_holder=!mt_customMinecraftAppPath_holder:"=!"
+        set "mt_customMinecraftAppPath_holder=!mt_customMinecraftAppPath_holder:Minecraft.Windows.exe=!"
+        rem set "mt_customMinecraftAppPath_holder=!mt_customMinecraftAppPath_holder:8wekyb3d8bbwe\=8wekyb3d8bbwe!"
+        if "!mt_customMinecraftAppPath_holder:~-1!" equ "\" set "mt_customMinecraftAppPath_holder=!mt_customMinecraftAppPath_holder:~0,-1!"
+        if exist "!mt_customMinecraftAppPath_holder!\AppxManifest.xml" (
+            if exist "!mt_customMinecraftAppPath_holder!\Minecraft.Windows.exe" (
+                set "MCLOCATION=!mt_customMinecraftAppPath_holder!"
+                call "modules\settingsV3" set mt_customMinecraftAppPath "!MCLOCATION!"
+                set "mt_customMinecraftAppPath_holder="
                 goto settingsP2
             )
         )
@@ -324,61 +418,73 @@ echo !ERR![^^!] Invalid Minecraft app path.!RST!
 %backmsg:EOF=settingsP2%
 
 :toggleP2_2
-if exist "%customMinecraftDataPath%" (
-    del /q ".\%customMinecraftDataPath%" > NUL
-    set "gameData=!defaultGameData!"
+rem if exist "%customMinecraftDataPath%" (
+rem     del /q ".\%customMinecraftDataPath%" > NUL
+rem     set "gameData=!defaultGameData!"
+rem     goto settingsP2
+rem )
+
+if defined mt_customMinecraftDataPath (
+    call "modules\settingsV3" clear mt_customMinecraftDataPath
+    set "gameData=%defaultGameData%"
     goto settingsP2
 )
+
 cls
-set "setCustomMinecraftDataPath="
+set "mt_customMinecraftDataPath_holder="
 echo.
 echo !YLW![*] Enter your custom Minecraft data ^(com.mojang folder^) path 
 echo     ^(Make sure not to include unnecessary space. Leave blank to cancel.^)!RST!
 echo %showCursor%
-set /p "setCustomMinecraftDataPath=Custom Minecraft data (com.mojang folder) path: "
+set /p "mt_customMinecraftDataPath_holder=!WHT!Custom Minecraft data (com.mojang folder) path:!RST! "
 echo %hideCursor%
-if not defined setCustomMinecraftDataPath (goto settingsP2)
-set "setCustomMinecraftDataPath=!setCustomMinecraftDataPath:"=!"
-set "setCustomMinecraftDataPath=!setCustomMinecraftDataPath:com.mojang\=com.mojang!"
-if exist "!setCustomMinecraftDataPath!\minecraftpe\options.txt" (
-    echo !setCustomMinecraftDataPath!>%customMinecraftDataPath%
-    set "gameData=!setCustomMinecraftDataPath!"
-    set "setCustomMinecraftDataPath="
+if not defined mt_customMinecraftDataPath_holder (goto settingsP2)
+set "mt_customMinecraftDataPath_holder=!mt_customMinecraftDataPath_holder:"=!"
+rem set "mt_customMinecraftDataPath_holder=!mt_customMinecraftDataPath_holder:com.mojang\=com.mojang!"
+if "!mt_customMinecraftDataPath_holder:~-1!" equ "\" set "mt_customMinecraftDataPath_holder=!mt_customMinecraftDataPath_holder:~0,-1!"
+if exist "!mt_customMinecraftDataPath_holder!\minecraftpe\options.txt" (
+    rem echo !setCustomMinecraftDataPath!>%customMinecraftDataPath%
+    rem set "gameData=!setCustomMinecraftDataPath!"
+    call "modules\settingsV3" set mt_customMinecraftDataPath "!mt_customMinecraftDataPath_holder!"
+    set "gameData=!mt_customMinecraftDataPath_holder!"
+    set "mt_customMinecraftDataPath_holder="
     goto settingsP2
 )
 echo !ERR![^^!] Invalid Minecraft data path.!RST!
-set "setCustomMinecraftDataPath="
+set "mt_customMinecraftDataPath_holder="
 %backmsg:EOF=settingsP2%
 
 
 :toggleP2_3
-if exist "%customIObitUnlockerPath%" (
+if defined mt_customIObitUnlockerPath (
+    call "modules\settingsV3" clear mt_customIObitUnlockerPath
     cls
     echo !YLW![^^!] Custom IObit Unlocker path removed.
     echo     Relaunch to take effect...!RST!
-    del /q ".\%customIObitUnlockerPath%" > NUL
     %relaunchmsg%
 )
 cls
-set "setCustomIObitUnlockerPath="
+set "mt_customIObitUnlockerPath_holder="
 echo.
-echo !YLW![*] Enter your custom IObit Unlocker folder path 
+echo !YLW![*] Enter your custom IObit Unlocker folder/exe path 
 echo     !GRY!Make sure not to include unnecessary space. Leave blank to cancel!RST!
 echo %showCursor%
-set /p "setCustomIObitUnlockerPath=IObit Unlocker path: "
+set /p "mt_customIObitUnlockerPath_holder=!WHT!IObit Unlocker path:!RST! "
 echo %hideCursor%
 
-if not defined setCustomIObitUnlockerPath (
+if not defined mt_customIObitUnlockerPath_holder (
     cls
     echo !YLW![^^!] Custom IObit Unlocker path not set.!RST!
     %exitmsg%
 ) else (
-    set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:"=!"
-    set "setCustomIObitUnlockerPath=!setCustomIObitUnlockerPath:IObit Unlocker\=IObit Unlocker!"
-    if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.exe" (
-        if exist "!setCustomIObitUnlockerPath!\IObitUnlocker.dll" (
+    set "mt_customIObitUnlockerPath_holder=!mt_customIObitUnlockerPath_holder:"=!"
+    set "mt_customIObitUnlockerPath_holder=!mt_customIObitUnlockerPath_holder:IObitUnlocker.exe=!"
+    rem set "mt_customIObitUnlockerPath_holder=!mt_customIObitUnlockerPath_holder:IObit Unlocker\=IObit Unlocker!"
+    if "!mt_customIObitUnlockerPath_holder:~-1!" equ "\" set "mt_customIObitUnlockerPath_holder=!mt_customIObitUnlockerPath_holder:~0,-1!"
+    if exist "!mt_customIObitUnlockerPath_holder!\IObitUnlocker.exe" (
+        if exist "!mt_customIObitUnlockerPath_holder!\IObitUnlocker.dll" (
+            call "modules\settingsV3" set mt_customIObitUnlockerPath "!mt_customIObitUnlockerPath_holder!"
             cls
-            echo !setCustomIObitUnlockerPath!>%customIObitUnlockerPath%
             echo !GRN![*] Custom IObit Unlocker path set.
             echo     Relaunch to take effect...!RST!
             %relaunchmsg%
@@ -402,8 +508,15 @@ goto settingsP3
 call :hmmmmm_20250413_1545
 goto settingsP2
 
+:toggleP2_8
+call "modules\help" settingsP2
+goto settingsP2
+
+
 :settingsP3
+call "modules\settingsV3"
 cls
+
 echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !GRY! General  /  Custom paths  / !WHT![matjectNEXT settings]!GRY! /  Updates ^& Debug !RST! !YLW![D] ^>!RST! 
 echo.
 echo.
@@ -412,28 +525,46 @@ echo !WHT!Here you can change how matjectNEXT works.!RST!
 echo.
 echo.
 
-if exist "%syncThenExit%" (set "toggleP3_1=!toggleOn!") else (set "toggleP3_1=!toggleOff!")
-if exist "%disableManifestCheck%" (set toggleP3_2=!toggleOn!) else (set toggleP3_2=!toggleOff!)
+if defined mtnxt_syncAndExit (set "toggleP3_1=!toggleOn!") else (set "toggleP3_1=!toggleOff!")
+if defined mtnxt_disableManifestChecker (set "toggleP3_2=!toggleOn!") else (set "toggleP3_2=!toggleOff!")
+if defined mtnxt_targetPackNum (
+    set "toggleP3_3=!toggleOn!"
+    set /a mtnxt_targetPackNum_preview=mtnxt_targetPackNum + 1
+) else (
+    set "toggleP3_3=!toggleOff!"
+    set "mtnxt_targetPackNum_preview=1"
+)
+if defined mtnxt_openMinecraftAfterSync (set "toggleP3_4=!toggleOn!") else (set "toggleP3_4=!toggleOff!")
+if defined mtnxt_reapplyEvenIfEqu (set "toggleP3_5=!toggleOn!") else (set "toggleP3_5=!toggleOff!")
+if defined mtnxt_resourcePacksToScan (
+    set "toggleP3_6=!toggleOn!"
+    if /i "!mtnxt_resourcePacksToScan!" equ "resource_packs" set "toggleP3_six=!GRY! Both  / !BLU![resource_packs]!GRY! /  development_resource_packs!RST!"
+    if /i "!mtnxt_resourcePacksToScan!" equ "development_resource_packs" set "toggleP3_six=!GRY! Both  /  resource_packs  / !RED![development_resource_packs]!RST!"
+) else (
+    set "toggleP3_6=!toggleOff!"
+    set "toggleP3_six=!GRN![Both]!GRY! /  resource_packs  /  development_resource_packs!RST!"
+)
 
 echo !toggleP3_1! 1. Just sync and exit
 echo !toggleP3_2! 2. Disable manifest checker !RED![EXPERIMENTAL]!RST!
+echo !toggleP3_3! 3. Target pack in global resource !GRY!^(Currently set to !mtnxt_targetPackNum_preview!^) ^(Sets which pack to use like 1st/2nd/3rd^)!RST!
+echo !toggleP3_4! 4. Automatically open Minecraft after sync
+echo !toggleP3_5! 5. Reapply even if old and new packs are the same !GRY!^(Useful for creators, especially when testing^)!RST!
+echo !toggleP3_6! 6. Resource packs to scan: !toggleP3_six!
 echo.
 echo.
 echo.
 echo.
 echo.
-echo.
-echo.
-echo.
-echo.
-echo !YLW!Press corresponding key to toggle desired option...!RST!
+echo !YLW!Press corresponding key to confirm your choice. !GRY!Press Q to know what each action does.!RST!
 echo !GRY!Press [A] or [D] to switch tab...!RST!
-choice /c 1bad2w /n >nul
+choice /c 1bad2w3456q /n >nul
 
 goto toggleP3_!errorlevel!
 
 :toggleP3_1
-if not exist "%syncThenExit%" (echo I hope matjectNEXT is doing its job properly. - Creator [%date% // %time:~0,-6%]>"%syncThenExit%" ) else (del /q ".\%syncThenExit%" >nul)
+rem if not exist "%syncThenExit%" (echo I hope matjectNEXT is doing its job properly. - Creator [%date% // %time:~0,-6%]>"%syncThenExit%" ) else (del /q ".\%syncThenExit%" >nul)
+if defined mtnxt_syncAndExit (call "modules\settingsV3" clear mtnxt_syncAndExit) else (call "modules\settingsV3" set mtnxt_syncAndExit true)
 goto settingsP3
 
 :toggleP3_2
@@ -446,25 +577,94 @@ goto settingsP2
 goto settingsP4
 
 :toggleP3_5
-if not exist %disableManifestCheck% (echo why minecraft imports shaders with wrong manifest? [%date% // %time:~0,-6%]>%disableManifestCheck%) else (del /q ".\%disableManifestCheck%" >nul)
+rem if not exist %disableManifestCheck% (echo why minecraft imports shaders with wrong manifest? [%date% // %time:~0,-6%]>%disableManifestCheck%) else (del /q ".\%disableManifestCheck%" >nul)
+if defined mtnxt_disableManifestChecker (call "modules\settingsV3" clear mtnxt_disableManifestChecker) else (call "modules\settingsV3" set mtnxt_disableManifestChecker true)
 goto settingsP3
 
-:toggle_P3_6
+:toggleP3_6
 call :hmmmmm_20250413_1545
+goto settingsP3
+
+:toggleP3_7
+if defined mtnxt_targetPackNum (
+    call "modules\settingsV3" clear mtnxt_targetPackNum
+    goto settingsP3
+)
+cls
+echo !WHT![*] This option allows you to set which pack matjectNEXT will target. !GRY!^(Like 1st, 2nd, 3rd...^)!RST!
+echo.
+echo %showCursor%
+set "mtnxt_targetPackNum_holder="
+set /p "mtnxt_targetPackNum_holder=Enter a positive number between 1-9 !GRY!(leave blank to go back)!RST!: "
+echo %hideCursor%
+if not defined mtnxt_targetPackNum_holder goto settingsP3
+set "mtnxt_targetPackNum_holder=!mtnxt_targetPackNum_holder: =!"
+echo !mtnxt_targetPackNum_holder!|findstr /R "^[1-9][0-9]*$" >nul
+if !errorlevel! neq 0 (
+    echo !RED![^^!] Wrong input!RST!
+    %backmsg:EOF=settingsP3%
+) else (
+    if !mtnxt_targetPackNum_holder! lss 1 (
+        echo !RED![^^!] Wrong input!RST!
+        %backmsg:EOF=settingsP3%
+    )
+    if !mtnxt_targetPackNum_holder! gtr 9 (
+        echo !RED![^^!] Wrong input!RST!
+        %backmsg:EOF=settingsP3%
+    )
+    set /a mtnxt_targetPackNum_holder-=1
+    set /a mtnxt_targetPackNum=!mtnxt_targetPackNum_holder!
+    set "mtnxt_targetPackNum_holder="
+    call "modules\settingsV3" set mtnxt_targetPackNum !mtnxt_targetPackNum!
+)
+goto settingsP3
+
+:toggleP3_8
+if defined mtnxt_openMinecraftAfterSync (call "modules\settingsV3" clear mtnxt_openMinecraftAfterSync) else (call "modules\settingsV3" set mtnxt_openMinecraftAfterSync true)
+goto settingsP3
+
+:toggleP3_9
+if defined mtnxt_reapplyEvenIfEqu (call "modules\settingsV3" clear mtnxt_reapplyEvenIfEqu) else (call "modules\settingsV3" set mtnxt_reapplyEvenIfEqu true)
+goto settingsP3
+
+:toggleP3_10
+if not defined mtnxt_resourcePacksToScan (
+    call "modules\settingsV3" set mtnxt_resourcePacksToScan resource_packs
+    goto settingsP3
+)
+if /i "!mtnxt_resourcePacksToScan!" equ "resource_packs" (
+    call "modules\settingsV3" set mtnxt_resourcePacksToScan development_resource_packs
+    goto settingsP3
+)
+if /i "!mtnxt_resourcePacksToScan!" equ "development_resource_packs" (
+    call "modules\settingsV3" clear mtnxt_resourcePacksToScan
+    goto settingsP3
+)
+goto settingsP3
+
+:toggleP3_11
+call "modules\help" settingsP3
 goto settingsP3
 
 
 :settingsP4
 :settingsP4_01
+call "modules\settingsV3"
 cls
-echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !GRY! General  /  Custom paths  /  matjectNEXT settings  / !WHT![Updates ^& Debug]!RST! !YLW![D] ^>!RST! 
+
+echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !GRY! General  /  Custom paths  /  matjectNEXT settings  / !WHT![Updates ^& Debug]!RST! !YLW![D] ^>!RST!
 echo.
 echo.
 
-if exist %doCheckUpdates% (set toggleP4_1=!toggleOn!) else (set toggleP4_1=!toggleOff!)
-if exist %disableInterruptionCheck% (set toggleP4_2=!toggleOn!) else (set toggleP4_2=!toggleOff!)
-if exist %disableMatCompatCheck% (set toggleP4_3=!toggleOn!) else (set toggleP4_3=!toggleOff!)
-if exist %runIObitUnlockerAsAdmin% (set toggleP4_4=!toggleOn!) else (set toggleP4_4=!toggleOff!)
+if defined mt_disableInterruptionCheck (set "toggleP4_2=!toggleOn!") else (set "toggleP4_2=!toggleOff!")
+if defined mt_disableMatCompatCheck (set "toggleP4_3=!toggleOn!") else (set "toggleP4_3=!toggleOff!")
+if defined mt_doCheckUpdates (set "toggleP4_1=!toggleOn!") else (set "toggleP4_1=!toggleOff!")
+if defined mt_runIObitUnlockerAsAdmin (set "toggleP4_4=!toggleOn!") else (set "toggleP4_4=!toggleOff!")
+
+rem if exist %doCheckUpdates% (set toggleP4_1=!toggleOn!) else (set toggleP4_1=!toggleOff!)
+rem if exist %disableInterruptionCheck% (set toggleP4_2=!toggleOn!) else (set toggleP4_2=!toggleOff!)
+rem if exist %disableMatCompatCheck% (set toggleP4_3=!toggleOn!) else (set toggleP4_3=!toggleOff!)
+rem if exist %runIObitUnlockerAsAdmin% (set toggleP4_4=!toggleOn!) else (set toggleP4_4=!toggleOff!)
 if "%debugMode%" equ "true" (set toggleP4_6=!RED![ON]!RST!) else (set toggleP4_6=!GRY![OFF]!RST!)
 if exist "%runAsAdmin%" (set toggleP4_7=!RED![ON]!RST!) else (set toggleP4_7=!GRY![OFF]!RST!)
 
@@ -478,18 +678,19 @@ echo !toggleP4_4! 4. Run IObit Unlocker as admin ^(admin prompts will be reduced
 echo.
 echo [M] Check for updates manually !YLW!^(requires internet^)!RST!
 echo !GRY![0] DEBUG MODE!RST! !toggleP4_6!
-echo !GRY![X] Always run Matject as admin !RED![BETA]!RST! !toggleP4_7!
-echo !GRY![Z] Reset Matject settings!RST!
+echo !GRY![X] Always run Matject as admin!RST! !toggleP4_7!
+echo !GRY![R] Reset Matject Settings!RST!
 echo ----------!YLW![S] Go down!RST!----------
 echo.
-echo !YLW!Press corresponding key to toggle desired option...!RST!
+echo !YLW!Press corresponding key to confirm your choice. !GRY!Press Q to know what each action does.!RST!
 echo !GRY!Press [A] or [D] to switch tab...!RST!
-choice /c 1m0bad23zx4ws /n >nul
+choice /c 1m0bad23rx4wqs /n >nul
 
 goto toggleP4_!errorlevel!
 
 :toggleP4_1
-if not exist %doCheckUpdates% (echo Thank you for being a regular user of Matject ^^^^ [%date% // %time:~0,-6%]>%doCheckUpdates%) else (del /q ".\%doCheckUpdates%" > NUL)
+rem if not exist %doCheckUpdates% (echo Thank you for being a regular user of Matject ^^^^ [%date% // %time:~0,-6%]>%doCheckUpdates%) else (del /q ".\%doCheckUpdates%" > NUL)
+if defined mt_doCheckUpdates (call "modules\settingsV3" clear mt_doCheckUpdates) else (call "modules\settingsV3" set mt_doCheckUpdates true)
 goto settingsP4
 
 :toggleP4_2
@@ -510,16 +711,22 @@ goto settingsP3
 goto settingsP1
 
 :toggleP4_7
-if not exist %disableInterruptionCheck% (echo You are QlJBVkU= [%date% // %time:~0,-6%]>%disableInterruptionCheck%) else (del /q .\%disableInterruptionCheck% > NUL)
+if defined mt_disableInterruptionCheck (
+    call "modules\settingsV3" clear mt_disableInterruptionCheck
+) else (
+    call "modules\settingsV3" set mt_disableInterruptionCheck true
+)
+rem if not exist %disableInterruptionCheck% (echo You are QlJBVkU= [%date% // %time:~0,-6%]>%disableInterruptionCheck%) else (del /q .\%disableInterruptionCheck% > NUL)
 goto settingsP4
 
 :toggleP4_8
-if not exist "%disableMatCompatCheck%" (echo Don't blame Matject if game crashes for you. [%date% // %time:~0,-6%]>%disableMatCompatCheck%) else (del /q .\%disableMatCompatCheck% >nul)
+if defined mt_disableMatCompatCheck (call "modules\settingsV3" clear mt_disableMatCompatCheck) else (call "modules\settingsV3" set mt_disableMatCompatCheck true)
+rem if not exist "%disableMatCompatCheck%" (echo Don't blame Matject if game crashes for you. [%date% // %time:~0,-6%]>%disableMatCompatCheck%) else (del /q .\%disableMatCompatCheck% >nul)
 goto settingsP4
 
 :toggleP4_9
 cls
-echo !RED![?] ARE YOU SURE ABOUT RESETTING Matject settings?!RST!
+echo !RED![?] ARE YOU SURE ABOUT RESETTING Matject Settings?!RST!
 echo.
 echo !GRY!Type yEs and press [Enter] to confirm. ^(case sensitive^)!RST!
 echo Giving wrong/blank input will cancel.
@@ -528,11 +735,13 @@ set /p "tmpinput=Input: "
 echo %hideCursor%
 
 if "%tmpinput%" neq "yEs" (goto settingsP4)
-del /q ".\.settings\*.txt" >nul
+del /q /f ".\.settings\*.txt" >nul
+del /q /f ".\.settings\!matjectSettings:~0,-4!.ini" >nul
+if exist ".\.settings\runAsAdmin_helper.vbs" del /q /f ".\.settings\runAsAdmin_helper.vbs"
 if exist "modules\jq.exe" (del /q /f ".\modules\jq.exe" >nul)
 if exist "modules\material-updater.exe" (del /q /f ".\modules\material-updater.exe" >nul)
-if exist ".\tmp" (del /q .\tmp >nul)
-call "modules\createShortcut" deleteallshortcuts
+if exist ".\tmp" (rmdir /q /s ".\tmp" >nul)
+call "modules\createShortcut" "deleteallshortcuts"
 cls
 echo !YLW![^^!] Settings reset.
 echo     Relaunch to take effect...!RST!
@@ -553,7 +762,7 @@ echo !WHT![1] PowerShell !GRN![Recommended]!RST!
 echo     Slow, using Start-Process with RunAs verb.
 echo     Automatically turns off this setting if admin prompt is ever declined.
 echo.
-echo !WHT![2] VBscript !RED![BETA]!RST!
+echo !WHT![2] VBscript!RST!
 echo     Fast, using a helper .vbs script created in .settings
 echo.
 echo.
@@ -567,7 +776,7 @@ choice /c b12 /n >nul
 if %errorlevel% equ 1 goto settingsP4
 if %errorlevel% equ 2 (
     echo sudo is better anyways. [%date% // %time:~0,-6%]>"%runAsAdmin%"
-    del /q ".\.settings\runAsAdmin_helper.vbs" >nul 2>&1
+    del /q /f ".\.settings\runAsAdmin_helper.vbs" >nul 2>&1
     goto settingsP4
 )
 :: VBscript obtained from https://ss64.com/vb/shellexecute.html
@@ -583,101 +792,103 @@ echo.
 echo CreateObject^("Shell.Application"^).ShellExecute WScript.Arguments^(1^), "murgi", "", "runas", 1
 )>".settings\runAsAdmin_helper.vbs"
     echo sudo is better anyways. [%date% // %time:~0,-6%]>"%runAsAdmin%"
-    attrib +R ".settings\runAsAdmin_helper.vbs"
+    attrib +R ".settings\runAsAdmin_helper.vbs" >nul 2>&1
     goto settingsP4
 )
 
 :toggleP4_11
-if not exist %runIObitUnlockerAsAdmin% (echo 4 minus 3 equals 1 hmm... [%date% // %time:~0,-6%]>%runIObitUnlockerAsAdmin%) else (del /q .\%runIObitUnlockerAsAdmin% >nul)
+rem if not exist %runIObitUnlockerAsAdmin% (echo 4 minus 3 equals 1 hmm... [%date% // %time:~0,-6%]>%runIObitUnlockerAsAdmin%) else (del /q .\%runIObitUnlockerAsAdmin% >nul)
+if defined mt_runIObitUnlockerAsAdmin (call "modules\settingsV3" clear mt_runIObitUnlockerAsAdmin) else (call "modules\settingsV3" set mt_runIObitUnlockerAsAdmin true)
 goto settingsP4
 
 :toggleP4_12
 call :hmmmmm_20250413_1545
-goto settingsP4
+goto settingsP4_01
 
 :toggleP4_13
+call "modules\help" settingsP4_01
+goto settingsP4_01
+
+
+:toggleP4_14
 :settingsP4_02
+call "modules\settingsV3"
 cls
+
 echo !RED!^< [B] Back!RST! ^| !YLW!^< [A]!RST! !GRY! General  /  Custom paths  /  matjectNEXT settings  / !WHT![Updates ^& Debug]!RST! !YLW![D] ^>!RST! 
 echo.
 echo.
 
+if defined mt_fallbackToExpandArchive (set "toggleP4_02_3=!toggleOn!") else (set "toggleP4_02_3=!toggleOff!")
+if defined mt_preferWtShortcut (set "toggleP4_02_4=!toggleOn!") else (set "toggleP4_02_4=!toggleOff!")
+if defined mt_directWriteMode (set "toggleP4_02_5=!toggleOn!") else (set "toggleP4_02_5=!toggleOff!")
+
 if exist "%disableModuleVerification%" (set toggleP4_02_1=!toggleOn!) else (set toggleP4_02_1=!toggleOff!)
 if exist "%dontMakeReadOnly%" (set toggleP4_02_2=!toggleOn!) else (set toggleP4_02_2=!toggleOff!)
-if exist "%fallbackToExpandArchive%" (set toggleP4_02_3=!toggleOn!) else (set toggleP4_02_3=!toggleOff!)
-if exist "%preferWtShortcut%" (set toggleP4_02_4=!toggleOn!) else (set toggleP4_02_4=!toggleOff!)
-if exist "%directWriteMode%" (set toggleP4_02_5=!toggleOn!) else (set toggleP4_02_5=!toggleOff!)
-if exist "%fullRestoreMaterialsPerCycle%" (
-    set /p materialsPerCycle=<"%fullRestoreMaterialsPerCycle%"
-    set "materialsPerCycle=!materialsPerCycle: =!"
-    echo !materialsPerCycle!|findstr /R "^[1-9][0-9]*$" >nul
-    if !errorlevel! neq 0 (
-        del /q ".\%fullRestoreMaterialsPerCycle%"
-        set /a materialsPerCycle=!defaultMaterialsPerCycle!
-        set toggleP4_02_6=!toggleOff!
-    ) else (
-        set /a materialsPerCycle=!materialsPerCycle!
-        if !materialsPerCycle! lss 2 (
-            del /q ".\%fullRestoreMaterialsPerCycle%"
-            set /a materialsPerCycle=!defaultMaterialsPerCycle!
-            set toggleP4_02_6=!toggleOff!
-        )
-        if !materialsPerCycle! gtr 75 (
-            del /q ".\%fullRestoreMaterialsPerCycle%"
-            set /a materialsPerCycle=!defaultMaterialsPerCycle!
-            set toggleP4_02_6=!toggleOff!
-        )
-        set toggleP4_02_6=!toggleOn!
-    )
+rem if exist "%fallbackToExpandArchive%" (set toggleP4_02_3=!toggleOn!) else (set toggleP4_02_3=!toggleOff!)
+rem if exist "%preferWtShortcut%" (set toggleP4_02_4=!toggleOn!) else (set toggleP4_02_4=!toggleOff!)
+rem if exist "%directWriteMode%" (set toggleP4_02_5=!toggleOn!) else (set toggleP4_02_5=!toggleOff!)
+if defined mt_fullRestoreMaterialsPerCycle (
+    set "mt_fullRestoreMaterialsPerCycle_display=!mt_fullRestoreMaterialsPerCycle!"
+    set toggleP4_02_6=!toggleOn!
 ) else (
+    set "mt_fullRestoreMaterialsPerCycle_display=!mt_fullRestoreMaterialsPerCycle_default!"
     set toggleP4_02_6=!toggleOff!
 )
 
 echo !WHT!Here you can check for updates or enable in-development features.!RST!
 echo.
 echo -----------!YLW![W] Go up!RST!-----------
-echo !toggleP4_02_1! 1. Disable module verification !RED!^(UNSAFE^)!RST!
+echo !toggleP4_02_1! 1. Disable module verification !RED![EXPERIMENTAL]!RST!
 echo !toggleP4_02_2! 2. Don't make .bat files read-only
 echo !toggleP4_02_3! 3. Force fallback to PowerShell Expand-Archive
 echo !toggleP4_02_4! 4. Prefer Windows Terminal over Command Prompt for shortcuts !GRY!^(Shortcuts will not be recreated^)!RST!
-echo !toggleP4_02_5! 5. Direct write mode !RED![EXPERIMENTAL]!RST!
-echo !toggleP4_02_6! 6. Max materials per cycle for full restore !GRY!^(currently set to: !materialsPerCycle!^)!RST! !RED![EXPERIMENTAL]!RST!
+echo !toggleP4_02_5! 5. Direct write mode !RED![BETA]!RST!
+echo !toggleP4_02_6! 6. Max materials per cycle for full restore !GRY!^(currently set to: !mt_fullRestoreMaterialsPerCycle_display!^)!RST! !RED![EXPERIMENTAL]!RST!
 echo.
 echo.
 echo.
 echo.
 echo.
-echo !YLW!Press corresponding key to toggle desired option...!RST!
+echo !YLW!Press corresponding key to confirm your choice. !GRY!Press Q to know what each action does.!RST!
 echo !GRY!Press [A] or [D] to switch tab...!RST!
-choice /c 1234567890bwasd /n >nul
+choice /c 1234567890bwasdq /n >nul
 
 goto toggleP4_02_!errorlevel!
 
 :toggleP4_02_1
-if not exist %disableModuleVerification% (echo well, this is only needed when you're modifying the files... [%date% // %time:~0,-6%]>%disableModuleVerification%) else (del /q .\%disableModuleVerification% >nul)
+if not exist "%disableModuleVerification%" (echo well, this is only needed when you're modifying the files... [%date% // %time:~0,-6%]>"%disableModuleVerification%") else (del /q /f ".\%disableModuleVerification:~0,-4%.txt" >nul)
 goto settingsP4_02
 
 :toggleP4_02_2
-if not exist %dontMakeReadOnly% (echo good luck modifying modules ;^) [%date% // %time:~0,-6%]>%dontMakeReadOnly%) else (del /q .\%dontMakeReadOnly% >nul)
+if not exist "%dontMakeReadOnly%" (echo good luck modifying modules ;^) [%date% // %time:~0,-6%]>"%dontMakeReadOnly%") else (del /q /f ".\%dontMakeReadOnly:~0,-4%.txt" >nul)
 goto settingsP4_02
 
 :toggleP4_02_3
-if not exist "%fallbackToExpandArchive%" (
-    echo tar is fast tho... [%date% // %time:~0,-6%]>"%fallbackToExpandArchive%"
-    set "tarexe=confused_unga/bunga"
-) else (
-    >nul del /q ".\%fallbackToExpandArchive%"
+rem if not exist "%fallbackToExpandArchive%" (
+rem     echo tar is fast tho... [%date% // %time:~0,-6%]>"%fallbackToExpandArchive%"
+rem     set "tarexe=confused_unga/bunga"
+rem ) else (
+rem     >nul del /q ".\%fallbackToExpandArchive%"
+rem     set "tarexe=tar.exe"
+rem )
+if defined mt_fallbackToExpandArchive (
+    call "modules\settingsV3" clear mt_fallbackToExpandArchive
     set "tarexe=tar.exe"
+) else (
+    call "modules\settingsV3" set mt_fallbackToExpandArchive true
+    set "tarexe=confused_unga/bunga"
 )
 goto settingsP4_02
 
 :toggleP4_02_4
-if not exist %preferWtShortcut% (echo Windows users when they see terminal a terminal: *sweats* [%date% // %time:~0,-6%]>"%preferWtShortcut%") else (del /q ".\%preferWtShortcut%" >nul)
+rem if not exist %preferWtShortcut% (echo Windows users when they see terminal a terminal: *sweats* [%date% // %time:~0,-6%]>"%preferWtShortcut%") else (del /q ".\%preferWtShortcut%" >nul)
+if defined mt_preferWtShortcut (call "modules\settingsV3" clear mt_preferWtShortcut) else (call "modules\settingsV3" set mt_preferWtShortcut true)
 goto settingsP4_02
 
 :toggleP4_02_5
-if exist "%directWriteMode%" (
-    del /q ".\%directWriteMode%" >nul
+if defined mt_directWriteMode (
+    call "modules\settingsV3" clear mt_directWriteMode
     goto settingsP4_02
 )
 cls
@@ -685,7 +896,7 @@ echo !RED!^< [B] Back!RST!
 echo.
 echo.
 
-echo !WHT![*] Enabling this option will make Matject use MOVE, DEL commands instead of IObit Unlocker.
+echo !WHT![*] Enabling this option will make Matject use COPY, DEL commands instead of IObit Unlocker.
 echo     Use this if you use Bedrock Launcher or Minecraft app folder is not write protected.
 echo.
 
@@ -700,10 +911,10 @@ echo.
 choice /c ynb /n >nul
 
 if !errorlevel! equ 1 (
-    (echo This file was created to check if Minecraft app folder is writable. [%date% // %time:~0,-6%]>"!MCLOCATION!\matject-test-file.txt") >nul 2>&1
+    (echo This file was created to check whether Minecraft app folder is writable. [%date% // %time:~0,-6%]>"!MCLOCATION!\matject-test-file.txt") >nul 2>&1
     if exist "!MCLOCATION!\matject-test-file.txt" (
-        del /q "!MCLOCATION!\matject-test-file.txt"
-        echo being outside WindowsApps feels like freedom. [%date% // %time:~0,-6%]>"%directWriteMode%"
+        del /q /f "!MCLOCATION!\matject-test-file.txt"
+        call "modules\settingsV3" set mt_directWriteMode true
         echo !GRN![*] Test passed and enabled direct write mode.!RST!
     ) else (
         echo !RED![^^!] Test failed and direct write mode remains disabled.!RST!
@@ -713,14 +924,11 @@ if !errorlevel! equ 1 (
 goto settingsP4_02
 
 :toggleP4_02_6
-if exist "%fullRestoreMaterialsPerCycle%" (
-    del /q ".\%fullRestoreMaterialsPerCycle%" >nul
+if defined mt_fullRestoreMaterialsPerCycle (
+    call "modules\settingsV3" clear mt_fullRestoreMaterialsPerCycle
     goto settingsP4_02
 )
 cls
-echo !RED!^< [B] Back!RST!
-echo.
-echo.
 echo !WHT![*] This option allows you to set how many materials are processed per cycle for full restore.!RST!
 echo.
 echo !YLW![NOTE]!GRY!
@@ -751,7 +959,8 @@ if !errorlevel! neq 0 (
     )
     set /a materialsPerCycle=!materialsPerCycle_tmp!
     set "materialsPerCycle_tmp="
-    echo !materialsPerCycle!>"%fullRestoreMaterialsPerCycle%"
+    rem echo !materialsPerCycle!>"%fullRestoreMaterialsPerCycle%"
+    call "modules\settingsV3" set mt_fullRestoreMaterialsPerCycle !materialsPerCycle!
 )
 goto settingsP4_02
 
@@ -776,12 +985,16 @@ goto settingsP4_02
 :toggleP4_02_15
 goto settingsP1
 
+:toggleP4_02_16
+call "modules\help" settingsP4_02
+goto settingsP4_02
 
 goto :EOF
 
 :set_mtupdate_target
-if exist "%materialUpdaterArg%" (
-    set /p mtupdate_target=<"%materialUpdaterArg%"
+call "modules\settingsV3"
+if defined mt_materialUpdaterArg (
+    set "mtupdate_target=!mt_materialUpdaterArg!"
     echo %hideCursor%>nul
 
     if /i "!mtupdate_target: =!" equ "v1-18-30" set "mtupdate_target=v1.18.30 - v1.19.51"
@@ -795,7 +1008,7 @@ if exist "%materialUpdaterArg%" (
 )
 
 if "[%~1]" equ "[main_settings]" (
-    if exist "%materialUpdaterArg%" (
+    if defined mt_materialUpdaterArg (
         set "mtupdate_target=Updating for !mtupdate_target!"
     ) else (
         if not defined isPreview (
@@ -805,6 +1018,14 @@ if "[%~1]" equ "[main_settings]" (
         )
     )
 )
+goto :EOF
+
+:set
+call "modules\settingsV3" set %1 %2
+goto :EOF
+
+:clear
+call "modules\settingsV3" clear %1
 goto :EOF
 
 :hmmmmm_20250413_1545
@@ -859,7 +1080,7 @@ echo !px_225!!px_226!!px_227!!px_228!!px_229!!px_230!!px_231!!px_232!!px_233!!px
 echo !px_241!!px_242!!px_243!!px_244!!px_245!!px_246!!px_247!!px_248!!px_249!!px_250!!px_251!!px_252!!px_253!!px_254!!px_255!!px_256!
 echo.
 if !current_pos! equ 45 (
-    echo [92m[*] %sekret_words:~30%^^!
+    echo !BEL![92m[*] %sekret_words:~30%^^!
     echo     Returning to settings...[0m
     timeout 3 >nul
     goto :EOF
@@ -871,7 +1092,7 @@ goto init
 :1key
 for %%N in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16) do (
     if !current_pos! equ %%N (
-        echo [91m[^^!] Out of boundaries.[0m
+        echo !BEL![91m[^^!] Out of boundaries.[0m
         goto :EOF
     )
 )
@@ -882,7 +1103,7 @@ goto :EOF
 :2key
 for %%N in (1,17,33,49,65,81,97,113,129,145,161,177,193,209,225,241) do (
     if !current_pos! equ %%N (
-        echo [91m[^^!] Out of boundaries.[0m
+        echo !BEL![91m[^^!] Out of boundaries.[0m
         goto :EOF
     )
 )
@@ -893,7 +1114,7 @@ goto :EOF
 :3key
 for %%N in (241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256) do (
     if !current_pos! equ %%N (
-        echo [91m[^^!] Out of boundaries.[0m
+        echo !BEL![91m[^^!] Out of boundaries.[0m
         goto :EOF
     )
 )
@@ -904,7 +1125,7 @@ goto :EOF
 :4key
 for %%N in (16,32,48,64,80,96,112,128,144,160,176,192,208,224,240,256) do (
     if !current_pos! equ %%N (
-        echo [91m[^^!] Out of boundaries.[0m
+        echo !BEL![91m[^^!] Out of boundaries.[0m
         goto :EOF
     )
 )
