@@ -138,18 +138,18 @@ rem if not defined where_exists goto where_error
     @cmd /k
 )
 
->nul 2>&1 where msg || (
-    cls
-    echo [91m[^^!] Matject is not compatible with your PC.
-    echo     Reason: 'msg' is missing.
-    echo     DO NOT TRY TO ADD IT YOURSELF.[0m
-    echo.
-    echo Exiting...[?25h
-    echo.
-    endlocal
-    echo on
-    @cmd /k
-)
+rem >nul 2>&1 where msg || (
+rem    cls
+rem    echo [91m[^^!] Matject is not compatible with your PC.
+rem    echo     Reason: 'msg' is missing.
+rem    echo     DO NOT TRY TO ADD IT YOURSELF.[0m
+rem    echo.
+rem    echo Exiting...[?25h
+rem    echo.
+rem    endlocal
+rem    echo on
+rem    @cmd /k
+rem )
 
 >nul 2>&1 where powershell || (
     cls
@@ -1731,4 +1731,5 @@ if defined mt_disableSuccessMsg (
 )
 
 echo !GRN!Thanks for using Matject, have a good day^^!!RST!
+
 %exitmsg%
